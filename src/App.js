@@ -6,6 +6,7 @@ import './index.css';
 import Redax from './lib/Redax';
 
 var initialData = {
+  rootName: '',
   rootAddress: ''
 }
 
