@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Immutable from 'immutable'
 import Main from './Main';
 import './index.css';
-import Redax from './Redax';
+import Redax from './lib/Redax';
 
 var initialData = {
   rootAddress: ''

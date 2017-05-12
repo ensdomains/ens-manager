@@ -1,5 +1,3 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
 import app from './App';
 import './index.css';
 import ENS from 'ethereum-ens'
@@ -18,9 +16,9 @@ import {
   ens,
   ensContract,
   namehash
-} from './utils/ensutils'
-import web3 from './utils/web3'
-
+} from './lib/ensutils'
+import web3 from './lib/web3'
+import './api/preimage'
 
 //const ens = new ENS(web3)
 
@@ -32,7 +30,7 @@ import web3 from './utils/web3'
 // resolver.addr().then(console.log)
 
 var address = ens.resolver('jefflau.test')//.addr().then(function(addr) { console.log(addr) });
-
+console.log(address)
 console.log(getAddr('jefflau.test'))
 
 // console.log(fifsRegistrarContract.at(ens.resolver(namehash('ethereum.test'))).address)
