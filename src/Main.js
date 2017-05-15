@@ -11,7 +11,6 @@ import {
 
 const Main = () => (
   <div className="App">
-    <Link to="/">Home</Link>
     <div>ENS Management</div>
     <Nav />
     <Router>
