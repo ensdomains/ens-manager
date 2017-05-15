@@ -1,5 +1,5 @@
 import app from './App';
-import './index.css';
+import './css/main.css';
 import ENS from 'ethereum-ens'
 import {
   getAddr,

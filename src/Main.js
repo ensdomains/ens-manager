@@ -1,23 +1,25 @@
 import React, { Component } from 'react'
-import logo from './logo.svg'
-import './Main.css'
-import app from './App'
-import Nodes from './components/Nodes'
-import { getAddr } from './lib/ensutils'
+import DomainManager from './pages/DomainManager'
+import ReverseRecord from './pages/ReverseRecord'
+import Nav from './components/Nav'
 
-function updateAddress(e) {
-  app.update(
-    app.db.set('rootName', e.target.value)
-          .set('rootAddress', getAddr(e.target.value))
-  )
-}
+import {
+  BrowserRouter as Router,
+  Route,
+  Link
+} from 'react-router-dom'
 
 const Main = () => (
   <div className="App">
+    <Link to="/">Home</Link>
     <div>ENS Management</div>
-    <input type="text" id="address" onChange={updateAddress} />
-    <span>hash</span><span>{app.db.get('rootAddress')}</span>
-    <Nodes />
+    <Nav />
+    <Router>
+      <div>
+        <Route exact path="/" component={DomainManager}/>
+        <Route path="/reverse-record" component={ReverseRecord}/>
+      </div>
+    </Router>
   </div>
 )
 

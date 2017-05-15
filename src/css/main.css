@@ -1,0 +1,13 @@
+.header {
+  background: #00f;
+  display: flex;
+}
+.search-name {
+  height: 100px;
+  background: #f00;
+  width: 50%;
+}
+.node-info {
+  background: #008000;
+  width: 50%;
+}
