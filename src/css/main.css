@@ -53,7 +53,8 @@ h1 {
   text-decoration: none;
   transition: 0.2s;
 }
-.nav a:hover {
+.nav a:hover,
+.nav a.current {
   border-bottom: 2px solid #fff;
   color: #fff;
 }
