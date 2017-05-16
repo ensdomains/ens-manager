@@ -1,0 +1,25 @@
+*
+  border-box
+
+$width-xxs = 600px
+$width-xs = 728px
+$width-s = 970px
+$width-m = 1024px
+$width-l = 1200px
+
+
+$darkBlue = #102026
+$lightBlue = #C3CCDB
+
+clearfix()
+  zoom 1
+  &:after
+  &:before
+    content ""
+    display table
+  &:after
+    clear both
+
+bp(width)
+  @media (max-width: width)
+    {block}

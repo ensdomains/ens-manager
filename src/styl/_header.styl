@@ -1,0 +1,38 @@
+.header
+  clearfix()
+  background $darkBlue
+  padding 10px 20px
+
+h1
+  margin-top 0
+  margin-bottom 0
+  float left
+  color $lightBlue
+  font-weight 300
+  +bp($width-xs)
+    width 100%
+    text-align center
+
+.nav
+  float right
+  +bp($width-xs)
+    width 100%
+  ul
+    padding 0
+    +bp($width-xs)
+      text-align center
+
+  li
+    display inline-block
+    transition 0.2s
+    border-bottom 2px solid transparent
+
+  a
+    color $lightBlue
+    margin 0 20px
+    padding-bottom 10px
+    text-decoration none
+    transition 0.2s
+    &:hover
+      border-bottom 2px solid white
+      color white

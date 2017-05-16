@@ -1,7 +1,7 @@
 import React from 'react'
 import DomainManager from './pages/DomainManager'
 import ReverseRecord from './pages/ReverseRecord'
-import Nav from './components/Nav'
+import Header from './components/Header'
 
 import {
   BrowserRouter as Router,
@@ -10,10 +10,9 @@ import {
 
 const Main = () => (
   <div className="App">
-    <div>ENS Management</div>
     <Router>
       <div>
-        <Nav />
+        <Header />
         <Route exact path="/" component={DomainManager}/>
         <Route path="/reverse-record" component={ReverseRecord}/>
       </div>

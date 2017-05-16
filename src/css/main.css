@@ -1,5 +1,66 @@
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,400i,600,700,900");
 .header {
-  background: #00f;
+  zoom: 1;
+  background: #102026;
+  padding: 10px 20px;
+}
+.header:after,
+.header:before {
+  content: "";
+  display: table;
+}
+.header:after {
+  clear: both;
+}
+h1 {
+  margin-top: 0;
+  margin-bottom: 0;
+  float: left;
+  color: #c3ccdb;
+  font-weight: 300;
+}
+@media (max-width: 728px) {
+  h1 {
+    width: 100%;
+    text-align: center;
+  }
+}
+.nav {
+  float: right;
+}
+@media (max-width: 728px) {
+  .nav {
+    width: 100%;
+  }
+}
+.nav ul {
+  padding: 0;
+}
+@media (max-width: 728px) {
+  .nav ul {
+    text-align: center;
+  }
+}
+.nav li {
+  display: inline-block;
+  transition: 0.2s;
+  border-bottom: 2px solid transparent;
+}
+.nav a {
+  color: #c3ccdb;
+  margin: 0 20px;
+  padding-bottom: 10px;
+  text-decoration: none;
+  transition: 0.2s;
+}
+.nav a:hover {
+  border-bottom: 2px solid #fff;
+  color: #fff;
+}
+body {
+  font-family: "Source Sans Pro";
+}
+.domain-manager-header {
   display: flex;
 }
 .search-name {
