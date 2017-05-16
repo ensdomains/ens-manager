@@ -1,0 +1,30 @@
+.domain-manager-header {
+  display: flex;
+}
+.search-name {
+  height: 100px;
+  background: #eee;
+  width: 50%;
+}
+.node-info {
+  background: #ccc;
+  width: 50%;
+}
+/* Nodes */
+.nodes-root {
+  color: $lightBlue;
+  background: $darkBlue;
+}
+.child-nodes {
+  display: flex;
+  justify-content: center;
+}
+.node {
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+.node-details {
+  padding: 20px;
+  border: 2px solid $lightBlue;
+}

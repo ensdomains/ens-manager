@@ -16,7 +16,11 @@ const Node = ({ data }) => (
 )
 
 const Nodes = () => (
-  <div className="nodes-root">{app.db.get('nodes').map(node => <Node key={node.get('address')} data={node} />)}</div>
+  <div className="nodes-root">
+    <div className="nodes-inner">
+      {app.db.get('nodes').map(node => <Node key={node.get('address')} data={node} />)}
+    </div>
+  </div>
 )
 
 export default Nodes

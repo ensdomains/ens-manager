@@ -1,4 +1,8 @@
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,400i,600,700,900");
+body {
+  background: #333;
+  font-family: "Source Sans Pro";
+}
 .header {
   zoom: 1;
   background: #102026;
@@ -58,18 +62,37 @@ h1 {
   border-bottom: 2px solid #fff;
   color: #fff;
 }
-body {
-  font-family: "Source Sans Pro";
-}
 .domain-manager-header {
   display: flex;
 }
 .search-name {
   height: 100px;
-  background: #f00;
+  background: #eee;
   width: 50%;
 }
 .node-info {
-  background: #008000;
+  background: #ccc;
   width: 50%;
+}
+.nodes-root {
+  color: #c3ccdb;
+  background: #102026;
+}
+.nodes-inner {
+  max-width: 1200px;
+  padding: 0 20px 0;
+  margin: 0 auto 0;
+}
+.child-nodes {
+  display: flex;
+  justify-content: center;
+}
+.node {
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+.node-details {
+  padding: 20px;
+  border: 2px solid #c3ccdb;
 }
