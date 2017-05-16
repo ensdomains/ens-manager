@@ -12,9 +12,9 @@ import {
 const Main = () => (
   <div className="App">
     <div>ENS Management</div>
-    <Nav />
     <Router>
       <div>
+        <Nav />
         <Route exact path="/" component={DomainManager}/>
         <Route path="/reverse-record" component={ReverseRecord}/>
       </div>
