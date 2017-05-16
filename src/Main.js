@@ -1,12 +1,11 @@
-import React, { Component } from 'react'
+import React from 'react'
 import DomainManager from './pages/DomainManager'
 import ReverseRecord from './pages/ReverseRecord'
 import Nav from './components/Nav'
 
 import {
   BrowserRouter as Router,
-  Route,
-  Link
+  Route
 } from 'react-router-dom'
 
 const Main = () => (
