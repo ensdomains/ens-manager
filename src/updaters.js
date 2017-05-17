@@ -1,12 +1,14 @@
 import app from './App'
 import { getAddr } from './lib/ensutils'
 import Immutable from 'immutable'
-import { getSubdomains } from './api/registry'
+import { getSubdomains, getOwner } from './api/registry'
 
 export function updateAddress(value) {
   app.update(
     app.db.set('rootName', value)
-          .set('rootAddress', getAddr(value))
+  )
+  getOwner(value).then(owner =>
+    app.update(app.db.set('rootAddress', owner))
   )
 }
 

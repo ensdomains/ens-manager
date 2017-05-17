@@ -10,7 +10,7 @@ export default () => {
     owner = <div>Owner address: {app.db.get('rootAddress')}</div>
   }
 
-  getDetails = addressExists ? <button onClick={() => getNodeDetails(app.db.get('rootAddress'))}>Get Details</button> : null
+  getDetails = addressExists ? <button onClick={() => getNodeDetails(app.db.get('rootName'))}>Get Details</button> : null
 
   return <div className="search-name">
     <input type="text" id="address" onChange={(e) => updateAddress(e.target.value)} />

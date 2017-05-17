@@ -1,4 +1,5 @@
 import web3 from './web3'
+import ENSconstructor from 'ethereum-ens'
 
 function namehash(name) {
     var node = '0x0000000000000000000000000000000000000000000000000000000000000000';
@@ -1217,6 +1218,8 @@ function getContent(name) {
   return resolverContract.at(resolverAddress).content(node);
 }
 
+const ENS = new ENSconstructor(web3, '0x112234455c3a32fd11230c42e7bccd4a84e02010')
+
 export {
   getAddr,
   getContent,
@@ -1231,5 +1234,6 @@ export {
   auctionRegistrarContract,
   ens,
   ensContract,
-  namehash
+  namehash,
+  ENS
 }
