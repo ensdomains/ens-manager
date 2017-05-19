@@ -10,7 +10,11 @@ var initialData = {
   rootName: '',
   rootAddress: '0x0000000000000000000000000000000000000000',
   nodes: [],
-  selectedNode: {}
+  selectedNode: {},
+  updateForm: {
+    newOwner: '',
+    newResolver: ''
+  }
 }
 
 let middleware = [ImmutableLogger]

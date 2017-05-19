@@ -1,16 +1,20 @@
-import { ens, namehash, getAddr, ENS  } from '../lib/ensutils'
+import ENS, { ens } from '../lib/ens'
 import Immutable from 'immutable'
 import web3 from '../lib/web3'
 
 export function setSubnodeOwner(domain, subDomain, newOwner, account){
-  ens.setSubnodeOwner(namehash(name), web3.sha3(subDomain), newOwner, {from: account});
+  //ens.setSubnodeOwner(namehash(name), web3.sha3(subDomain), newOwner, {from: account});
 }
 
 export function getOwner(name){
   return ENS.owner(name)
 }
 
-export function setOwner(){
+export function setNewOwner(name, newOwner){
+  console.log(name, newOwner, web3.eth.accounts)
+  console.log(ENS)
+  return ENS.setOwner(name, newOwner, {from: web3.eth.accounts[0]})
+  //return ENS.setOwner(name, newOwner, {from: web3.eth.accounts[0]}).catch(console.error)
   // ENS
   // name string The name to update
   // address address The address of the new owner
@@ -24,10 +28,44 @@ export function setOwner(){
 export function getSubdomains(name){
   //Todo write function to get subdomains via events for 'newOwner' and 'transferOwner'
   console.log(name)
-  var mockData = [
-    {
+
+  console.log(ens)
+  // ENS.registryPromise.then((registry)=> {
+  //   console.log(registry)
+  //   console.log(registry.allEventsAsync())
+  //   return registry.allEventsAsync()
+  // }).then((value)=> console.log(value))
+  //const events = []
+
+  web3.eth.getBlockNumber(function(currentBlock){
+    var myEvent = ens.NewOwner({owner: '0xdf324c9a1c0fd322526fb905fde5738a89bf1850'},{fromBlock: 0, toBlock: 'latest'})
+
+    myEvent.get(function(error, logs){
+      console.log(logs)
+      logs.forEach(log => console.log(log.args.owner))
+    })
+  })
+
+
+  var mockData1 = {
+      name: 'talbert.test',
+      domain: ['talbert', 'test'],
+      nodes: [
+        {
+          name: 'awesome.talbert.test',
+          address: '123456',
+          domain: ['awesome', 'talbert', 'test']
+        },
+        {
+          name: 'another.talbert.test',
+          address: '234567',
+          domain: ['another', 'talbert', 'test']
+        }
+      ]
+    }
+
+  var mockData2 = {
       name: 'jefflau.test',
-      address: getAddr(name),
       domain: ['jefflau', 'test'],
       nodes: [
         {
@@ -42,6 +80,10 @@ export function getSubdomains(name){
         }
       ]
     }
-  ]
-  return Immutable.fromJS(mockData)
+
+
+  return getOwner(name).then(address =>
+    //mock data
+    Immutable.fromJS([{...mockData2, address}])
+  )
 }

@@ -1,5 +1,4 @@
 import app from './App'
-import { getAddr } from './lib/ensutils'
 import Immutable from 'immutable'
 import { getSubdomains, getOwner } from './api/registry'
 
@@ -12,13 +11,19 @@ export function updateAddress(value) {
   )
 }
 
+export function updateForm(formName, data) {
+  app.update(
+    app.db.setIn(['updateForm', formName], data)
+  )
+}
+
 export function getNodeDetails(name) {
   //TODO: event log for subdomains
   console.log(name)
-  let data = getSubdomains(name)
-
-  app.update(
-    app.db.set('nodes', data)
+  getSubdomains(name).then(data =>
+    app.update(
+      app.db.set('nodes', data)
+    )
   )
 }
 
