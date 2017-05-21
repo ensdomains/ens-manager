@@ -5,11 +5,14 @@ import Main from './Main'
 import './index.css'
 import Redax from './lib/Redax'
 import ImmutableLogger from './lib/ImmutableLogger'
+import { syncData, localStorageMiddlewareImmutable } from './lib/LocalStorage'
 
-var initialData = {
+let syncProp = ['nodeCache', 'rootName', 'rootAddress']
+let initialData = {
   rootName: '',
   rootAddress: '0x0000000000000000000000000000000000000000',
   nodes: [],
+  nodeCache: [],
   selectedNode: {},
   updateForm: {
     newOwner: '',
@@ -17,10 +20,14 @@ var initialData = {
   }
 }
 
-let middleware = [ImmutableLogger]
+var syncedData = syncData(syncProp)(initialData)
+
+console.log(syncedData)
+
+let middleware = [ImmutableLogger, localStorageMiddlewareImmutable(syncProp)]
 
 const app = new Redax(
-  Immutable.fromJS(initialData),
+  Immutable.fromJS(syncedData),
   () => ReactDOM.render(<Main />, document.getElementById('root')),
   middleware
 )
