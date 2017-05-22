@@ -2,12 +2,50 @@
 .domain-manager-header
   display flex
 
+button
+  border none
+  color white
+  background $darkBlue
+  font-size 14px
+  padding 10px 20px
+  &:hover
+    cursor pointer
+  &:focus
+    outline 0
+
+input
+  font-size 14px
+  padding 10px
+  margin-bottom 10px
+  border 1px solid white
+  &:focus
+    outline 0
+    border 1px solid red
+
 .search-name
-  height 100px
+  padding 20px
   background #eee
   width 50%
+  .instructions
+    margin-bottom 10px
+  .owner
+    margin-bottom 20px
+  input
+    width 100%
+  button
+    background #262B78
+    width 100%
+    transition 0.2s
+    &:hover
+      background #363CA1
+
+/* Node info */
+
+.current-owner
+  margin-bottom 10px
 
 .node-info
+  padding 20px
   background #ccc
   width 50%
 

@@ -22,15 +22,31 @@ function handleOnChange(formName, newOwner){
 export default () => {
   const db = app.db
   const selectedNode = db.get('selectedNode')
-  return <div className="node-info">
-    Current Owner: {selectedNode.get('address')}
-    <input type="text" name="newOwner"
-      value={db.getIn(['updateForm', 'newOwner'])}
-      onChange={(e)=> handleOnChange('newOwner', e.target.value)}/>
-    <button
-      onClick={(e)=> handleUpdateOwner(db.getIn(['selectedNode', 'name']), db.getIn(['updateForm', 'newOwner']))}>Update owner</button>
-    <input type="text" name="resolver"/><button>Update resolver</button>
-    <button onClick={() => setDefaultResolver()}>Use default resolver</button>
-    <input type="text" name="deleteNode"/><button>Delete Node</button>
-  </div>
+  var content = <div>Select a node to continue</div>
+
+  if(selectedNode.get('address')){
+    content = (
+      <div>
+        <div className="current-owner">Current Owner: {selectedNode.get('address')}</div>
+        <div className="input-group">
+          <input placeholder="0x..." type="text" name="newOwner"
+            value={db.getIn(['updateForm', 'newOwner'])}
+            onChange={(e)=> handleOnChange('newOwner', e.target.value)}/>
+          <button
+            onClick={(e)=> handleUpdateOwner(db.getIn(['selectedNode', 'name']), db.getIn(['updateForm', 'newOwner']))}>Update owner</button>
+        </div>
+        <div className="input-group">
+          <input type="text" name="resolver"/><button>Update resolver</button>
+          <button onClick={() => setDefaultResolver()}>Use default resolver</button>
+        </div>
+        <input type="text" name="deleteNode"/><button>Delete Node</button>
+      </div>
+    )
+  }
+
+  return (
+    <div className="node-info">
+      {content}
+    </div>
+  )
 }

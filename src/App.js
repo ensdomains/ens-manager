@@ -20,14 +20,15 @@ let initialData = {
   }
 }
 
-var syncedData = syncData(syncProp)(initialData)
+//var syncedData = syncData(syncProp)(initialData)
 
-console.log(syncedData)
-
-let middleware = [ImmutableLogger, localStorageMiddlewareImmutable(syncProp)]
+let middleware = [
+  ImmutableLogger,
+  //localStorageMiddlewareImmutable(syncProp, Immutable)
+]
 
 const app = new Redax(
-  Immutable.fromJS(syncedData),
+  Immutable.fromJS(initialData),//Immutable.fromJS(syncedData),
   () => ReactDOM.render(<Main />, document.getElementById('root')),
   middleware
 )

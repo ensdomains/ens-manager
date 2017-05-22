@@ -17,9 +17,10 @@ export function updateForm(formName, data) {
   )
 }
 
-export function getNodeDetails(name) {
+export function getNodeDetails(name, address) {
   //TODO: event log for subdomains
   console.log(name)
+
   getSubdomains(name).then(data =>
     app.update(
       app.db.set('nodes', data)

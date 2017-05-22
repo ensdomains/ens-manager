@@ -1,7 +1,4 @@
 const LocalStorage = window.localStorage
-import Immutable from 'immutable'
-
-const isImmutable = Immutable.Iterable.isIterable
 
 const syncData = (props) => {
   return data => {
@@ -10,7 +7,7 @@ const syncData = (props) => {
       acc[c] = propData[i]
       return acc
     }, {})
-    
+
     return {
       ...data,
       ...obj
@@ -24,8 +21,9 @@ const localStorageMiddleware = props =>
     return state
   }
 
-const localStorageMiddlewareImmutable = props =>
+const localStorageMiddlewareImmutable = (props, Immutable) =>
   state => {
+    const isImmutable = Immutable.Iterable.isIterable
     props.forEach(prop => {
       let data = state.get(prop)
       return LocalStorage.setItem(prop, isImmutable(data) ? data.toJS() : data)

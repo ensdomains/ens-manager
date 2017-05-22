@@ -1,12 +1,57 @@
 .domain-manager-header {
   display: flex;
 }
+button {
+  border: none;
+  color: #fff;
+  background: $darkBlue;
+  font-size: 14px;
+  padding: 10px 20px;
+}
+button:hover {
+  cursor: pointer;
+}
+button:focus {
+  outline: 0;
+}
+input {
+  font-size: 14px;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #fff;
+}
+input:focus {
+  outline: 0;
+  border: 1px solid #f00;
+}
 .search-name {
-  height: 100px;
+  padding: 20px;
   background: #eee;
   width: 50%;
 }
+.search-name .instructions {
+  margin-bottom: 10px;
+}
+.search-name .owner {
+  margin-bottom: 20px;
+}
+.search-name input {
+  width: 100%;
+}
+.search-name button {
+  background: #262b78;
+  width: 100%;
+  transition: 0.2s;
+}
+.search-name button:hover {
+  background: #363ca1;
+}
+/* Node info */
+.current-owner {
+  margin-bottom: 10px;
+}
 .node-info {
+  padding: 20px;
   background: #ccc;
   width: 50%;
 }
