@@ -1,6 +1,6 @@
 import app from './App'
 import Immutable from 'immutable'
-import { getSubdomains, getOwner } from './api/registry'
+import { getSubdomains, getOwner, getResolver } from './api/registry'
 
 export function updateAddress(value) {
   app.update(
@@ -19,13 +19,19 @@ export function updateForm(formName, data) {
 
 export function getNodeDetails(name, address) {
   //TODO: event log for subdomains
-  console.log(name)
 
   getSubdomains(name).then(data =>
     app.update(
       app.db.set('nodes', data)
     )
   )
+
+  getResolver(name).then(data =>
+    app.update(
+      app.db.set('resolver', data)
+    )
+  )
+
 }
 
 export function selectNode(data) {

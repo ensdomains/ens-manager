@@ -10,6 +10,10 @@ export function getOwner(name){
   return ENS.owner(name)
 }
 
+export function getResolver(name){
+  return ENS.resolver(name)
+}
+
 export function setNewOwner(name, newOwner){
   console.log(name, newOwner, web3.eth.accounts)
   console.log(ENS)

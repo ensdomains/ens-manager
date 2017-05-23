@@ -15,6 +15,14 @@ function setDefaultResolver(){
 
 }
 
+function setResolver() {
+
+}
+
+function checkSubDomain(){
+
+}
+
 function handleOnChange(formName, newOwner){
   updateForm(formName, newOwner)
 }
@@ -36,10 +44,14 @@ export default () => {
             onClick={(e)=> handleUpdateOwner(db.getIn(['selectedNode', 'name']), db.getIn(['updateForm', 'newOwner']))}>Update owner</button>
         </div>
         <div className="input-group">
-          <input type="text" name="resolver"/><button>Update resolver</button>
-          <button onClick={() => setDefaultResolver()}>Use default resolver</button>
+          <input type="text" name="resolver"/>
+          <button onClick={() => setResolver()}>Set Resolver</button>
         </div>
-        <input type="text" name="deleteNode"/><button>Delete Node</button>
+        <button onClick={() => setDefaultResolver()}>Use default resolver</button>
+        <div className="input-group">
+          <input type="text" name="subDomain" /><button onClick={() => checkSubDomain()}>Check For Subdomain</button>
+        </div>
+        <button>Delete Node</button>
       </div>
     )
   }

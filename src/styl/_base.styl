@@ -4,3 +4,43 @@
 body
   background #333
   font-family "Source Sans Pro"
+
+button
+  border none
+  color white
+  background $medBlue
+  border 1px solid $medBlue
+  font-size 14px
+  padding 12px 20px
+  border-radius 3px
+  margin-bottom 10px
+  width 100%
+  background $medBlue
+  transition 0.2s
+
+  &:hover
+    background $medBlueHigh
+    border 1px solid $medBlueHigh
+    cursor pointer
+  &:focus
+    outline 0
+
+input
+  font-size 14px
+  padding 12px 15px
+  margin-bottom 10px
+  border 1px solid white
+  border-radius 3px
+
+  &:focus
+    outline 0
+    border 1px solid $lightestBlue
+
+.input-group
+  input
+    border-radius 3px 0 0 3px
+    width calc(100% - 200px)
+
+  button
+    border-radius 0 3px 3px 0
+    width 200px
