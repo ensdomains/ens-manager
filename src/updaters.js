@@ -1,6 +1,14 @@
 import app from './App'
-import Immutable from 'immutable'
+import Immutable, { fromJS } from 'immutable'
 import { getSubdomains, getOwner, getResolver } from './api/registry'
+
+//web3
+
+export function updateReadOnly(value){
+  app.update(
+    app.db.set('readOnly', value)
+  )
+}
 
 export function updateAddress(value) {
   app.update(
@@ -38,4 +46,22 @@ export function selectNode(data) {
   app.update(
     app.db.set('selectedNode', data)
   )
+}
+
+export function appendSubDomain(subDomain, domain, address){
+
+  const domainArray = domain.split('.')
+  if(domainArray.length > 2) {
+    const indexOfNode = app.db.get('nodes').findIndex(node =>
+      node.get('domain') === domain
+    );
+  } else {
+    app.update(
+      app.db.updateIn(['nodes', 0, 'nodes'], nodes => nodes.push(fromJS({
+        address,
+        name: subDomain + '.' + domain,
+        nodes: []
+      })))
+    )
+  }
 }

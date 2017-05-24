@@ -1,17 +1,19 @@
 import web3 from './web3'
 import ENSconstructor from 'ethereum-ens'
-//
-// function namehash(name) {
-//     var node = '0x0000000000000000000000000000000000000000000000000000000000000000';
-//     if (name !== '') {
-//         var labels = name.split(".");
-//         for(var i = labels.length - 1; i >= 0; i--) {
-//             node = web3.sha3(node + web3.sha3(labels[i]).slice(2), {encoding: 'hex'});
-//         }
-//     }
-//     return node.toString();
-// }
-//
+
+function namehash(name) {
+  return web3().then(({ web3 }) =>{
+    var node = '0x0000000000000000000000000000000000000000000000000000000000000000';
+    if (name !== '') {
+        var labels = name.split(".");
+        for(var i = labels.length - 1; i >= 0; i--) {
+            node = web3.sha3(node + web3.sha3(labels[i]).slice(2), {encoding: 'hex'});
+        }
+    }
+    return node.toString();
+  })
+}
+
 
 const ensContract = web3().then(({ web3 }) => {
   return web3.eth.contract([
@@ -1242,5 +1244,5 @@ export {
 //   auctionRegistrarContract,
    ens,
   // ensContract
-//   namehash,
+   namehash,
 }

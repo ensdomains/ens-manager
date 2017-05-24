@@ -1,7 +1,7 @@
 import React from 'react'
 import app from '../App'
-import { setNewOwner } from '../api/registry'
-import { updateForm } from '../updaters'
+import { setNewOwner, checkSubDomain } from '../api/registry'
+import { updateForm, appendSubDomain } from '../updaters'
 
 function handleUpdateOwner(name, newOwner){
   //contract api call updateOwner
@@ -19,8 +19,15 @@ function setResolver() {
 
 }
 
-function checkSubDomain(){
-
+function handleCheckSubDomain(subDomain, domain){
+  checkSubDomain(subDomain, domain).then(address => {
+    console.log('here', subDomain, domain, address)
+    if(true){//if(address !== "0x0000000000000000000000000000000000000000"){
+      appendSubDomain(subDomain, domain, address)
+    } else {
+      console.log('no subdomain with that name')
+    }
+  })
 }
 
 function handleOnChange(formName, newOwner){
@@ -49,7 +56,8 @@ export default () => {
         </div>
         <button onClick={() => setDefaultResolver()}>Use default resolver</button>
         <div className="input-group">
-          <input type="text" name="subDomain" /><button onClick={() => checkSubDomain()}>Check For Subdomain</button>
+          <input type="text" name="subDomain" onChange={(e)=> handleOnChange('subDomain', e.target.value)} />
+          <button onClick={() => handleCheckSubDomain(db.getIn(['updateForm', 'subDomain']), db.getIn(['selectedNode', 'name']))}>Check For Subdomain</button>
         </div>
         <button>Delete Node</button>
       </div>

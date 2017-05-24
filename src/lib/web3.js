@@ -1,9 +1,11 @@
 import Web3 from 'web3'
+import 'whatwg-fetch'
 
 let web3,
     provider,
     readOnly = false,
     ready = false;
+
 
 function web3Promise(){
   if(ready === false){

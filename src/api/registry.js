@@ -1,4 +1,4 @@
-import ENS, { ens } from '../lib/ens'
+import ENS, { ens, namehash } from '../lib/ens'
 import Immutable from 'immutable'
 import web3 from '../lib/web3'
 
@@ -6,13 +6,15 @@ export function setSubnodeOwner(domain, subDomain, newOwner, account){
   //ens.setSubnodeOwner(namehash(name), web3.sha3(subDomain), newOwner, {from: account});
 }
 
-export function getOwner(name){
-  return ENS().then(ENS => ENS.owner(name))
-}
+export const getOwner = name =>
+  ENS().then(ENS => ENS.owner(name))
 
-export function getResolver(name){
-  return ENS().then(ENS => ENS.resolver(name))
-}
+
+export const getResolver = name =>
+  ENS().then(ENS => ENS.resolver(name))
+
+export const checkSubDomain = (subDomain, domain) =>
+  ENS().then(ENS => ENS.owner(subDomain + '.' + domain))
 
 export function setNewOwner(name, newOwner){
   // console.log(name, newOwner, web3.eth.accounts)
@@ -43,11 +45,14 @@ export function getSubdomains(name){
 
   web3().then(({ web3 }) => {
     web3.eth.getBlockNumber(function(currentBlock){
-      var myEvent = ens.NewOwner({owner: '0xdf324c9a1c0fd322526fb905fde5738a89bf1850'},{fromBlock: 0, toBlock: 'latest'})
-
-      myEvent.get(function(error, logs){
-        console.log(logs)
-        logs.forEach(log => console.log(log.args.owner))
+      ens.then(ens => {
+        return namehash(name).then(name => {
+          const myEvent = ens.NewOwner({ name },{fromBlock: 0, toBlock: 'latest'})
+          myEvent.get(function(error, logs){
+            console.log(logs)
+            logs.forEach(log => console.log(log.args.owner))
+          })
+        })
       })
     })
   })
@@ -90,6 +95,10 @@ export function getSubdomains(name){
 
   return getOwner(name).then(address =>
     //mock data
-    Immutable.fromJS([{...mockData2, address}])
+    Immutable.fromJS([{
+      name,
+      address,
+      nodes: []
+    }])
   )
 }
