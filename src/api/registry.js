@@ -7,17 +7,17 @@ export function setSubnodeOwner(domain, subDomain, newOwner, account){
 }
 
 export function getOwner(name){
-  return ENS.owner(name)
+  return ENS().then(ENS => ENS.owner(name))
 }
 
 export function getResolver(name){
-  return ENS.resolver(name)
+  return ENS().then(ENS => ENS.resolver(name))
 }
 
 export function setNewOwner(name, newOwner){
-  console.log(name, newOwner, web3.eth.accounts)
-  console.log(ENS)
-  return ENS.setOwner(name, newOwner, {from: web3.eth.accounts[0]})
+  // console.log(name, newOwner, web3.eth.accounts)
+  // console.log(ENS)
+  return ENS().then(ENS => ENS.setOwner(name, newOwner, {from: web3.eth.accounts[0]}))
   //return ENS.setOwner(name, newOwner, {from: web3.eth.accounts[0]}).catch(console.error)
   // ENS
   // name string The name to update
@@ -41,12 +41,14 @@ export function getSubdomains(name){
   // }).then((value)=> console.log(value))
   //const events = []
 
-  web3.eth.getBlockNumber(function(currentBlock){
-    var myEvent = ens.NewOwner({owner: '0xdf324c9a1c0fd322526fb905fde5738a89bf1850'},{fromBlock: 0, toBlock: 'latest'})
+  web3().then(({ web3 }) => {
+    web3.eth.getBlockNumber(function(currentBlock){
+      var myEvent = ens.NewOwner({owner: '0xdf324c9a1c0fd322526fb905fde5738a89bf1850'},{fromBlock: 0, toBlock: 'latest'})
 
-    myEvent.get(function(error, logs){
-      console.log(logs)
-      logs.forEach(log => console.log(log.args.owner))
+      myEvent.get(function(error, logs){
+        console.log(logs)
+        logs.forEach(log => console.log(log.args.owner))
+      })
     })
   })
 

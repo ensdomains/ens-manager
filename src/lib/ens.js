@@ -12,208 +12,212 @@ import ENSconstructor from 'ethereum-ens'
 //     return node.toString();
 // }
 //
-var ensContract = web3.eth.contract([
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "node",
-        "type": "bytes32"
-      }
-    ],
-    "name": "resolver",
-    "outputs": [
-      {
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "payable": false,
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "node",
-        "type": "bytes32"
-      }
-    ],
-    "name": "owner",
-    "outputs": [
-      {
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "payable": false,
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "node",
-        "type": "bytes32"
-      },
-      {
-        "name": "label",
-        "type": "bytes32"
-      },
-      {
-        "name": "owner",
-        "type": "address"
-      }
-    ],
-    "name": "setSubnodeOwner",
-    "outputs": [],
-    "payable": false,
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "node",
-        "type": "bytes32"
-      },
-      {
-        "name": "ttl",
-        "type": "uint64"
-      }
-    ],
-    "name": "setTTL",
-    "outputs": [],
-    "payable": false,
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "node",
-        "type": "bytes32"
-      }
-    ],
-    "name": "ttl",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint64"
-      }
-    ],
-    "payable": false,
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "node",
-        "type": "bytes32"
-      },
-      {
-        "name": "resolver",
-        "type": "address"
-      }
-    ],
-    "name": "setResolver",
-    "outputs": [],
-    "payable": false,
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "node",
-        "type": "bytes32"
-      },
-      {
-        "name": "owner",
-        "type": "address"
-      }
-    ],
-    "name": "setOwner",
-    "outputs": [],
-    "payable": false,
-    "type": "function"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "node",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "name": "owner",
-        "type": "address"
-      }
-    ],
-    "name": "Transfer",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "node",
-        "type": "bytes32"
-      },
-      {
-        "indexed": true,
-        "name": "label",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "name": "owner",
-        "type": "address"
-      }
-    ],
-    "name": "NewOwner",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "node",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "name": "resolver",
-        "type": "address"
-      }
-    ],
-    "name": "NewResolver",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "node",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "name": "ttl",
-        "type": "uint64"
-      }
-    ],
-    "name": "NewTTL",
-    "type": "event"
-  }
-]);
-var ens = ensContract.at('0x112234455c3a32fd11230c42e7bccd4a84e02010');
+
+const ensContract = web3().then(({ web3 }) => {
+  return web3.eth.contract([
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "node",
+          "type": "bytes32"
+        }
+      ],
+      "name": "resolver",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "node",
+          "type": "bytes32"
+        }
+      ],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "node",
+          "type": "bytes32"
+        },
+        {
+          "name": "label",
+          "type": "bytes32"
+        },
+        {
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "name": "setSubnodeOwner",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "node",
+          "type": "bytes32"
+        },
+        {
+          "name": "ttl",
+          "type": "uint64"
+        }
+      ],
+      "name": "setTTL",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "node",
+          "type": "bytes32"
+        }
+      ],
+      "name": "ttl",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "node",
+          "type": "bytes32"
+        },
+        {
+          "name": "resolver",
+          "type": "address"
+        }
+      ],
+      "name": "setResolver",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "node",
+          "type": "bytes32"
+        },
+        {
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "name": "setOwner",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "node",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "name": "Transfer",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "node",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "name": "label",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "name": "NewOwner",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "node",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "resolver",
+          "type": "address"
+        }
+      ],
+      "name": "NewResolver",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "node",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "ttl",
+          "type": "uint64"
+        }
+      ],
+      "name": "NewTTL",
+      "type": "event"
+    }
+  ]);
+})
+
+const ens = ensContract.then(ensContract => ensContract.at('0x112234455c3a32fd11230c42e7bccd4a84e02010'))
 //
 // var auctionRegistrarContract = web3.eth.contract([
 //   {
@@ -1217,8 +1221,11 @@ var ens = ensContract.at('0x112234455c3a32fd11230c42e7bccd4a84e02010');
 //   }
 //   return resolverContract.at(resolverAddress).content(node);
 // }
-
-const ENS = new ENSconstructor(web3, '0x112234455c3a32fd11230c42e7bccd4a84e02010')
+function ENS() {
+  return web3().then(({ web3 }) => {
+    return new ENSconstructor(web3, '0x112234455c3a32fd11230c42e7bccd4a84e02010')
+  })
+}
 
 export default ENS
 export {
