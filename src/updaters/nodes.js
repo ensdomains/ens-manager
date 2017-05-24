@@ -1,6 +1,6 @@
-import app from './App'
+import app from '../App'
 import Immutable, { fromJS } from 'immutable'
-import { getSubdomains, getOwner, getResolver } from './api/registry'
+import { getSubdomains, getOwner, getResolver } from '../api/registry'
 
 //web3
 

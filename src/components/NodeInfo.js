@@ -1,7 +1,7 @@
 import React from 'react'
 import app from '../App'
 import { setNewOwner, checkSubDomain } from '../api/registry'
-import { updateForm, appendSubDomain } from '../updaters'
+import { updateForm, appendSubDomain } from '../updaters/nodes'
 
 function handleUpdateOwner(name, newOwner){
   //contract api call updateOwner

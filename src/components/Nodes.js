@@ -1,6 +1,6 @@
 import React from 'react'
 import app from '../App'
-import { selectNode } from '../updaters'
+import { selectNode } from '../updaters/nodes'
 
 const handleSelectNode = (event, data) => {
   selectNode(data)

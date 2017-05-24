@@ -1,5 +1,5 @@
 import React from 'react'
-import { updateAddress, getNodeDetails } from '../updaters'
+import { updateAddress, getNodeDetails } from '../updaters/nodes'
 import app from '../App'
 
 export default () => {
