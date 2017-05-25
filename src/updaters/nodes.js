@@ -1,6 +1,7 @@
 import app from '../App'
 import Immutable, { fromJS } from 'immutable'
 import { getSubdomains, getOwner, getResolver } from '../api/registry'
+import { addNotification } from './notifications'
 
 //web3
 
@@ -28,6 +29,9 @@ export function updateForm(formName, data) {
 export function getNodeDetails(name, address) {
   //TODO: event log for subdomains
 
+  addNotification()
+
+
   getSubdomains(name).then(data =>
     app.update(
       app.db.set('nodes', data)
@@ -48,20 +52,40 @@ export function selectNode(data) {
   )
 }
 
-export function appendSubDomain(subDomain, domain, address){
-
+export function appendSubDomain(subDomain, domain, owner){
   const domainArray = domain.split('.')
+  let indexOfNode
+
   if(domainArray.length > 2) {
-    const indexOfNode = app.db.get('nodes').findIndex(node =>
+    indexOfNode = app.db.get('nodes').findIndex(node =>
       node.get('domain') === domain
     );
   } else {
     app.update(
       app.db.updateIn(['nodes', 0, 'nodes'], nodes => nodes.push(fromJS({
-        address,
+        owner,
+        label: subDomain,
+        node: domain,
         name: subDomain + '.' + domain,
         nodes: []
       })))
     )
   }
+}
+
+export function appendSubDomains(subDomains, rootDomain) {
+  const domainArray = rootDomain.split('.')
+  let indexOfNode
+
+  if(domainArray.length > 2) {
+    indexOfNode = app.db.get('nodes').findIndex(node =>
+      node.get('domain') === rootDomain
+    );
+  }
+
+  subDomains.forEach(domain => {
+    app.update(
+      app.db.updateIn(['nodes', 0, 'nodes'], nodes => nodes.push(fromJS(domain)))
+    )
+  })
 }

@@ -22,7 +22,7 @@ function setResolver() {
 function handleCheckSubDomain(subDomain, domain){
   checkSubDomain(subDomain, domain).then(address => {
     console.log('here', subDomain, domain, address)
-    if(true){//if(address !== "0x0000000000000000000000000000000000000000"){
+    if(address !== "0x0000000000000000000000000000000000000000"){
       appendSubDomain(subDomain, domain, address)
     } else {
       console.log('no subdomain with that name')

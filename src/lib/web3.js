@@ -33,23 +33,29 @@ function web3Promise(){
         let url = "http://localhost:8545"
 
         fetch(url)
-          .then(res => console.log('local node active'))
+          .then(res => {
+            console.log('local node active')
+            ready = true
+
+          })
           .catch(error => {
             if(error.readyState === 4 && (error.status === 400 || error.status === 200)){
               // the endpoint is active
               console.log('Success')
             } else {
               //Infura
-              console.log('The endspoint is not active. Falling back to read_only mode')
+              console.log('The endpoint is not active. Falling back to Infura readOnly mode')
               url = 'https://ropsten.infura.io/BW6Y98TxAjFjImkmjVnG'
               readOnly = true
-              provider = new Web3.providers.HttpProvider(url)
-              web3 = new Web3(provider);
-              web3.version.getNetwork(function(err, networkId){
-                ready = true
-                resolve({web3, provider, readOnly, networkId})
-              })
             }
+          })
+          .then(res => {
+            provider = new Web3.providers.HttpProvider(url)
+            web3 = new Web3(provider);
+            web3.version.getNetwork(function(err, networkId){
+              ready = true
+              resolve({web3, provider, readOnly, networkId})
+            })
           })
 
       }

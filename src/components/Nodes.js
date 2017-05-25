@@ -12,14 +12,14 @@ const Node = ({ data }) =>
     <div onClick={(e) => handleSelectNode(e, data)} className="node-details">{data.get('name')}</div>
 
     <div className="child-nodes">
-      {data.get('nodes').size > 0 ? data.get('nodes').map(node => <Node key={node.get('address')} data={node} />) : ''}
+      {data.get('nodes').size > 0 ? data.get('nodes').map(node => <Node key={node.get('name')} data={node} />) : ''}
     </div>
   </div>
 
 const Nodes = () => (
   <div className="nodes-root">
     <div className="nodes-inner">
-      {app.db.get('nodes').map(node => <Node key={node.get('address')} data={node} />)}
+      {app.db.get('nodes').map(node => <Node key={node.get('owner')} data={node} />)}
     </div>
   </div>
 )

@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Immutable from 'immutable'
+import Immutable, { fromJS } from 'immutable'
 import Main from './Main'
 import './index.css'
 import Redax from './lib/Redax'
@@ -13,6 +13,8 @@ let initialData = {
   rootAddress: '0x0000000000000000000000000000000000000000',
   nodes: [],
   nodeCache: [],
+  domainFetch: [],
+  notifications: [],
   resolver: {},
   selectedNode: {},
   updateForm: {
@@ -29,7 +31,7 @@ let middleware = [
 ]
 
 const app = new Redax(
-  Immutable.fromJS(initialData),//Immutable.fromJS(syncedData),
+  fromJS(initialData),//fromJS(syncedData),
   () => ReactDOM.render(<Main />, document.getElementById('root')),
   middleware
 )
