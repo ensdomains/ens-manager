@@ -42,7 +42,8 @@ export default () => {
   if(selectedNode.get('name')){
     content = (
       <div>
-        <div className="current-owner">Current Owner: {selectedNode.get('name')}</div>
+        <div className="current-owner">Current Node: {selectedNode.get('name')}</div>
+        <div className="current-owner">Owner: {selectedNode.get('owner')}</div>
         <div className="input-group">
           <input placeholder="0x..." type="text" name="newOwner"
             value={db.getIn(['updateForm', 'newOwner'])}

@@ -8,7 +8,7 @@ const handleSelectNode = (event, data) => {
 }
 
 const Node = ({ data }) =>
-  <div className="node">
+  <div className="node ">
     <div onClick={(e) => handleSelectNode(e, data)} className="node-details">{data.get('name')}</div>
 
     <div className="child-nodes">
