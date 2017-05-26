@@ -50,3 +50,6 @@
   padding: 20px;
   border: 2px solid $lightBlue;
 }
+.selected > .node-details {
+  border: 2px solid $medBlue;
+}
