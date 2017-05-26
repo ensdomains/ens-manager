@@ -1,5 +1,5 @@
-import ENS, { ens, namehash, getENSEvent } from './ens'
-import Immutable from 'immutable'
+import ENS, { namehash, getENSEvent } from './ens'
+import { fromJS } from 'immutable'
 import web3 from './web3'
 import { decryptHash } from './preimage'
 
@@ -18,16 +18,14 @@ export const setNewOwner = (name, newOwner) =>
 export const setSubnodeOwner = (label, node, newOwner) =>
   ENS().then(ENS => ENS.setSubnodeOwner(namehash(node), web3.sha3(label), newOwner, {from: web3.eth.accounts[0]}))
 
-export function getRootDomain(name){
-
-  return getOwner(name).then(owner =>
-    Immutable.fromJS([{
+export const getRootDomain = name =>
+  getOwner(name).then(owner =>
+    fromJS([{
       name,
       owner,
       nodes: []
     }])
   )
-}
 
 export const getSubdomains = name => {
   return namehash(name).then(namehash =>

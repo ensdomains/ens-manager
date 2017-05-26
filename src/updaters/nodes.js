@@ -1,5 +1,5 @@
 import app from '../App'
-import Immutable, { fromJS } from 'immutable'
+import { fromJS } from 'immutable'
 import { getSubdomains, getRootDomain, getOwner, getResolver } from '../api/registry'
 import { addNotification } from './notifications'
 

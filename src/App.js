@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Immutable, { fromJS } from 'immutable'
+import { fromJS } from 'immutable'
 import Main from './Main'
 import './index.css'
 import Redax from './lib/Redax'
