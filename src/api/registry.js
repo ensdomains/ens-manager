@@ -1,6 +1,6 @@
-import ENS, { ens, namehash, getENSEvent } from '../api/ens'
+import ENS, { ens, namehash, getENSEvent } from './ens'
 import Immutable from 'immutable'
-import web3 from '../api/web3'
+import web3 from './web3'
 import { decryptHash } from './preimage'
 
 export const getOwner = name =>
@@ -16,7 +16,7 @@ export const setNewOwner = (name, newOwner) =>
   ENS().then(ENS => ENS.setOwner(name, newOwner, {from: web3.eth.accounts[0]}))
 
 export const setSubnodeOwner = (label, node, newOwner) =>
-  ENS().then(ENS => ENS.setSubnodeOwner(namehash(node), web3.sha3(label), newOwner, {from: web3.eth.accounts[0]});
+  ENS().then(ENS => ENS.setSubnodeOwner(namehash(node), web3.sha3(label), newOwner, {from: web3.eth.accounts[0]}))
 
 export function getRootDomain(name){
 
