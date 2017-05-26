@@ -231,11 +231,10 @@ const ens = ensContract.then(ensContract => ensContract.at('0x112234455c3a32fd11
 //   }
 //   return resolverContract.at(resolverAddress).content(node);
 // }
-function ENS() {
-  return web3().then(({ web3 }) => {
-    return new ENSconstructor(web3, '0x112234455c3a32fd11230c42e7bccd4a84e02010')
-  })
-}
+const ENS = () =>
+  web3().then(({ web3 }) =>
+    new ENSconstructor(web3, '0x112234455c3a32fd11230c42e7bccd4a84e02010')
+  )
 
 const getENSEvent = (event, filter, params) =>
   ens.then(ens => {

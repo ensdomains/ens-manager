@@ -29,7 +29,7 @@ export function updateForm(formName, data) {
 export function setNodeDetails(name, address) {
   //TODO: event log for subdomains
 
-  addNotification()
+  addNotification('Node details set')
 
   getRootDomain(name).then(rootDomain => {
     app.update(
@@ -64,7 +64,7 @@ export function appendSubDomain(subDomain, domain, owner){
   if(domainArray.length > 2) {
     indexOfNode = app.db.get('nodes').findIndex(node =>
       node.get('domain') === domain
-    );
+    )
   } else {
     app.update(
       app.db.updateIn(['nodes', 0, 'nodes'], nodes => nodes.push(fromJS({
@@ -93,4 +93,6 @@ export function appendSubDomains(subDomains, rootDomain) {
       app.db.updateIn(['nodes', 0, 'nodes'], nodes => nodes.push(fromJS(domain)))
     )
   })
+
+  addNotification(subDomains.length + ' subdomains found')
 }
