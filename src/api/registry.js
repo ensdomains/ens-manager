@@ -1,6 +1,6 @@
-import ENS, { ens, namehash, getENSEvent } from '../lib/ens'
+import ENS, { ens, namehash, getENSEvent } from '../api/ens'
 import Immutable from 'immutable'
-import web3 from '../lib/web3'
+import web3 from '../api/web3'
 import { decryptHash } from './preimage'
 
 export function setSubnodeOwner(domain, subDomain, newOwner, account){
@@ -59,7 +59,6 @@ export const getSubdomains = name =>
           }
         })
 
-        console.log(subdomains)
         return subdomains
       })
     })
