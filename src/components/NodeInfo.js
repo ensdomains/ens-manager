@@ -39,16 +39,16 @@ export default () => {
   const selectedNode = db.get('selectedNode')
   var content = <div>Select a node to continue</div>
 
-  if(selectedNode.get('address')){
+  if(selectedNode.get('name')){
     content = (
       <div>
-        <div className="current-owner">Current Owner: {selectedNode.get('address')}</div>
+        <div className="current-owner">Current Owner: {selectedNode.get('name')}</div>
         <div className="input-group">
           <input placeholder="0x..." type="text" name="newOwner"
             value={db.getIn(['updateForm', 'newOwner'])}
             onChange={(e)=> handleOnChange('newOwner', e.target.value)}/>
           <button
-            onClick={(e)=> handleUpdateOwner(db.getIn(['selectedNode', 'name']), db.getIn(['updateForm', 'newOwner']))}>Update owner</button>
+            onClick={(e)=> handleUpdateOwner(db.getIn(['selectedNode', 'owner']), db.getIn(['updateForm', 'newOwner']))}>Update owner</button>
         </div>
         <div className="input-group">
           <input type="text" name="resolver"/>

@@ -2,7 +2,6 @@ import ENS, { ens, namehash } from '../lib/ens'
 import Immutable from 'immutable'
 import web3 from '../lib/web3'
 import { decryptHash } from './preimage'
-import { appendSubDomains } from '../updaters/nodes'
 
 export function setSubnodeOwner(domain, subDomain, newOwner, account){
   //ens.setSubnodeOwner(namehash(name), web3.sha3(subDomain), newOwner, {from: account});
@@ -33,37 +32,13 @@ export function setNewOwner(name, newOwner){
 
 //ens.setSubnodeOwner(namehash('jefflau.test'), web3.sha3('awesome'), eth.accounts[0], {from: eth.accounts[0]});
 
-export function getSubdomains(name){
+export function getRootDomain(name){
   //Todo check subdomain owner and replace
   console.log(name)
 
   console.log(ens)
 
-  ens.then(ens => {
-    return namehash(name).then(namehash => {
-      const myEvent = ens.NewOwner({ node: namehash },{fromBlock: 0, toBlock: 'latest'})
 
-      myEvent.get(function(error, logs){
-        console.log(logs)
-        let promises = logs.map(log => decryptHash(log.args.label))
-        Promise.all(promises).then(values => {
-          let subdomains = values.map((value, index) => {
-            //if(label === false)
-            return {
-              label: value,
-              node: name,
-              owner: logs[index].args.owner,
-              name: value + '.' + name,
-              nodes: []
-            }
-          })
-
-          console.log(subdomains)
-          appendSubDomains(subdomains, name)
-        })
-      })
-    })
-  })
 
   return getOwner(name).then(address =>
     Immutable.fromJS([{
@@ -73,3 +48,41 @@ export function getSubdomains(name){
     }])
   )
 }
+
+const getENSEvent = (event, filter, params) =>
+  ens.then(ens => {
+    const myEvent = ens[event](filter,params)
+
+    return new Promise(function(resolve,reject){
+      myEvent.get(function(error, logs){
+        console.log(logs)
+        if(error) {
+          reject(error)
+        } else {
+          resolve(logs)
+        }
+      })
+    });
+  })
+
+export const getSubdomains = name =>
+  namehash(name).then(namehash =>
+    getENSEvent('NewOwner', {node: namehash}, {fromBlock: 900000, toBlock: 'latest'}).then(logs => {
+      let promises = logs.map(log => decryptHash(log.args.label))
+      return Promise.all(promises).then(values => {
+        let subdomains = values.map((value, index) => {
+          //if(label === false)
+          return {
+            label: value,
+            node: name,
+            owner: logs[index].args.owner,
+            name: value + '.' + name,
+            nodes: []
+          }
+        })
+
+        console.log(subdomains)
+        return subdomains
+      })
+    })
+  )

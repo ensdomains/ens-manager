@@ -1,6 +1,6 @@
 import app from '../App'
 import Immutable, { fromJS } from 'immutable'
-import { getSubdomains, getOwner, getResolver } from '../api/registry'
+import { getSubdomains, getRootDomain, getOwner, getResolver } from '../api/registry'
 import { addNotification } from './notifications'
 
 //web3
@@ -26,17 +26,22 @@ export function updateForm(formName, data) {
   )
 }
 
-export function getNodeDetails(name, address) {
+export function setNodeDetails(name, address) {
   //TODO: event log for subdomains
 
   addNotification()
 
-
-  getSubdomains(name).then(data =>
+  getRootDomain(name).then(rootDomain => {
     app.update(
-      app.db.set('nodes', data)
+      app.db.set('nodes', rootDomain)
+    )
+    return name
+  }).then(name =>
+    getSubdomains(name).then(subdomains =>
+      appendSubDomains(subdomains, name)
     )
   )
+
 
   getResolver(name).then(data =>
     app.update(

@@ -1,5 +1,5 @@
 import React from 'react'
-import { updateAddress, getNodeDetails } from '../updaters/nodes'
+import { updateAddress, setNodeDetails } from '../updaters/nodes'
 import app from '../App'
 
 export default () => {
@@ -11,8 +11,7 @@ export default () => {
   } else if(app.db.get('rootName').length > 0 ) {
     owner = <div>No owner found</div>
   }
-
-  getDetails = addressExists ? <button className="get-details" onClick={() => getNodeDetails(app.db.get('rootName'),app.db.get('rootAddress'))}>Get Details</button> : null
+  getDetails = addressExists ? <button className="get-details" onClick={() => setNodeDetails(app.db.get('rootName'),app.db.get('rootAddress'))}>Get Details</button> : null
 
   return <div className="search-name">
     <div className="instructions">Search an ethereum name</div>
