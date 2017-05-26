@@ -3,13 +3,8 @@ import Immutable from 'immutable'
 import web3 from '../api/web3'
 import { decryptHash } from './preimage'
 
-export function setSubnodeOwner(domain, subDomain, newOwner, account){
-  //ens.setSubnodeOwner(namehash(name), web3.sha3(subDomain), newOwner, {from: account});
-}
-
 export const getOwner = name =>
   ENS().then(ENS => ENS.owner(name))
-
 
 export const getResolver = name =>
   ENS().then(ENS => ENS.resolver(name))
@@ -17,20 +12,11 @@ export const getResolver = name =>
 export const checkSubDomain = (subDomain, domain) =>
   ENS().then(ENS => ENS.owner(subDomain + '.' + domain))
 
-export function setNewOwner(name, newOwner){
-  // console.log(name, newOwner, web3.eth.accounts)
-  // console.log(ENS)
-  return ENS().then(ENS => ENS.setOwner(name, newOwner, {from: web3.eth.accounts[0]}))
-  //return ENS.setOwner(name, newOwner, {from: web3.eth.accounts[0]}).catch(console.error)
-  // ENS
-  // name string The name to update
-  // address address The address of the new owner
-  // options object An optional dict of parameters to pass to web3.
-  // addr
-  // params
-}
+export const setNewOwner = (name, newOwner) =>
+  ENS().then(ENS => ENS.setOwner(name, newOwner, {from: web3.eth.accounts[0]}))
 
-//ens.setSubnodeOwner(namehash('jefflau.test'), web3.sha3('awesome'), eth.accounts[0], {from: eth.accounts[0]});
+export const setSubnodeOwner = (label, node, newOwner) =>
+  ENS().then(ENS => ENS.setSubnodeOwner(namehash(node), web3.sha3(label), newOwner, {from: web3.eth.accounts[0]});
 
 export function getRootDomain(name){
 
@@ -43,13 +29,14 @@ export function getRootDomain(name){
   )
 }
 
-export const getSubdomains = name =>
-  namehash(name).then(namehash =>
+export const getSubdomains = name => {
+  return namehash(name).then(namehash =>
     getENSEvent('NewOwner', {node: namehash}, {fromBlock: 900000, toBlock: 'latest'}).then(logs => {
       let promises = logs.map(log => decryptHash(log.args.label))
       return Promise.all(promises).then(values => {
         let subdomains = values.map((value, index) => {
           //if(label === false)
+          // TODO add check for labels that haven't been found
           return {
             label: value,
             node: name,
@@ -63,3 +50,4 @@ export const getSubdomains = name =>
       })
     })
   )
+}
