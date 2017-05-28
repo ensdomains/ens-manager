@@ -62,10 +62,9 @@ export function appendSubDomain(subDomain, domain, owner){
   let indexOfNode,
       updatePath = ['nodes', 0, 'nodes']
 
-  console.log(domainArray)
   if(domainArray.length > 2) {
     let domainArraySliced = domainArray.slice(0, domainArray.length - 2)
-    updatePath = resolveUpdatePath(domainArraySliced, updatePath)
+    updatePath = resolveUpdatePath(domainArraySliced, updatePath, app.db)
   }
 
   app.update(
@@ -88,7 +87,7 @@ export function appendSubDomains(subDomains, rootDomain) {
 
   if(domainArray.length > 2) {
     let domainArraySliced = domainArray.slice(0, domainArray.length - 2)
-    updatePath = resolveUpdatePath(domainArraySliced, updatePath)
+    updatePath = resolveUpdatePath(domainArraySliced, updatePath, app.db)
   }
 
   subDomains.forEach(domain => {
@@ -100,18 +99,18 @@ export function appendSubDomains(subDomains, rootDomain) {
   addNotification(subDomains.length + ' subdomains found')
 }
 
-function resolveUpdatePath (domainArray, path) {
+function resolveUpdatePath (domainArray, path, db) {
   if(domainArray.length === 0 ){
     return path
   }
 
   let domainArrayPopped = domainArray.slice(0, domainArray.length - 1)
   let currentLabel = domainArray[domainArray.length - 1]
-  let indexOfNode = app.db.getIn(path).findIndex(node =>
+  let indexOfNode = db.getIn(path).findIndex(node =>
     node.get('label') === currentLabel
   );
 
   let updatedPath = [...path, indexOfNode, 'nodes']
 
-  return resolveUpdatePath(domainArrayPopped, updatedPath)
+  return resolveUpdatePath(domainArrayPopped, updatedPath, db)
 }
