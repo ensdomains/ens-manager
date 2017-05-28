@@ -59,40 +59,59 @@ export function selectNode(data) {
 
 export function appendSubDomain(subDomain, domain, owner){
   const domainArray = domain.split('.')
-  let indexOfNode
+  let indexOfNode,
+      updatePath = ['nodes', 0, 'nodes']
 
+  console.log(domainArray)
   if(domainArray.length > 2) {
-    indexOfNode = app.db.get('nodes').findIndex(node =>
-      node.get('domain') === domain
-    )
-  } else {
-    app.update(
-      app.db.updateIn(['nodes', 0, 'nodes'], nodes => nodes.push(fromJS({
-        owner,
-        label: subDomain,
-        node: domain,
-        name: subDomain + '.' + domain,
-        nodes: []
-      })))
-    )
+    let domainArraySliced = domainArray.slice(0, domainArray.length - 2)
+    updatePath = resolveUpdatePath(domainArraySliced, updatePath)
   }
+
+  app.update(
+    app.db.updateIn(updatePath, nodes => nodes.push(fromJS({
+      owner,
+      label: subDomain,
+      node: domain,
+      name: subDomain + '.' + domain,
+      nodes: []
+    })))
+  )
+
+  addNotification(subDomain + '.' + domain +  'subdomain found')
 }
 
 export function appendSubDomains(subDomains, rootDomain) {
   const domainArray = rootDomain.split('.')
-  let indexOfNode
+  let indexOfNode,
+      updatePath = ['nodes', 0, 'nodes']
 
   if(domainArray.length > 2) {
-    indexOfNode = app.db.get('nodes').findIndex(node =>
-      node.get('domain') === rootDomain
-    );
+    let domainArraySliced = domainArray.slice(0, domainArray.length - 2)
+    updatePath = resolveUpdatePath(domainArraySliced, updatePath)
   }
 
   subDomains.forEach(domain => {
     app.update(
-      app.db.updateIn(['nodes', 0, 'nodes'], nodes => nodes.push(fromJS(domain)))
+      app.db.updateIn(updatePath, nodes => nodes.push(fromJS(domain)))
     )
   })
 
   addNotification(subDomains.length + ' subdomains found')
+}
+
+function resolveUpdatePath (domainArray, path) {
+  if(domainArray.length === 0 ){
+    return path
+  }
+
+  let domainArrayPopped = domainArray.slice(0, domainArray.length - 1)
+  let currentLabel = domainArray[domainArray.length - 1]
+  let indexOfNode = app.db.getIn(path).findIndex(node =>
+    node.get('label') === currentLabel
+  );
+
+  let updatedPath = [...path, indexOfNode, 'nodes']
+
+  return resolveUpdatePath(domainArrayPopped, updatedPath)
 }

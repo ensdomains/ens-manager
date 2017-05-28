@@ -18,30 +18,17 @@ export function addNotification(message, time = 3000){
     )
   )
 
-function removeNotification(id){
+  function removeNotification(id){
 
-  const db = app.db
+    const db = app.db
 
-  const index = db.get('notifications').findIndex(notif => {
-    return notif.get('key') === id;
-  });
+    const index = db.get('notifications').findIndex(notif => {
+      return notif.get('key') === id;
+    });
 
-  app.update(
-    db.set('notifications', db.get('notifications').delete(index))
-  )
+    app.update(
+      db.set('notifications', db.get('notifications').delete(index))
+    )
 
-
-}
-
-
-  // app.db.update('notificationsHistory', notifications => notifications.push({
-  //     message: `Notification ipsum...`,
-  //     key: 'some UID',
-  //     action: 'Dismiss',
-  //     onClick: (notification, deactivate) => {
-  //       deactivate();
-  //       this.removeNotification('some UID');
-  //     }
-  //   })
-  // })
+  }
 }
