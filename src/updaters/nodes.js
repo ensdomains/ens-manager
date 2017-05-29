@@ -28,7 +28,7 @@ export function updateForm(formName, data) {
 
 export function setNodeDetails(name, address) {
   //TODO: event log for subdomains
-  const recursiveFetchSubdomains = name =>
+  const fetchSubdomains = name =>
     getSubdomains(name).then(subdomains => {
       appendSubDomains(subdomains, name)
       subdomains.forEach(subdomain =>
@@ -43,7 +43,7 @@ export function setNodeDetails(name, address) {
       app.db.set('nodes', rootDomain)
     )
     return name
-  }).then(recursiveFetchSubdomains)
+  }).then(fetchSubdomains)
 
 
 
