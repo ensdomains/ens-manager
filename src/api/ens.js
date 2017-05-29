@@ -232,9 +232,10 @@ const ens = ensContract.then(ensContract => ensContract.at('0x112234455c3a32fd11
 //   return resolverContract.at(resolverAddress).content(node);
 // }
 const ENS = () =>
-  web3().then(({ web3 }) =>
-    new ENSconstructor(web3, '0x112234455c3a32fd11230c42e7bccd4a84e02010')
-  )
+  web3().then(({ web3 }) => ({
+    ENS: new ENSconstructor(web3, '0x112234455c3a32fd11230c42e7bccd4a84e02010'),
+    web3
+  }))
 
 const getENSEvent = (event, filter, params) =>
   ens.then(ens => {

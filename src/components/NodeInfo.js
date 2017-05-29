@@ -1,12 +1,18 @@
 import React from 'react'
 import app from '../App'
-import { setNewOwner, checkSubDomain } from '../api/registry'
+import { setNewOwner, setSubnodeOwner, checkSubDomain } from '../api/registry'
 import { updateForm, appendSubDomain } from '../updaters/nodes'
 
 function handleUpdateOwner(name, newOwner){
   //contract api call updateOwner
   //updateform
+  console.log('handle update owner')
+  let domainArray = name.split('.')
+  console.log(domainArray)
   //
+  if(domainArray.length > 2) {
+    setSubnodeOwner(domainArray[0], domainArray.slice(1), newOwner).then(console.log)
+  }
 
   setNewOwner(name, newOwner).then(console.log)
 }
@@ -49,7 +55,7 @@ export default () => {
             value={db.getIn(['updateForm', 'newOwner'])}
             onChange={(e)=> handleOnChange('newOwner', e.target.value)}/>
           <button
-            onClick={(e)=> handleUpdateOwner(db.getIn(['selectedNode', 'owner']), db.getIn(['updateForm', 'newOwner']))}>Update owner</button>
+            onClick={(e)=> handleUpdateOwner(db.getIn(['selectedNode', 'name']), db.getIn(['updateForm', 'newOwner']))}>Update owner</button>
         </div>
         <div className="input-group">
           <input type="text" name="resolver"/>
