@@ -1,10 +1,17 @@
 import 'whatwg-fetch'
 
-const rootUrl = 'http://preimagedb.appspot.com/keccak256'
+const rootUrl = 'http://preimagedb.appspot.com/keccak256/query'
 
-export function decryptHash(hash) {
-  let trimmedHash = hash.slice(2)
-  return fetch(`${rootUrl}/${trimmedHash}`)
-    .then(res => res.text())
-    .catch(error => error)
+export function decryptHashes(...hashes) {
+  let trimmedHashes = hashes.map(hash => hash.slice(2))
+
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json")
+
+  return fetch(rootUrl, {
+    method: "POST",
+    headers: myHeaders,
+    body: JSON.stringify(trimmedHashes)
+  }).then(res => res.json())
+    .then(json => json.data)
 }

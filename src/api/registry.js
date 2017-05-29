@@ -1,7 +1,7 @@
 import ENS, { namehash, getENSEvent } from './ens'
 import { fromJS } from 'immutable'
 import web3 from './web3'
-import { decryptHash } from './preimage'
+import { decryptHashes } from './preimage'
 
 export const getOwner = name =>
   ENS().then(({ENS}) => ENS.owner(name))
@@ -30,8 +30,8 @@ export const getRootDomain = name =>
 export const getSubdomains = name => {
   return namehash(name).then(namehash =>
     getENSEvent('NewOwner', {node: namehash}, {fromBlock: 900000, toBlock: 'latest'}).then(logs => {
-      let labelPromises = logs.map(log => decryptHash(log.args.label))
-      return Promise.all(labelPromises).then(labels => {
+      let labelsPromise = decryptHashes(...logs.map(log => log.args.label))
+      return labelsPromise.then(labels => {
         let ownerPromises = labels.map(label => getOwner(`${label}.${name}`))
 
         return Promise.all(ownerPromises).then(owners => {
