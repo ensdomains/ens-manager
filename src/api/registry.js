@@ -30,21 +30,25 @@ export const getRootDomain = name =>
 export const getSubdomains = name => {
   return namehash(name).then(namehash =>
     getENSEvent('NewOwner', {node: namehash}, {fromBlock: 900000, toBlock: 'latest'}).then(logs => {
-      let promises = logs.map(log => decryptHash(log.args.label))
-      return Promise.all(promises).then(values => {
-        let subdomains = values.map((value, index) => {
-          //if(label === false)
-          // TODO add check for labels that haven't been found
-          return {
-            label: value,
-            node: name,
-            owner: logs[index].args.owner,
-            name: value + '.' + name,
-            nodes: []
-          }
-        })
+      let labelPromises = logs.map(log => decryptHash(log.args.label))
+      return Promise.all(labelPromises).then(labels => {
+        let ownerPromises = labels.map(label => getOwner(`${label}.${name}`))
 
-        return subdomains
+        return Promise.all(ownerPromises).then(owners => {
+          let subdomains = labels.map((value, index) => {
+            //if(label === false)
+            // TODO add check for labels that haven't been found
+            return {
+              label: value,
+              node: name,
+              owner: owners[index],
+              name: value + '.' + name,
+              nodes: []
+            }
+          })
+
+          return subdomains
+        })
       })
     })
   )
