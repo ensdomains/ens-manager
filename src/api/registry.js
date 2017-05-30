@@ -59,30 +59,3 @@ export const getSubdomains = async name => {
     return subdomains
   })
 }
-
-// export const getSubdomains = async name => {
-//   return namehash(name).then(namehash =>
-//     getENSEvent('NewOwner', {node: namehash}, {fromBlock: 900000, toBlock: 'latest'}).then(logs => {
-//       let labelsPromise = decryptHashes(...logs.map(log => log.args.label))
-//       return labelsPromise.then(labels => {
-//         let ownerPromises = labels.map(label => getOwner(`${label}.${name}`))
-//
-//         return Promise.all(ownerPromises).then(owners => {
-//           let subdomains = labels.map((value, index) => {
-//             //if(label === false)
-//             // TODO add check for labels that haven't been found
-//             return {
-//               label: value,
-//               node: name,
-//               owner: owners[index],
-//               name: value + '.' + name,
-//               nodes: []
-//             }
-//           })
-//
-//           return subdomains
-//         })
-//       })
-//     })
-//   )
-// }
