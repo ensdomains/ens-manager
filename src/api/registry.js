@@ -13,11 +13,15 @@ export async function getResolver(name){
   return registry.resolverAsync(name)
 }
 
+export async function setResolver(name, resolver) {
+  let { ENS, web3 } = await getENS()
+  return ENS.setResolver(name, resolver, {from: web3.eth.accounts[0]})
+}
+
 export async function checkSubDomain(subDomain, domain) {
   let { ENS } = await getENS()
   return ENS.owner(subDomain + '.' + domain)
 }
-
 
 export async function setNewOwner(name, newOwner) {
   let { ENS, web3 } = await getENS()
@@ -28,13 +32,15 @@ export async function setSubnodeOwner(label, node, newOwner) {
   let { ENS, web3 } = await getENS()
   return ENS.setSubnodeOwner(getNamehash(node), web3.sha3(label), newOwner, {from: web3.eth.accounts[0]})
 }
-export async function getRootDomain(name){
-  let owner = await getOwner(name)
-  return fromJS([{
-    name,
-    owner,
-    nodes: []
-  }])
+export function getRootDomain(name){
+  return Promise.all([getOwner(name), getResolver(name)])
+    .then(([owner, resolver]) => fromJS([{
+        name,
+        owner,
+        resolver,
+        nodes: []
+      }])
+    )
 }
 
 export const getSubdomains = async name => {
