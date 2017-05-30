@@ -11,12 +11,9 @@ function setupWeb3(){
   return new Promise(function(resolve,reject){
     if (typeof window.web3 !== 'undefined') {
       //Metamask or Mist
-      console.log(window.web3)
-      console.log(window.web3.currentProvider)
 
       web3 = new Web3(window.web3.currentProvider);
       provider = web3.currentProvider
-      console.log(web3)
       web3.version.getNetwork(function(err, networkId){
         ready = true
         injected = true
@@ -64,7 +61,6 @@ function getWeb3(){
   } else {
     return new Promise(function(resolve,reject){
       web3.version.getNetwork(function(err, networkId){
-        console.log(web3, provider, networkId)
         resolve({web3, provider, readOnly, networkId})
       })
     })
