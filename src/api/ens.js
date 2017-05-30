@@ -1,4 +1,4 @@
-import web3 from './web3'
+import getWeb3 from './web3'
 import ENSconstructor from 'ethereum-ens'
 
 var contracts = {
@@ -12,8 +12,10 @@ var contracts = {
   },
 }
 
+let ENS;
+
 function namehash(name) {
-  return web3().then(({ web3 }) =>{
+  return getWeb3().then(({ web3 }) =>{
     var node = '0x0000000000000000000000000000000000000000000000000000000000000000';
     if (name !== '') {
         var labels = name.split(".");
@@ -26,7 +28,7 @@ function namehash(name) {
 }
 
 
-const ens = web3().then(({ web3, networkId }) => {
+const ens = getWeb3().then(({ web3, networkId }) => {
   let contract = web3.eth.contract([
     {
       "constant": true,
@@ -242,11 +244,19 @@ const ens = web3().then(({ web3, networkId }) => {
 //   }
 //   return resolverContract.at(resolverAddress).content(node);
 // }
-const ENS = () =>
-  web3().then(({ web3, networkId }) => ({
-    ENS: new ENSconstructor(web3, contracts[networkId].registry),
-    web3
-  }))
+const getENS = async () => {
+  let { web3, networkId } = await getWeb3()
+  
+  if(!ENS){
+    ENS = new ENSconstructor(web3, contracts[networkId].registry)
+  }
+
+  return { ENS, web3}
+}
+  // web3().then(({ web3, networkId }) => ({
+  //   ENS: new ENSconstructor(web3, contracts[networkId].registry),
+  //   web3
+  // }))
 
 const getENSEvent = (event, filter, params) =>
   ens.then(ens => {
@@ -264,7 +274,7 @@ const getENSEvent = (event, filter, params) =>
     });
   })
 
-export default ENS
+export default getENS
 export {
    ens,
    getENSEvent,

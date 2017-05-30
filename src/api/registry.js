@@ -1,23 +1,33 @@
-import ENS, { namehash, getENSEvent } from './ens'
+import getENS, { namehash, getENSEvent } from './ens'
 import { fromJS } from 'immutable'
-import web3 from './web3'
 import { decryptHashes } from './preimage'
 
-export const getOwner = name =>
-  ENS().then(({ENS}) => ENS.owner(name))
+export async function getOwner(name) {
+  let { ENS , web3} = await getENS()
+  return ENS.owner(name)
+}
+  //ENS().then(({ENS}) =>
 
-export const getResolver = name =>
-  ENS().then(({ENS}) => ENS.resolver(name))
+export async function getResolver(name){
+  let { ENS, web3 } = await getENS()
+  return ENS.resolver(name)
+}
 
-export const checkSubDomain = (subDomain, domain) =>
-  ENS().then(({ENS}) => ENS.owner(subDomain + '.' + domain))
+export async function checkSubDomain (subDomain, domain) {
+  let { ENS } = await getENS()
+  return ENS.owner(subDomain + '.' + domain)
+}
 
-export const setNewOwner = (name, newOwner) =>
-  ENS().then(({ENS, web3}) => ENS.setOwner(name, newOwner, {from: web3.eth.accounts[0]}))
 
-export const setSubnodeOwner = (label, node, newOwner) =>
-  ENS().then(({ENS, web3}) => ENS.setSubnodeOwner(namehash(node), web3.sha3(label), newOwner, {from: web3.eth.accounts[0]}))
+export async function setNewOwner (name, newOwner) {
+  let { ENS, web3 } = await getENS()
+  return ENS.setOwner(name, newOwner, {from: web3.eth.accounts[0]})
+}
 
+export async function setSubnodeOwner (label, node, newOwner) {
+  let { ENS, web3 } = await getENS()
+  return ENS.setSubnodeOwner(namehash(node), web3.sha3(label), newOwner, {from: web3.eth.accounts[0]})
+}
 export const getRootDomain = name =>
   getOwner(name).then(owner =>
     fromJS([{
