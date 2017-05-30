@@ -14,7 +14,7 @@ var contracts = {
 
 let ENS;
 
-function namehash(name) {
+function getNamehash(name) {
   return getWeb3().then(({ web3 }) =>{
     var node = '0x0000000000000000000000000000000000000000000000000000000000000000';
     if (name !== '') {
@@ -246,7 +246,7 @@ const ens = getWeb3().then(({ web3, networkId }) => {
 // }
 const getENS = async () => {
   let { web3, networkId } = await getWeb3()
-  
+
   if(!ENS){
     ENS = new ENSconstructor(web3, contracts[networkId].registry)
   }
@@ -278,5 +278,5 @@ export default getENS
 export {
    ens,
    getENSEvent,
-   namehash
+   getNamehash
 }
