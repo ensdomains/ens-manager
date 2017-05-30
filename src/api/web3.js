@@ -15,7 +15,6 @@ function setupWeb3(){
       web3 = new Web3(window.web3.currentProvider);
       web3.version.getNetwork(function(err, networkId){
         ready = true
-        injected = true
         console.log('Metamask active')
         resolve({web3, provider, readOnly, networkId})
       })
@@ -54,11 +53,13 @@ function setupWeb3(){
 }
 
 function web3Promise(){
-  if (ready === false || typeof window.web3 !== 'undefined' && injected === false){
+  if (ready === false){
     return setupWeb3()
   } else {
     return new Promise(function(resolve,reject){
+
       web3.version.getNetwork(function(err, networkId){
+        console.log(web3, provider, networkId)
         resolve({web3, provider, readOnly, networkId})
       })
     })
@@ -66,3 +67,5 @@ function web3Promise(){
 }
 
 export default web3Promise
+
+export { setupWeb3 }
