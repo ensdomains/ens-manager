@@ -1,6 +1,17 @@
 import web3 from './web3'
 import ENSconstructor from 'ethereum-ens'
 
+var contracts = {
+  1: {
+    registry: "0x314159265dd8dbb310642f98f50c066173c1259b",
+    publicResolver: "0x1da022710df5002339274aadee8d58218e9d6ab5"
+  },
+  3: {
+    registry: "0x112234455c3a32fd11230c42e7bccd4a84e02010",
+    publicResolver: "0x4c641fb9bad9b60ef180c31f56051ce826d21a9a"
+  },
+}
+
 function namehash(name) {
   return web3().then(({ web3 }) =>{
     var node = '0x0000000000000000000000000000000000000000000000000000000000000000';
@@ -15,8 +26,8 @@ function namehash(name) {
 }
 
 
-const ensContract = web3().then(({ web3 }) => {
-  return web3.eth.contract([
+const ens = web3().then(({ web3, networkId }) => {
+  let contract = web3.eth.contract([
     {
       "constant": true,
       "inputs": [
@@ -217,9 +228,9 @@ const ensContract = web3().then(({ web3 }) => {
       "type": "event"
     }
   ]);
-})
 
-const ens = ensContract.then(ensContract => ensContract.at('0x112234455c3a32fd11230c42e7bccd4a84e02010'))
+  return contract.at(contracts[networkId].registry)
+})
 
 
 //
@@ -232,8 +243,8 @@ const ens = ensContract.then(ensContract => ensContract.at('0x112234455c3a32fd11
 //   return resolverContract.at(resolverAddress).content(node);
 // }
 const ENS = () =>
-  web3().then(({ web3 }) => ({
-    ENS: new ENSconstructor(web3, '0x112234455c3a32fd11230c42e7bccd4a84e02010'),
+  web3().then(({ web3, networkId }) => ({
+    ENS: new ENSconstructor(web3, contracts[networkId].registry),
     web3
   }))
 
