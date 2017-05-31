@@ -131,17 +131,20 @@ export function resolveUpdatePath (domainArray, path, db) {
   let domainArrayPopped = domainArray.slice(0, domainArray.length - 1)
   let currentLabel = domainArray[domainArray.length - 1]
 
-
-  console.log(db.getIn(path))
-  let indexOfNode = db.getIn(path).findIndex(node =>
-    node.get('label') === currentLabel
-  );
+  function findIndex(path, db, label) {
+    return db.getIn(path).findIndex(node =>
+      node.get('label') === label
+    );
+  }
 
   let updatedPath;
-  if(typeof domainArray[domainArray.length - 1] === 'string') {
-    updatedPath = [...path, indexOfNode, 'nodes']
+  if(typeof path[path.length - 1] === 'string') {
+    let index = findIndex(path, db, currentLabel)
+    updatedPath = [...path, index, 'nodes']
   } else {
-    updatedPath = [...path, 'nodes', indexOfNode]
+    updatedPath = [...path, 'nodes']
+    let index = findIndex(updatedPath, db, currentLabel)
+    updatedPath = [...updatedPath, index]
   }
 
   return resolveUpdatePath(domainArrayPopped, updatedPath, db)

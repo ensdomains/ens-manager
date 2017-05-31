@@ -2,16 +2,31 @@ import React from 'react'
 import app from '../App'
 import { setNewOwner, setSubnodeOwner, checkSubDomain, setResolver } from '../api/registry'
 import { updateForm, appendSubDomain, updateNode, resolveUpdatePath } from '../updaters/nodes'
-import { watchResolverEvent } from '../api/watchers'
+import { watchResolverEvent, watchTransferEvent } from '../api/watchers'
 import { addNotification } from '../updaters/notifications'
 
 function handleUpdateOwner(name, newOwner){
   let domainArray = name.split('.')
   if(domainArray.length > 2) {
-    setSubnodeOwner(domainArray[0], domainArray.slice(1), newOwner).then(console.log)
+    setSubnodeOwner(domainArray[0], domainArray.slice(1), newOwner)
+      .then(txId => {
+        console.log(txId)
+        watch(name)
+      })
   }
 
-  setNewOwner(name, newOwner).then(console.log)
+  setNewOwner(name, newOwner).then(txId => {
+    console.log(txId)
+    watch(name)
+  })
+
+  function watch(){
+    watchTransferEvent(name).then(log => {
+      console.log(log)
+      updateNode(name, 'owner', log.args.owner)
+      addNotification(`New owner found for ${name}`)
+    })
+  }
 }
 
 function setDefaultResolver(){
@@ -19,13 +34,12 @@ function setDefaultResolver(){
 }
 
 function handleSetResolver(name, newResolver) {
-  watchResolverEvent(name).then(log => {
-    console.log(log)
-    updateNode(name, 'resolver', log.args.resolver)
-    addNotification(`New resolver found for ${name}`)
+  setResolver(name, newResolver).then(txId => {
+    watchResolverEvent(name).then(log => {
+      updateNode(name, 'resolver', log.args.resolver)
+      addNotification(`New resolver found for ${name}`)
+    })
   })
-  setResolver(name, newResolver).then(values => console.log('TX ID', values))
-
 }
 
 function handleCheckSubDomain(subDomain, domain){
@@ -44,14 +58,17 @@ function handleOnChange(formName, newOwner){
 }
 
 function getNodeInfo(name, prop) {
-  let updatePath = ['nodes', 0],
-      domainArray = name.split('.')
+  const domainArray = name.split('.')
+  let indexOfNode,
+      updatePath = ['nodes', 0]
+
   if(domainArray.length > 2) {
     let domainArraySliced = domainArray.slice(0, domainArray.length - 2)
     updatePath = resolveUpdatePath(domainArraySliced, updatePath, app.db)
   }
-  let path = [...updatePath, prop]
-  return app.db.getIn(path)
+
+  updatePath = [...updatePath, prop]
+  return app.db.getIn(updatePath)
 }
 
 export default () => {

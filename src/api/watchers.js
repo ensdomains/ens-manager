@@ -5,7 +5,7 @@ export async function watchResolverEvent(name) {
   return watchENSEvent('NewResolver', {node: namehash}, {fromBlock: 'latest'})
 }
 
-export async function watchOwnerEvent(name) {
+export async function watchTransferEvent(name) {
   let namehash = await getNamehash(name)
-  return watchENSEvent('NewOwner', {node: namehash}, {fromBlock: 'latest'})
+  return watchENSEvent('Transfer', {node: namehash}, {fromBlock: 'latest'})
 }
