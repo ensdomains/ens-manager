@@ -3,6 +3,7 @@ import app from '../App'
 import { setNewOwner, setSubnodeOwner, checkSubDomain, setResolver } from '../api/registry'
 import { updateForm, appendSubDomain, updateNode, resolveUpdatePath } from '../updaters/nodes'
 import { watchResolverEvent } from '../api/watchers'
+import { addNotification } from '../updaters/notifications'
 
 function handleUpdateOwner(name, newOwner){
   let domainArray = name.split('.')
@@ -21,6 +22,7 @@ function handleSetResolver(name, newResolver) {
   watchResolverEvent(name).then(log => {
     console.log(log)
     updateNode(name, 'resolver', log.args.resolver)
+    addNotification(`New resolver found for ${name}`)
   })
   setResolver(name, newResolver).then(values => console.log('TX ID', values))
 
