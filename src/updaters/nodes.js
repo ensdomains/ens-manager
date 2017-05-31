@@ -5,6 +5,12 @@ import { addNotification } from './notifications'
 
 //web3
 
+export function updatePublicResolver(address){
+  app.update(
+    app.db.set('publicResolver', address)
+  )
+}
+
 export function updateReadOnly(value){
   app.update(
     app.db.set('readOnly', value)

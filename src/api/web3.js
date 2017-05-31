@@ -1,5 +1,6 @@
 import Web3 from 'web3'
 import 'whatwg-fetch'
+import { updateReadOnly } from '../updaters/nodes'
 
 let web3,
     provider,
@@ -39,6 +40,7 @@ function setupWeb3(){
             console.log('The endpoint is not active. Falling back to Infura readOnly mode')
             url = 'https://ropsten.infura.io/BW6Y98TxAjFjImkmjVnG'
             readOnly = true
+            updateReadOnly(true)
           }
         })
         .then(res => {

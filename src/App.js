@@ -13,9 +13,8 @@ let initialData = {
   rootAddress: '0x0000000000000000000000000000000000000000',
   nodes: [],
   nodeCache: [],
-  domainFetch: [],
   notifications: [],
-  resolver: {},
+  publicResolver: "",
   selectedNode: {},
   updateForm: {
     newOwner: '',

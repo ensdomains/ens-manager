@@ -3,12 +3,10 @@ import ENSconstructor from 'ethereum-ens'
 
 var contracts = {
   1: {
-    registry: "0x314159265dd8dbb310642f98f50c066173c1259b",
-    publicResolver: "0x1da022710df5002339274aadee8d58218e9d6ab5"
+    registry: "0x314159265dd8dbb310642f98f50c066173c1259b"
   },
   3: {
-    registry: "0x112234455c3a32fd11230c42e7bccd4a84e02010",
-    publicResolver: "0x4c641fb9bad9b60ef180c31f56051ce826d21a9a"
+    registry: "0x112234455c3a32fd11230c42e7bccd4a84e02010"
   },
 }
 
@@ -239,15 +237,6 @@ const getEns = () => {
   })
 }
 
-//
-// function getContent(name) {
-//   var node = namehash(name)
-//   var resolverAddress = ens.resolver(node);
-//   if (resolverAddress === '0x0000000000000000000000000000000000000000') {
-//     return "0x0000000000000000000000000000000000000000000000000000000000000000";
-//   }
-//   return resolverContract.at(resolverAddress).content(node);
-// }
 const getENS = async () => {
   let { web3, networkId } = await getWeb3()
 
@@ -257,10 +246,6 @@ const getENS = async () => {
 
   return { ENS, web3}
 }
-  // web3().then(({ web3, networkId }) => ({
-  //   ENS: new ENSconstructor(web3, contracts[networkId].registry),
-  //   web3
-  // }))
 
 const getENSEvent = (event, filter, params) =>
   getEns().then(({ens}) => {
@@ -277,6 +262,8 @@ const getENSEvent = (event, filter, params) =>
       })
     });
   })
+
+
 
 export default getENS
 export {

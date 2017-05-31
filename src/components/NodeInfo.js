@@ -1,6 +1,6 @@
 import React from 'react'
 import app from '../App'
-import { setNewOwner, setSubnodeOwner, checkSubDomain } from '../api/registry'
+import { setNewOwner, setSubnodeOwner, checkSubDomain, setResolver } from '../api/registry'
 import { updateForm, appendSubDomain } from '../updaters/nodes'
 
 function handleUpdateOwner(name, newOwner){
@@ -21,8 +21,9 @@ function setDefaultResolver(){
 
 }
 
-function setResolver() {
-
+function handleSetResolver(name, newResolver) {
+  setResolver(name, newResolver).then(values => console.log('TX ID', values))
+  //console.log(txId)
 }
 
 function handleCheckSubDomain(subDomain, domain){
@@ -48,8 +49,9 @@ export default () => {
   if(selectedNode.get('name')){
     content = (
       <div>
-        <div className="current-owner">Current Node: {selectedNode.get('name')}</div>
+        <div className="current-node">Current Node: {selectedNode.get('name')}</div>
         <div className="current-owner">Owner: {selectedNode.get('owner')}</div>
+        <div className="current-resolver">Resolver: {selectedNode.get('resolver')}</div>
         <div className="input-group">
           <input placeholder="0x..." type="text" name="newOwner"
             value={db.getIn(['updateForm', 'newOwner'])}
@@ -58,8 +60,12 @@ export default () => {
             onClick={(e)=> handleUpdateOwner(db.getIn(['selectedNode', 'name']), db.getIn(['updateForm', 'newOwner']))}>Update owner</button>
         </div>
         <div className="input-group">
-          <input type="text" name="resolver"/>
-          <button onClick={() => setResolver()}>Set Resolver</button>
+          <input
+            type="text"
+            name="resolver"
+            onChange={(e)=> handleOnChange('newResolver', e.target.value)}
+          />
+          <button placeholder="0x..." onClick={() => setResolver(db.getIn(['selectedNode', 'name']), db.getIn(['updateForm', 'newResolver']))}>Set Resolver</button>
         </div>
         <button onClick={() => setDefaultResolver()}>Use default resolver</button>
         <div className="input-group">
