@@ -32,8 +32,24 @@ export function updateForm(formName, data) {
   )
 }
 
+export function updateNode(name, prop, data) {
+  const domainArray = name.split('.')
+  let indexOfNode,
+      updatePath = ['nodes', 0]
+
+  if(domainArray.length > 2) {
+    let domainArraySliced = domainArray.slice(0, domainArray.length - 2)
+    updatePath = resolveUpdatePath(domainArraySliced, updatePath, app.db)
+  }
+
+  updatePath = [...updatePath, prop]
+
+  app.update(
+    app.db.setIn(updatePath, data)
+  )
+}
+
 export function setNodeDetails(name, address) {
-  //TODO: event log for subdomains
   const fetchSubdomains = name =>
     getSubdomains(name).then(subdomains => {
       appendSubDomains(subdomains, name)
@@ -50,9 +66,6 @@ export function setNodeDetails(name, address) {
     )
     return name
   }).then(fetchSubdomains)
-
-
-
 
   getResolver(name).then(data =>
     app.update(
@@ -110,18 +123,26 @@ export function appendSubDomains(subDomains, rootDomain) {
   addNotification(subDomains.length + ' subdomains found')
 }
 
-function resolveUpdatePath (domainArray, path, db) {
+export function resolveUpdatePath (domainArray, path, db) {
   if(domainArray.length === 0 ){
     return path
   }
 
   let domainArrayPopped = domainArray.slice(0, domainArray.length - 1)
   let currentLabel = domainArray[domainArray.length - 1]
+
+
+  console.log(db.getIn(path))
   let indexOfNode = db.getIn(path).findIndex(node =>
     node.get('label') === currentLabel
   );
 
-  let updatedPath = [...path, indexOfNode, 'nodes']
+  let updatedPath;
+  if(typeof domainArray[domainArray.length - 1] === 'string') {
+    updatedPath = [...path, indexOfNode, 'nodes']
+  } else {
+    updatedPath = [...path, 'nodes', indexOfNode]
+  }
 
   return resolveUpdatePath(domainArrayPopped, updatedPath, db)
 }

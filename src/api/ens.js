@@ -263,11 +263,28 @@ const getENSEvent = (event, filter, params) =>
     });
   })
 
+const watchENSEvent = (event, filter, params, callback) =>
+  getEns().then(({ens}) => {
+    const myEvent = ens[event](filter,params)
+      console.log(myEvent)
+    return new Promise(function(resolve,reject){
+      myEvent.watch(function(error, log){
+        console.log('here in teh watchENS Event', log)
+        if(error) {
+          reject(error)
+        } else {
+          resolve(log)
+        }
+      })
+    });
+  })
+
 
 
 export default getENS
 export {
    getEns,
    getENSEvent,
-   getNamehash
+   getNamehash,
+   watchENSEvent
 }

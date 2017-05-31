@@ -9,10 +9,11 @@ export async function getOwner(name) {
 
 export async function getResolver(name){
   let { ENS, web3 } = await getENS()
+  let node = await getNamehash(name)
   let registry = await ENS.registryPromise
-  return registry.resolverAsync(name)
+  return registry.resolverAsync(node)
 }
-// var address = ens.resolver('foo.eth').addr().then(function(addr) { ... });
+
 export async function getAddr(name){
   let { ENS } = await getENS()
   let resolver = await ENS.resolver(name)
@@ -26,7 +27,6 @@ export async function getContent(name){
 }
 
 export async function setResolver(name, resolver) {
-  console.log(name, resolver)
   let { ENS, web3 } = await getENS()
   return ENS.setResolver(name, resolver, {from: web3.eth.accounts[0]})
 }

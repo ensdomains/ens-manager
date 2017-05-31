@@ -15,7 +15,7 @@ let initialData = {
   nodeCache: [],
   notifications: [],
   publicResolver: "",
-  selectedNode: {},
+  selectedNode: "",
   updateForm: {
     newOwner: '',
     newResolver: ''

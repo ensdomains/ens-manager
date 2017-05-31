@@ -12,11 +12,11 @@ const Node = ({ data }) => {
 
   let classes = classNames({
     node: true,
-    selected: data.get('name') === app.db.getIn(['selectedNode', 'name'])
+    selected: data.get('name') === app.db.get('selectedNode')
   })
 
   return <div className={classes}>
-    <div onClick={(e) => handleSelectNode(e, data)} className="node-details">{data.get('name')}</div>
+    <div onClick={(e) => handleSelectNode(e, data.get('name'))} className="node-details">{data.get('name')}</div>
 
     <div className="child-nodes">
       {data.get('nodes').size > 0 ? data.get('nodes').map(node => <Node key={node.get('name')} data={node} />) : ''}
