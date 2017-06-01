@@ -14,11 +14,12 @@ let initialData = {
   nodes: [],
   nodeCache: [],
   notifications: [],
-  publicResolver: "",
-  selectedNode: "",
+  publicResolver: '',
+  selectedNode: '',
   updateForm: {
     newOwner: '',
-    newResolver: ''
+    newResolver: '',
+    newSubDomain: '',
   }
 }
 

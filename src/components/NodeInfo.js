@@ -1,8 +1,9 @@
 import React from 'react'
 import app from '../App'
-import { setNewOwner, setSubnodeOwner, checkSubDomain, setResolver } from '../api/registry'
+import { setNewOwner, setSubnodeOwner, checkSubDomain, setResolver, createSubDomain} from '../api/registry'
 import { updateForm, appendSubDomain, updateNode, resolveUpdatePath } from '../updaters/nodes'
-import { watchResolverEvent, watchTransferEvent } from '../api/watchers'
+import { watchResolverEvent, watchTransferEvent, watchNewOwnerEvent } from '../api/watchers'
+import { getNamehash } from '../api/ens'
 import { addNotification } from '../updaters/notifications'
 
 function handleUpdateOwner(name, newOwner){
@@ -44,11 +45,29 @@ function handleSetResolver(name, newResolver) {
 
 function handleCheckSubDomain(subDomain, domain){
   checkSubDomain(subDomain, domain).then(address => {
-    console.log('here', subDomain, domain, address)
     if(address !== "0x0000000000000000000000000000000000000000"){
       appendSubDomain(subDomain, domain, address)
     } else {
       console.log('no subdomain with that name')
+    }
+  })
+}
+
+function handleCreateSubDomain(subDomain, domain){
+  checkSubDomain(subDomain, domain).then(address => {
+    console.log('here', subDomain, domain, address)
+    if(address !== "0x0000000000000000000000000000000000000000"){
+      console.log('subdomain already exists!')
+    } else {
+      createSubDomain(subDomain, domain).then(txId => {
+        watchNewOwnerEvent(domain).then(async log => {
+          //TODO check if this subdomain really is the same one submitted
+          // if it is cancel event
+          let labelHash = await getNamehash(subDomain)
+          console.log(labelHash, log.args.label)
+          appendSubDomain(subDomain, domain, address)
+        })
+      })
     }
   })
 }
@@ -101,7 +120,11 @@ export default () => {
         <button onClick={() => setDefaultResolver()}>Use default resolver</button>
         <div className="input-group">
           <input type="text" name="subDomain" onChange={(e)=> handleOnChange('subDomain', e.target.value)} />
-          <button onClick={() => handleCheckSubDomain(db.getIn(['updateForm', 'subDomain']), getNodeInfo(selectedNode, 'name'))}>Check For Subdomain</button>
+          <button onClick={() => handleCheckSubDomain(db.getIn(['updateForm', 'subDomain']), getNodeInfo(selectedNode, 'name'))}>Check for subdomain</button>
+        </div>
+        <div className="input-group">
+          <input type="text" name="subDomain" onChange={(e)=> handleOnChange('newSubDomain', e.target.value)} />
+          <button onClick={() => handleCreateSubDomain(db.getIn(['updateForm', 'newSubDomain']), getNodeInfo(selectedNode, 'name'))}>Create new subdomain</button>
         </div>
         <button>Delete Node</button>
       </div>
