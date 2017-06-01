@@ -148,7 +148,7 @@ export default () => {
           <input type="text" name="subDomain" onChange={(e)=> handleOnChange('newSubDomain', e.target.value)} />
           <button onClick={() => handleCreateSubDomain(db.getIn(['updateForm', 'newSubDomain']), getNodeInfo(selectedNode, 'name'))}>Create new subdomain</button>
         </div>
-        <button>Delete Node</button>
+        <button onClick={() => handleDeleteSubDomain(getNodeInfo(selectedNode, 'label'), getNodeInfo(selectedNode, 'node'))}>Delete Node</button>
       </div>
     )
   }

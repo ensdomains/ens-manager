@@ -105,6 +105,6 @@ export const getSubdomains = async name => {
         resolver: resolvers[index],
         nodes: []
       }
-    })
+    }).filter(node => parseInt(node.owner, 16) !== 0)
   })
 }
