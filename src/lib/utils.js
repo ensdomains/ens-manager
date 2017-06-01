@@ -1,5 +1,4 @@
-export function uniq(a, param){
-    return a.filter(function(item, pos, array){
-        return array.map(function(mapItem){ return mapItem[param]; }).indexOf(item[param]) === pos;
-    })
-}
+export const uniq = (a, param) =>
+  a.filter((item, pos) =>
+    a.map(mapItem => mapItem[param]).indexOf(item[param]) === pos
+  )
