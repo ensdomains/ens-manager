@@ -123,6 +123,21 @@ export function appendSubDomains(subDomains, rootDomain) {
   addNotification(subDomains.length + ' subdomains found')
 }
 
+export function deleteSubDomain(subDomain, rootDomain) {
+  const domainArray = rootDomain.split('.')
+  let indexOfNode,
+      updatePath = ['nodes', 0, 'nodes']
+
+  if(domainArray.length > 2) {
+    let domainArraySliced = domainArray.slice(0, domainArray.length - 2)
+    updatePath = resolveUpdatePath(domainArraySliced, updatePath, app.db)
+  }
+
+  app.update(
+    app.db.updateIn(updatePath, nodes => nodes.filter())
+  )
+}
+
 export function resolveUpdatePath (domainArray, path, db) {
   if(domainArray.length === 0 ){
     return path

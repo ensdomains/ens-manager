@@ -1,7 +1,7 @@
 import React from 'react'
 import app from '../App'
-import { setNewOwner, setSubnodeOwner, checkSubDomain, setResolver, createSubDomain} from '../api/registry'
-import { updateForm, appendSubDomain, updateNode, resolveUpdatePath } from '../updaters/nodes'
+import { setNewOwner, setSubnodeOwner, checkSubDomain, setResolver, createSubDomain } from '../api/registry'
+import { updateForm, appendSubDomain, updateNode, resolveUpdatePath, deleteSubDomain } from '../updaters/nodes'
 import { watchResolverEvent, watchTransferEvent, watchNewOwnerEvent } from '../api/watchers'
 import { getNamehash } from '../api/ens'
 import { addNotification } from '../updaters/notifications'
@@ -9,17 +9,17 @@ import { addNotification } from '../updaters/notifications'
 function handleUpdateOwner(name, newOwner){
   let domainArray = name.split('.')
   if(domainArray.length > 2) {
-    setSubnodeOwner(domainArray[0], domainArray.slice(1), newOwner)
+    setSubnodeOwner(domainArray[0], domainArray.slice(1).join('.'), newOwner)
       .then(txId => {
         console.log(txId)
         watch(name)
       })
+  } else {
+    setNewOwner(name, newOwner).then(txId => {
+      console.log(txId)
+      watch(name)
+    })
   }
-
-  setNewOwner(name, newOwner).then(txId => {
-    console.log(txId)
-    watch(name)
-  })
 
   function watch(){
     watchTransferEvent(name).then(log => {
@@ -66,6 +66,27 @@ function handleCreateSubDomain(subDomain, domain){
           let labelHash = await getNamehash(subDomain)
           console.log(labelHash, log.args.label)
           appendSubDomain(subDomain, domain, address)
+        })
+      })
+    }
+  })
+}
+
+function handleDeleteSubDomain(subDomain, domain){
+  checkSubDomain(subDomain, domain).then(address => {
+    console.log('here', subDomain, domain, address)
+    if(address === "0x0000000000000000000000000000000000000000"){
+      console.log('subdomain already exists!')
+    } else {
+      deleteSubDomain(subDomain, domain).then(txId => {
+        watchNewOwnerEvent(domain).then(async log => {
+          //TODO check if this subdomain really is the same one submitted
+          // if it is cancel event
+          // if()
+          // let labelHash = await getNamehash(subDomain)
+          // console.log(labelHash, log.args.label)
+          // appendSubDomain(subDomain, domain, address)
+          deleteSubDomain(subDomain, domain)
         })
       })
     }

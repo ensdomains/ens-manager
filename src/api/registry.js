@@ -43,6 +43,13 @@ export async function createSubDomain(subDomain, domain) {
   return registry.setSubnodeOwnerAsync(node, web3.sha3(subDomain), web3.eth.accounts[0], {from: web3.eth.accounts[0]});
 }
 
+export async function deleteSubDomain(subDomain, domain){
+  let { ENS, web3 } = await getENS()
+  let node = await getNamehash(domain)
+  let registry = await ENS.registryPromise
+  return registry.setSubnodeOwnerAsync(node, web3.sha3(subDomain), 0, {from: web3.eth.accounts[0]});
+}
+
 export async function setNewOwner(name, newOwner) {
   let { ENS, web3 } = await getENS()
   return ENS.setOwner(name, newOwner, {from: web3.eth.accounts[0]})
@@ -50,8 +57,10 @@ export async function setNewOwner(name, newOwner) {
 
 export async function setSubnodeOwner(label, node, newOwner) {
   let { ENS, web3 } = await getENS()
-  return ENS.setSubnodeOwner(getNamehash(node), web3.sha3(label), newOwner, {from: web3.eth.accounts[0]})
+  let owner = await ENS.owner(node)
+  return ENS.setSubnodeOwner(label + '.' + node, newOwner, {from: web3.eth.accounts[0]})
 }
+
 export function getRootDomain(name){
   return Promise.all([getOwner(name), getResolver(name)])
     .then(([owner, resolver]) => fromJS([{
