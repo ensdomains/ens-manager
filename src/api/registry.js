@@ -1,6 +1,7 @@
 import getENS, { getNamehash, getENSEvent, getEns } from './ens'
 import { fromJS } from 'immutable'
 import { decryptHashes } from './preimage'
+import { uniq } from '../lib/utils'
 
 export async function getOwner(name) {
   let { ENS , web3} = await getENS()
@@ -27,6 +28,7 @@ export async function getContent(name){
 }
 
 export async function setResolver(name, resolver) {
+  console.log('setting resolver to ', resolver)
   let { ENS, web3 } = await getENS()
   return ENS.setResolver(name, resolver, {from: web3.eth.accounts[0]})
 }
@@ -45,8 +47,14 @@ export async function createSubDomain(subDomain, domain) {
 
 export async function deleteSubDomain(subDomain, domain){
   let { ENS, web3 } = await getENS()
+  let name = subDomain + '.' + domain
   let node = await getNamehash(domain)
   let registry = await ENS.registryPromise
+  let resolver = getResolver(name)
+  if(parseInt(resolver, 16) !== 0){
+    await setSubnodeOwner(subDomain, domain, web3.eth.accounts[0])
+    await setResolver(name, 0)
+  }
   return registry.setSubnodeOwnerAsync(node, web3.sha3(subDomain), 0, {from: web3.eth.accounts[0]});
 }
 
@@ -56,6 +64,7 @@ export async function setNewOwner(name, newOwner) {
 }
 
 export async function setSubnodeOwner(label, node, newOwner) {
+  console.log('setting subnode to ', newOwner)
   let { ENS, web3 } = await getENS()
   let owner = await ENS.owner(node)
   return ENS.setSubnodeOwner(label + '.' + node, newOwner, {from: web3.eth.accounts[0]})
@@ -74,8 +83,12 @@ export function getRootDomain(name){
 
 export const getSubdomains = async name => {
   let namehash = await getNamehash(name)
-  let logs = await getENSEvent('NewOwner', {node: namehash}, {fromBlock: 900000, toBlock: 'latest'})
-  let labels = await decryptHashes(...logs.map(log => log.args.label))
+  let rawLogs = await getENSEvent('NewOwner', {node: namehash}, {fromBlock: 900000, toBlock: 'latest'})
+  let flattenedLogs = rawLogs.map(log => log.args)
+  console.log('flattenedlogs', flattenedLogs)
+  let logs = uniq(flattenedLogs, 'label')
+  console.log('LOGS', logs)
+  let labels = await decryptHashes(...logs.map(log => log.label))
   let ownerPromises = labels.map(label => getOwner(`${label}.${name}`))
   let resolverPromises = labels.map(label => getResolver(`${label}.${name}`))
 

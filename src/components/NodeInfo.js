@@ -1,7 +1,7 @@
 import React from 'react'
 import app from '../App'
-import { setNewOwner, setSubnodeOwner, checkSubDomain, setResolver, createSubDomain } from '../api/registry'
-import { updateForm, appendSubDomain, updateNode, resolveUpdatePath, deleteSubDomain } from '../updaters/nodes'
+import { setNewOwner, setSubnodeOwner, checkSubDomain, setResolver, createSubDomain, deleteSubDomain } from '../api/registry'
+import { updateForm, appendSubDomain, updateNode, resolveUpdatePath, removeSubDomain } from '../updaters/nodes'
 import { watchResolverEvent, watchTransferEvent, watchNewOwnerEvent } from '../api/watchers'
 import { getNamehash } from '../api/ens'
 import { addNotification } from '../updaters/notifications'
@@ -80,13 +80,14 @@ function handleDeleteSubDomain(subDomain, domain){
     } else {
       deleteSubDomain(subDomain, domain).then(txId => {
         watchNewOwnerEvent(domain).then(async log => {
+          console.log(log)
           //TODO check if this subdomain really is the same one submitted
           // if it is cancel event
           // if()
           // let labelHash = await getNamehash(subDomain)
           // console.log(labelHash, log.args.label)
           // appendSubDomain(subDomain, domain, address)
-          deleteSubDomain(subDomain, domain)
+          //removeSubDomain(subDomain, domain)
         })
       })
     }

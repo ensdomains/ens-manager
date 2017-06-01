@@ -269,7 +269,7 @@ const watchENSEvent = (event, filter, params, callback) =>
       console.log(myEvent)
     return new Promise(function(resolve,reject){
       myEvent.watch(function(error, log){
-        console.log(event, 'here in teh watchENS Event', log)
+        console.log(event, 'here in the watchENS Event', log)
         if(error) {
           reject(error)
         } else {
