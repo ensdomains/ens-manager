@@ -273,7 +273,7 @@ const watchENSEvent = (event, filter, params, callback) =>
         if(error) {
           reject(error)
         } else {
-          resolve(log)
+          resolve({log, event: myEvent, eventName: event})
         }
       })
     });

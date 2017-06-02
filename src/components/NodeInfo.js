@@ -2,9 +2,11 @@ import React from 'react'
 import app from '../App'
 import { setNewOwner, setSubnodeOwner, checkSubDomain, setResolver, createSubDomain, deleteSubDomain } from '../api/registry'
 import { updateForm, appendSubDomain, updateNode, resolveUpdatePath, removeSubDomain } from '../updaters/nodes'
-import { watchResolverEvent, watchTransferEvent, watchNewOwnerEvent } from '../api/watchers'
+import { watchResolverEvent, watchTransferEvent, watchNewOwnerEvent, stopWatching } from '../api/watchers'
 import { getNamehash } from '../api/ens'
 import { addNotification } from '../updaters/notifications'
+import { decrementWatchers } from '../updaters/config'
+import getWeb3 from '../api/web3'
 
 function handleUpdateOwner(name, newOwner){
   let domainArray = name.split('.')
@@ -22,10 +24,13 @@ function handleUpdateOwner(name, newOwner){
   }
 
   function watch(){
-    watchTransferEvent(name).then(log => {
+    watchTransferEvent(name).then(({ log, event }) => {
       console.log(log)
+      console.log(event)
       updateNode(name, 'owner', log.args.owner)
+      decrementWatchers(log.event)
       addNotification(`New owner found for ${name}`)
+      stopWatching(event, app.db.getIn(['watchers', event.event]) === 0)
     })
   }
 }
@@ -36,9 +41,12 @@ function setDefaultResolver(){
 
 function handleSetResolver(name, newResolver) {
   setResolver(name, newResolver).then(txId => {
-    watchResolverEvent(name).then(log => {
+    watchResolverEvent(name).then(({ log, event }) => {
+
       updateNode(name, 'resolver', log.args.resolver)
+      decrementWatchers(event.event)
       addNotification(`New resolver found for ${name}`)
+      // stopWatching(event, app.db.getIn(['watchers', log.event]))
     })
   })
 }
@@ -59,13 +67,23 @@ function handleCreateSubDomain(subDomain, domain){
     if(address !== "0x0000000000000000000000000000000000000000"){
       console.log('subdomain already exists!')
     } else {
-      createSubDomain(subDomain, domain).then(txId => {
-        watchNewOwnerEvent(domain).then(async log => {
+      createSubDomain(subDomain, domain).then(({ owner, txId }) => {
+        watchNewOwnerEvent(domain).then(async ({ log, event }) => {
           //TODO check if this subdomain really is the same one submitted
           // if it is cancel event
-          let labelHash = await getNamehash(subDomain)
+          let { web3 } = await getWeb3()
+          console.log(web3)
+          let labelHash = web3.sha3(subDomain)
+
+
           console.log(labelHash, log.args.label)
-          appendSubDomain(subDomain, domain, address)
+          console.log('LOG OWNER', log.args.owner, 'ACTUAL: OWNER', owner)
+          console.log(event)
+          if(log.args.owner === owner && labelHash === log.args.label) {
+            appendSubDomain(subDomain, domain, log.args.owner)
+            decrementWatchers(log.event)
+            //stopWatching(event, app.db.getIn(['watchers', log.event]))
+          }
         })
       })
     }
@@ -79,15 +97,22 @@ function handleDeleteSubDomain(subDomain, domain){
       console.log('subdomain already exists!')
     } else {
       deleteSubDomain(subDomain, domain).then(txId => {
-        watchNewOwnerEvent(domain).then(async log => {
+        watchNewOwnerEvent(domain).then(async ({ log, event }) => {
           console.log(log)
           //TODO check if this subdomain really is the same one submitted
           // if it is cancel event
           // if()
-          // let labelHash = await getNamehash(subDomain)
+          console.log(event)
+          let { web3 } = await getWeb3()
+          let labelHash = web3.sha3(subDomain)
           // console.log(labelHash, log.args.label)
           // appendSubDomain(subDomain, domain, address)
-          //removeSubDomain(subDomain, domain)
+          console.log(log.args.label, labelHash)
+          if(parseInt(log.args.owner, 16) === 0 && log.args.label === labelHash){
+            removeSubDomain(subDomain, domain)
+            decrementWatchers(log.event)
+            //stopWatching(event, app.db.getIn(['watchers', log.event]))
+          }
         })
       })
     }

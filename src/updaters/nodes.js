@@ -106,8 +106,7 @@ export function appendSubDomain(subDomain, domain, owner){
 
 export function appendSubDomains(subDomains, rootDomain) {
   const domainArray = rootDomain.split('.')
-  let indexOfNode,
-      updatePath = ['nodes', 0, 'nodes']
+  let updatePath = ['nodes', 0, 'nodes']
 
   if(domainArray.length > 2) {
     let domainArraySliced = domainArray.slice(0, domainArray.length - 2)
@@ -133,8 +132,9 @@ export function removeSubDomain(subDomain, rootDomain) {
     updatePath = resolveUpdatePath(domainArraySliced, updatePath, app.db)
   }
 
+  indexOfNode = app.db.getIn(updatePath).findIndex(node => node.get('name') === subDomain + '.' + rootDomain)
   app.update(
-    app.db.updateIn(updatePath, nodes => nodes.filter(node => node.name === subDomain+'.'+rootDomain))
+    app.db.updateIn(updatePath, nodes => nodes.delete(indexOfNode))
   )
 }
 
