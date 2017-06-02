@@ -16,15 +16,11 @@ let initialData = {
   notifications: [],
   publicResolver: '',
   selectedNode: '',
-  watchers: {
-    NewOwner: 0,
-    Transfer: 0,
-    NewResolver: 0
-  },
   updateForm: {
     newOwner: '',
     newResolver: '',
     newSubDomain: '',
+    subDomain: ''
   }
 }
 

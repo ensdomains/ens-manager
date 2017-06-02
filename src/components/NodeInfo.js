@@ -2,13 +2,13 @@ import React from 'react'
 import app from '../App'
 import { setNewOwner, setSubnodeOwner, checkSubDomain, setResolver, createSubDomain, deleteSubDomain } from '../api/registry'
 import { updateForm, appendSubDomain, updateNode, resolveUpdatePath, removeSubDomain } from '../updaters/nodes'
-import { watchResolverEvent, watchTransferEvent, watchNewOwnerEvent, stopWatching } from '../api/watchers'
+import { watchEvent, stopWatching } from '../api/watchers'
 import { getNamehash } from '../api/ens'
 import { addNotification } from '../updaters/notifications'
-import { decrementWatchers } from '../updaters/config'
 import getWeb3 from '../api/web3'
 
 function handleUpdateOwner(name, newOwner){
+  updateForm('newOwner', '')
   let domainArray = name.split('.')
   if(domainArray.length > 2) {
     setSubnodeOwner(domainArray[0], domainArray.slice(1).join('.'), newOwner)
@@ -24,11 +24,10 @@ function handleUpdateOwner(name, newOwner){
   }
 
   function watch(){
-    watchTransferEvent(name).then(({ log, event }) => {
+    watchEvent('Transfer', name, (error, log, event) => {
       console.log(log)
       console.log(event)
       updateNode(name, 'owner', log.args.owner)
-      decrementWatchers(log.event)
       addNotification(`New owner found for ${name}`)
       stopWatching(event, app.db.getIn(['watchers', event.event]) === 0)
     })
@@ -40,18 +39,19 @@ function setDefaultResolver(){
 }
 
 function handleSetResolver(name, newResolver) {
+  updateForm('newResolver', '')
   setResolver(name, newResolver).then(txId => {
-    watchResolverEvent(name).then(({ log, event }) => {
+    watchEvent('NewResolver', name, (error, log, event) => {
 
       updateNode(name, 'resolver', log.args.resolver)
-      decrementWatchers(event.event)
       addNotification(`New resolver found for ${name}`)
-      // stopWatching(event, app.db.getIn(['watchers', log.event]))
+      event.stopWatching()
     })
   })
 }
 
 function handleCheckSubDomain(subDomain, domain){
+  updateForm('subDomain', '')
   checkSubDomain(subDomain, domain).then(address => {
     if(address !== "0x0000000000000000000000000000000000000000"){
       appendSubDomain(subDomain, domain, address)
@@ -62,27 +62,21 @@ function handleCheckSubDomain(subDomain, domain){
 }
 
 function handleCreateSubDomain(subDomain, domain){
+  updateForm('newSubDomain', '')
   checkSubDomain(subDomain, domain).then(address => {
     console.log('here', subDomain, domain, address)
     if(address !== "0x0000000000000000000000000000000000000000"){
       console.log('subdomain already exists!')
     } else {
       createSubDomain(subDomain, domain).then(({ owner, txId }) => {
-        watchNewOwnerEvent(domain).then(async ({ log, event }) => {
+        watchEvent('NewOwner', domain,  async (error, log, event) => {
           //TODO check if this subdomain really is the same one submitted
           // if it is cancel event
           let { web3 } = await getWeb3()
-          console.log(web3)
           let labelHash = web3.sha3(subDomain)
-
-
-          console.log(labelHash, log.args.label)
-          console.log('LOG OWNER', log.args.owner, 'ACTUAL: OWNER', owner)
-          console.log(event)
           if(log.args.owner === owner && labelHash === log.args.label) {
             appendSubDomain(subDomain, domain, log.args.owner)
-            decrementWatchers(log.event)
-            //stopWatching(event, app.db.getIn(['watchers', log.event]))
+            event.stopWatching()
           }
         })
       })
@@ -97,21 +91,13 @@ function handleDeleteSubDomain(subDomain, domain){
       console.log('subdomain already exists!')
     } else {
       deleteSubDomain(subDomain, domain).then(txId => {
-        watchNewOwnerEvent(domain).then(async ({ log, event }) => {
-          console.log(log)
+        watchEvent('NewOwner', domain, async (error, log, event) => {
           //TODO check if this subdomain really is the same one submitted
-          // if it is cancel event
-          // if()
-          console.log(event)
           let { web3 } = await getWeb3()
           let labelHash = web3.sha3(subDomain)
-          // console.log(labelHash, log.args.label)
-          // appendSubDomain(subDomain, domain, address)
-          console.log(log.args.label, labelHash)
           if(parseInt(log.args.owner, 16) === 0 && log.args.label === labelHash){
             removeSubDomain(subDomain, domain)
-            decrementWatchers(log.event)
-            //stopWatching(event, app.db.getIn(['watchers', log.event]))
+            event.stopWatching()
           }
         })
       })
@@ -166,11 +152,11 @@ export default () => {
         </div>
         <button onClick={() => setDefaultResolver()}>Use default resolver</button>
         <div className="input-group">
-          <input type="text" name="subDomain" onChange={(e)=> handleOnChange('subDomain', e.target.value)} />
+          <input type="text" name="subDomain" value={db.getIn(['updateForm', 'subDomain'])} onChange={(e)=> handleOnChange('subDomain', e.target.value)} />
           <button onClick={() => handleCheckSubDomain(db.getIn(['updateForm', 'subDomain']), getNodeInfo(selectedNode, 'name'))}>Check for subdomain</button>
         </div>
         <div className="input-group">
-          <input type="text" name="subDomain" onChange={(e)=> handleOnChange('newSubDomain', e.target.value)} />
+          <input type="text" name="subDomain" value={db.getIn(['updateForm', 'newSubDomain'])} onChange={(e)=> handleOnChange('newSubDomain', e.target.value)} />
           <button onClick={() => handleCreateSubDomain(db.getIn(['updateForm', 'newSubDomain']), getNodeInfo(selectedNode, 'name'))}>Create new subdomain</button>
         </div>
         <button onClick={() => handleDeleteSubDomain(getNodeInfo(selectedNode, 'label'), getNodeInfo(selectedNode, 'node'))}>Delete Node</button>
