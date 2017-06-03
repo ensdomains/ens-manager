@@ -126,7 +126,12 @@ function getNodeInfo(name, prop) {
 export default () => {
   const db = app.db
   const selectedNode = db.get('selectedNode')
-  var content = <div>Select a node to continue</div>
+  let content = <div>Select a node to continue</div>,
+      resolver = null
+
+  if(parseInt(16, getNodeInfo(selectedNode, 'resolver')) !== 0) {
+    resolver = <div>got a resolver 'yo'</div>
+  }
 
   if(selectedNode.length > 0){
     content = (
@@ -160,6 +165,7 @@ export default () => {
           <button onClick={() => handleCreateSubDomain(db.getIn(['updateForm', 'newSubDomain']), getNodeInfo(selectedNode, 'name'))}>Create new subdomain</button>
         </div>
         <button onClick={() => handleDeleteSubDomain(getNodeInfo(selectedNode, 'label'), getNodeInfo(selectedNode, 'node'))}>Delete Node</button>
+        {resolver}
       </div>
     )
   }

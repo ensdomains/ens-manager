@@ -1,6 +1,6 @@
 const LocalStorage = window.localStorage
 
-const syncData = (props) => {
+const syncData = props => {
   return data => {
     let propData = props.map(prop => LocalStorage.getItem(prop))
     let obj = props.reduce((acc, c, i) => {
