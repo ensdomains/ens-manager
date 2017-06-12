@@ -119,7 +119,9 @@ export function appendSubDomains(subDomains, rootDomain) {
     )
   })
 
-  addNotification(subDomains.length + ' subdomains found')
+  let plural = subDomains.length === 1 ? '' : 's'
+
+  addNotification(`${subDomains.length} subdomain${plural} found for ${rootDomain}`)
 }
 
 export function removeSubDomain(subDomain, rootDomain) {

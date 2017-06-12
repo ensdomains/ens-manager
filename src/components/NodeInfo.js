@@ -88,15 +88,15 @@ function handleDeleteSubDomain(subDomain, domain){
   checkSubDomain(subDomain, domain).then(address => {
     console.log('here', subDomain, domain, address)
     if(address === "0x0000000000000000000000000000000000000000"){
-      console.log('subdomain already exists!')
+      addNotification('subdomain already deleted!')
     } else {
       deleteSubDomain(subDomain, domain).then(txId => {
         watchEvent('NewOwner', domain, async (error, log, event) => {
-          //TODO check if this subdomain really is the same one submitted
           let { web3 } = await getWeb3()
           let labelHash = web3.sha3(subDomain)
           if(parseInt(log.args.owner, 16) === 0 && log.args.label === labelHash){
             removeSubDomain(subDomain, domain)
+            addNotification('subdomain ' + subDomain + '.' + domain + ' deleted')
             event.stopWatching()
           }
         })
@@ -129,7 +129,7 @@ export default () => {
   let content = <div>Select a node to continue</div>,
       resolver = null
 
-  if(parseInt(16, getNodeInfo(selectedNode, 'resolver')) !== 0) {
+  if(parseInt(getNodeInfo(selectedNode, 'resolver'), 16) !== 0) {
     resolver = <div>got a resolver 'yo'</div>
   }
 

@@ -3,6 +3,7 @@ import DomainManager from './pages/DomainManager'
 import ReverseRecord from './pages/ReverseRecord'
 import Header from './components/Header'
 import { NotificationStack } from 'react-notification'
+import { removeNotification } from './updaters/notifications'
 import app from './App'
 
 import {
@@ -21,7 +22,7 @@ const Main = () => (
     </Router>
     <NotificationStack
       notifications={app.db.get('notifications').toJS()}
-      onDismiss={notification => console.log('delete notification')}
+      onDismiss={(notifcation) => removeNotification(notifcation.key)}
     />
   </div>
 )
