@@ -10,7 +10,7 @@
     "react-dom": "^15.5.4",
     "react-notification": "^6.7.0",
     "react-router-dom": "4.1.1",
-    "redaxe": "0.0.7",
+    "redaxe": "0.0.8",
     "uuid": "^3.0.1",
     "web3": "^0.19.0",
     "whatwg-fetch": "^2.0.3"
