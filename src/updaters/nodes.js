@@ -1,4 +1,4 @@
-import app from '../App'
+import { db, update} from 'redaxe'
 import { fromJS } from 'immutable'
 import { getSubdomains, getRootDomain, getOwner, getResolver } from '../api/registry'
 import { addNotification } from './notifications'
@@ -6,29 +6,29 @@ import { addNotification } from './notifications'
 //web3
 
 export function updatePublicResolver(address){
-  app.update(
-    app.db.set('publicResolver', address)
+  update(
+    db.set('publicResolver', address)
   )
 }
 
 export function updateReadOnly(value){
-  app.update(
-    app.db.set('readOnly', value)
+  update(
+    db.set('readOnly', value)
   )
 }
 
 export function updateAddress(value) {
-  app.update(
-    app.db.set('rootName', value)
+  update(
+    db.set('rootName', value)
   )
   getOwner(value).then(owner =>
-    app.update(app.db.set('rootAddress', owner))
+    update(db.set('rootAddress', owner))
   )
 }
 
 export function updateForm(formName, data) {
-  app.update(
-    app.db.setIn(['updateForm', formName], data)
+  update(
+    db.setIn(['updateForm', formName], data)
   )
 }
 
@@ -39,13 +39,13 @@ export function updateNode(name, prop, data) {
 
   if(domainArray.length > 2) {
     let domainArraySliced = domainArray.slice(0, domainArray.length - 2)
-    updatePath = resolveUpdatePath(domainArraySliced, updatePath, app.db)
+    updatePath = resolveUpdatePath(domainArraySliced, updatePath, db)
   }
 
   updatePath = [...updatePath, prop]
 
-  app.update(
-    app.db.setIn(updatePath, data)
+  update(
+    db.setIn(updatePath, data)
   )
 }
 
@@ -61,23 +61,23 @@ export function setNodeDetails(name, address) {
   addNotification('Node details set')
 
   getRootDomain(name).then(rootDomain => {
-    app.update(
-      app.db.set('nodes', rootDomain)
+    update(
+      db.set('nodes', rootDomain)
     )
     return name
   }).then(fetchSubdomains)
 
   getResolver(name).then(data =>
-    app.update(
-      app.db.set('resolver', data)
+    update(
+      db.set('resolver', data)
     )
   )
 
 }
 
 export function selectNode(data) {
-  app.update(
-    app.db.set('selectedNode', data)
+  update(
+    db.set('selectedNode', data)
   )
 }
 
@@ -88,11 +88,11 @@ export function appendSubDomain(subDomain, domain, owner){
 
   if(domainArray.length > 2) {
     let domainArraySliced = domainArray.slice(0, domainArray.length - 2)
-    updatePath = resolveUpdatePath(domainArraySliced, updatePath, app.db)
+    updatePath = resolveUpdatePath(domainArraySliced, updatePath, db)
   }
 
-  app.update(
-    app.db.updateIn(updatePath, nodes => nodes.push(fromJS({
+  update(
+    db.updateIn(updatePath, nodes => nodes.push(fromJS({
       owner,
       label: subDomain,
       node: domain,
@@ -110,12 +110,12 @@ export function appendSubDomains(subDomains, rootDomain) {
 
   if(domainArray.length > 2) {
     let domainArraySliced = domainArray.slice(0, domainArray.length - 2)
-    updatePath = resolveUpdatePath(domainArraySliced, updatePath, app.db)
+    updatePath = resolveUpdatePath(domainArraySliced, updatePath, db)
   }
 
   subDomains.forEach(domain => {
-    app.update(
-      app.db.updateIn(updatePath, nodes => nodes.push(fromJS(domain)))
+    update(
+      db.updateIn(updatePath, nodes => nodes.push(fromJS(domain)))
     )
   })
 
@@ -131,12 +131,12 @@ export function removeSubDomain(subDomain, rootDomain) {
 
   if(domainArray.length > 2) {
     let domainArraySliced = domainArray.slice(0, domainArray.length - 2)
-    updatePath = resolveUpdatePath(domainArraySliced, updatePath, app.db)
+    updatePath = resolveUpdatePath(domainArraySliced, updatePath, db)
   }
 
-  indexOfNode = app.db.getIn(updatePath).findIndex(node => node.get('name') === subDomain + '.' + rootDomain)
-  app.update(
-    app.db.updateIn(updatePath, nodes => nodes.delete(indexOfNode))
+  indexOfNode = db.getIn(updatePath).findIndex(node => node.get('name') === subDomain + '.' + rootDomain)
+  update(
+    db.updateIn(updatePath, nodes => nodes.delete(indexOfNode))
   )
 }
 

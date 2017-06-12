@@ -1,5 +1,5 @@
 import React from 'react'
-import app from '../App'
+import { db } from 'redaxe'
 import { selectNode } from '../updaters/nodes'
 import classNames from 'classnames'
 
@@ -12,7 +12,7 @@ const Node = ({ data }) => {
 
   let classes = classNames({
     node: true,
-    selected: data.get('name') === app.db.get('selectedNode')
+    selected: data.get('name') === db.get('selectedNode')
   })
 
   return <div className={classes}>
@@ -28,7 +28,7 @@ const Node = ({ data }) => {
 const Nodes = () => (
   <div className="nodes-root">
     <div className="nodes-inner">
-      {app.db.get('nodes').map(node => <Node key={node.get('owner')} data={node} />)}
+      {db.get('nodes').map(node => <Node key={node.get('owner')} data={node} />)}
     </div>
   </div>
 )

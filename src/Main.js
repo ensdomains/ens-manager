@@ -4,15 +4,16 @@ import ReverseRecord from './pages/ReverseRecord'
 import Header from './components/Header'
 import { NotificationStack } from 'react-notification'
 import { removeNotification } from './updaters/notifications'
-import app from './App'
+import { db } from 'redaxe'
 
 import {
   BrowserRouter as Router,
   Route
 } from 'react-router-dom'
 
-const Main = () => (
-  <div className="App">
+const Main = () => {
+  console.log(db.toJS())
+  return <div className="App">
     <Router>
       <div>
         <Header />
@@ -21,10 +22,10 @@ const Main = () => (
       </div>
     </Router>
     <NotificationStack
-      notifications={app.db.get('notifications').toJS()}
+      notifications={db.get('notifications').toJS()}
       onDismiss={(notifcation) => removeNotification(notifcation.key)}
     />
   </div>
-)
+}
 
 export default Main;

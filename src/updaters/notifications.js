@@ -1,11 +1,11 @@
-import app from '../App'
+import { db, update } from 'redaxe'
 import uuid from 'uuid/v4'
 import { fromJS } from 'immutable'
 
 export function addNotification(message, time = 3000){
   let id = uuid()
-  app.update(
-    app.db.set('notifications', app.db.get('notifications').push(fromJS({
+  update(
+    db.set('notifications', db.get('notifications').push(fromJS({
         message: message,
         key: id,
         action: 'Dismiss',
@@ -21,13 +21,13 @@ export function addNotification(message, time = 3000){
 
 export function removeNotification(id){
 
-  const db = app.db
+  const db = db
 
   const index = db.get('notifications').findIndex(notif => {
     return notif.get('key') === id;
   });
 
-  app.update(
+  update(
     db.set('notifications', db.get('notifications').delete(index))
   )
 

@@ -1,8 +1,9 @@
-import app from './App'
+import './App'
 import './css/main.css'
 import { setupWeb3 } from './api/web3'
 import { getAddr, getContent } from './api/registry'
 import { updatePublicResolver } from './updaters/nodes'
+import { render } from 'redaxe'
 
 async function setupDefaults() {
   const defaultResolver = "resolver.eth";
@@ -10,10 +11,11 @@ async function setupDefaults() {
   updatePublicResolver(resolverAddress)
 }
 
+
 window.addEventListener('load', function() {
   setupWeb3().then(()=>{
     setupDefaults()
   })
 })
 
-app.render()
+render()

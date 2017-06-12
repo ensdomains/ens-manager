@@ -1,5 +1,5 @@
 import React from 'react'
-import app from '../App'
+import { db } from 'redaxe'
 import { setNewOwner, setSubnodeOwner, checkSubDomain, setResolver, createSubDomain, deleteSubDomain } from '../api/registry'
 import { updateForm, appendSubDomain, updateNode, resolveUpdatePath, removeSubDomain } from '../updaters/nodes'
 import { watchEvent, stopWatching } from '../api/watchers'
@@ -29,13 +29,13 @@ function handleUpdateOwner(name, newOwner){
       console.log(event)
       updateNode(name, 'owner', log.args.owner)
       addNotification(`New owner found for ${name}`)
-      stopWatching(event, app.db.getIn(['watchers', event.event]) === 0)
+      stopWatching(event, db.getIn(['watchers', event.event]) === 0)
     })
   }
 }
 
 function setDefaultResolver(){
-  updateForm('newResolver', app.db.get('publicResolver'))
+  updateForm('newResolver', db.get('publicResolver'))
 }
 
 function handleSetResolver(name, newResolver) {
@@ -116,15 +116,14 @@ function getNodeInfo(name, prop) {
 
   if(domainArray.length > 2) {
     let domainArraySliced = domainArray.slice(0, domainArray.length - 2)
-    updatePath = resolveUpdatePath(domainArraySliced, updatePath, app.db)
+    updatePath = resolveUpdatePath(domainArraySliced, updatePath, db)
   }
 
   updatePath = [...updatePath, prop]
-  return app.db.getIn(updatePath)
+  return db.getIn(updatePath)
 }
 
 export default () => {
-  const db = app.db
   const selectedNode = db.get('selectedNode')
   let content = <div>Select a node to continue</div>,
       resolver = null

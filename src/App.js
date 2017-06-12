@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { fromJS } from 'immutable'
 import Main from './Main'
 import './index.css'
-import Redaxe from 'redaxe'
+import redaxeInit from 'redaxe'
 import ImmutableLogger from './lib/ImmutableLogger'
 import { syncData, localStorageMiddlewareImmutable } from './lib/LocalStorage'
 
@@ -31,10 +31,8 @@ let middleware = [
   //localStorageMiddlewareImmutable(syncProp, Immutable)
 ]
 
-const app = new Redaxe(
+redaxeInit(
   fromJS(initialData),//fromJS(syncedData),
   () => ReactDOM.render(<Main />, document.getElementById('root')),
   middleware
 )
-
-export default app
