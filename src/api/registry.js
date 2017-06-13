@@ -18,6 +18,7 @@ export async function getResolver(name){
 export async function getAddr(name){
   let { ENS } = await getENS()
   let resolver = await ENS.resolver(name)
+  console.log(resolver)
   return resolver.addr()
 }
 
@@ -94,7 +95,7 @@ export const getSubdomains = async name => {
   return Promise.all([
     Promise.all(ownerPromises),
     Promise.all(resolverPromises)
-  ]).then(([owners, resolvers]) => {
+  ]).then(([owners, resolvers, addr, content]) => {
     return labels.map((value, index) => {
       //if(label === false)
       // TODO add check for labels that haven't been found
@@ -107,5 +108,22 @@ export const getSubdomains = async name => {
         nodes: []
       }
     }).filter(node => parseInt(node.owner, 16) !== 0)
+  }).then(nodes => {
+    let nodePromises = nodes.map(node => {
+      let hasResolver = parseInt(node.resolver, 16) !== 0
+      if(hasResolver) {
+        let addr = getAddr(node.name)
+        let content = getContent(node.name)
+        return Promise.all([addr, content]).then(([addr, content]) => ({
+          ...node,
+          addr,
+          content
+        }))
+      }
+      return Promise.resolve(node)
+    })
+    return Promise.all(nodePromises)
   })
+
+
 }

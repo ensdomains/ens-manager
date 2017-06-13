@@ -20,7 +20,9 @@ let initialData = {
     newOwner: '',
     newResolver: '',
     newSubDomain: '',
-    subDomain: ''
+    subDomain: '',
+    newAddr: '',
+    newContent: ''
   }
 }
 

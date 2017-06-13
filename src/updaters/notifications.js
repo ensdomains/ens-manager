@@ -21,8 +21,6 @@ export function addNotification(message, time = 3000){
 
 export function removeNotification(id){
 
-  const db = db
-
   const index = db.get('notifications').findIndex(notif => {
     return notif.get('key') === id;
   });

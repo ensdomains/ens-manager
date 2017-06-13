@@ -17,5 +17,3 @@ window.addEventListener('load', function() {
     setupDefaults()
   })
 })
-
-render()

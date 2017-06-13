@@ -123,6 +123,14 @@ function getNodeInfo(name, prop) {
   return db.getIn(updatePath)
 }
 
+function handleUpdateAddr(){
+
+}
+
+function handleUpdateContent(){
+
+}
+
 export default () => {
   const selectedNode = db.get('selectedNode')
   let content = <div>Select a node to continue</div>,
