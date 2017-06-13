@@ -5,11 +5,15 @@ import { addNotification } from './notifications'
 
 //web3
 
+export const updatePublicResolverReducer = (db, address) =>
+  db.set('publicResolver', address)
+
 export function updatePublicResolver(address){
-  update(
-    db.set('publicResolver', address)
-  )
+  update(updatePublicResolverReducer(db, address))
 }
+
+export const updateReadOnlyReducer = (db, value) =>
+  db.set('readOnly', value)
 
 export function updateReadOnly(value){
   update(
@@ -147,7 +151,7 @@ export function removeSubDomain(subDomain, rootDomain) {
   )
 }
 
-export function resolveUpdatePath (domainArray, path, db) {
+export function resolveUpdatePath(domainArray, path, db) {
   if(domainArray.length === 0 ){
     return path
   }

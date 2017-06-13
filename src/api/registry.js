@@ -96,6 +96,7 @@ export const getSubdomains = async name => {
     Promise.all(ownerPromises),
     Promise.all(resolverPromises)
   ]).then(([owners, resolvers, addr, content]) => {
+    /* Maps owner and resolver onto nodes */
     return labels.map((value, index) => {
       //if(label === false)
       // TODO add check for labels that haven't been found
@@ -109,6 +110,7 @@ export const getSubdomains = async name => {
       }
     }).filter(node => parseInt(node.owner, 16) !== 0)
   }).then(nodes => {
+    /* Gets Resolver information for node if they have a resolver */
     let nodePromises = nodes.map(node => {
       let hasResolver = parseInt(node.resolver, 16) !== 0
       if(hasResolver) {
