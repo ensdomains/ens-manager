@@ -123,11 +123,11 @@ function getNodeInfo(name, prop) {
   return db.getIn(updatePath)
 }
 
-function handleUpdateAddr(){
+function handleSetAddr(name, addr){
 
 }
 
-function handleUpdateContent(){
+function handleSetContent(){
 
 }
 
@@ -137,7 +137,19 @@ export default () => {
       resolver = null
 
   if(parseInt(getNodeInfo(selectedNode, 'resolver'), 16) !== 0) {
-    resolver = <div>got a resolver 'yo'</div>
+    resolver = <div className="resolver-details">
+      <div className="addr">{getNodeInfo(selectedNode, 'addr')}</div>
+      <div className="input-group">
+        <input
+          type="text"
+          name="resolver"
+          value={db.getIn(['updateForm', 'newAddr'])}
+          onChange={(e)=> handleOnChange('newAddr', e.target.value)}
+        />
+        <button placeholder="0x..." onClick={() => handleSetAddr(getNodeInfo(selectedNode, 'name'), db.getIn(['updateForm', 'newAddr']))}>Set Addr</button>
+      </div>
+      <div className="content">{getNodeInfo(selectedNode, 'content')}</div>
+    </div>
   }
 
   if(selectedNode.length > 0){
