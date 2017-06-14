@@ -1,6 +1,15 @@
 import React from 'react'
 import { db } from 'redaxe'
-import { setNewOwner, setSubnodeOwner, checkSubDomain, setResolver, createSubDomain, deleteSubDomain } from '../api/registry'
+import {
+  setNewOwner,
+  setSubnodeOwner,
+  checkSubDomain,
+  setResolver,
+  createSubDomain,
+  deleteSubDomain,
+  setAddr,
+  setContent
+} from '../api/registry'
 import { updateForm, appendSubDomain, updateNode, resolveUpdatePath, removeSubDomain } from '../updaters/nodes'
 import { watchEvent, stopWatching } from '../api/watchers'
 import { getNamehash } from '../api/ens'
@@ -124,11 +133,13 @@ function getNodeInfo(name, prop) {
 }
 
 function handleSetAddr(name, addr){
-
+  console.log(name, addr)
+  setAddr(name, addr).then(txId => console.log(txId))
 }
 
-function handleSetContent(){
-
+function handleSetContent(name, content){
+  console.log(name, content)
+  setContent(name, content).then(txId => console.log(txId))
 }
 
 export default () => {
@@ -149,6 +160,15 @@ export default () => {
         <button placeholder="0x..." onClick={() => handleSetAddr(getNodeInfo(selectedNode, 'name'), db.getIn(['updateForm', 'newAddr']))}>Set Addr</button>
       </div>
       <div className="content">{getNodeInfo(selectedNode, 'content')}</div>
+      <div className="input-group">
+        <input
+          type="text"
+          name="resolver"
+          value={db.getIn(['updateForm', 'newContent'])}
+          onChange={(e)=> handleOnChange('newContent', e.target.value)}
+        />
+        <button placeholder="0x..." onClick={() => handleSetContent(getNodeInfo(selectedNode, 'name'), db.getIn(['updateForm', 'newContent']))}>Set Content</button>
+      </div>
     </div>
   }
 

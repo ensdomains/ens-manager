@@ -18,7 +18,6 @@ export async function getResolver(name){
 export async function getAddr(name){
   let { ENS } = await getENS()
   let resolver = await ENS.resolver(name)
-  console.log(resolver)
   return resolver.addr()
 }
 
@@ -26,6 +25,18 @@ export async function getContent(name){
   let { ENS } = await getENS()
   let resolver = await ENS.resolver(name)
   return resolver.content()
+}
+
+export async function setAddr(name, address){
+  let { ENS, web3 } = await getENS()
+  let resolver = await ENS.resolver(name)
+  return resolver.setAddr(address, { from: web3.eth.accounts[0]})
+}
+
+export async function setContent(name, content){
+  let { ENS, web3 } = await getENS()
+  let resolver = await ENS.resolver(name)
+  return resolver.setContent(content, { from: web3.eth.accounts[0]})
 }
 
 export async function setResolver(name, resolver) {
