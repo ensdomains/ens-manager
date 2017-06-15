@@ -1,16 +1,14 @@
 # ENS Manager
 
-
 ## Development
 
 In the project directory, you can run:
 
-### `npm start`
+```
+npm install
+npm start
+```
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Uses React and a tiny state management library called [Redaxe](https://github.com/jefflau/redaxe)
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
-
-Will also run stylus watcher
+Open [http://localhost:3000](http://localhost:3000) in Chrome (Metamask) or Mist. Currently only works on Ropsten testnet.
