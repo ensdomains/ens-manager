@@ -1,9 +1,10 @@
 import React from 'react'
 import { db } from 'redaxe'
-import { selectNode } from '../updaters/nodes'
+import { selectNode, switchTab } from '../updaters/nodeDetails'
 import classNames from 'classnames'
 
 const handleSelectNode = (event, data) => {
+  switchTab('nodeDetails')
   selectNode(data)
   event.stopPropagation()
 }

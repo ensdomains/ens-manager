@@ -23,6 +23,7 @@ import { watchEvent, stopWatching } from '../api/watchers'
 import { getNamehash } from '../api/ens'
 import { addNotification } from '../updaters/notifications'
 import getWeb3 from '../api/web3'
+import classnames from 'classnames'
 
 import ResolverInfo from './ResolverInfo'
 
@@ -132,14 +133,21 @@ function handleSwitchTab(tab){
   switchTab(tab)
 }
 
-const Tabs = ({ selectedNode }) => {
-  let resolverTab
-  if(parseInt(getNodeInfo(selectedNode, 'resolver'), 16) !== 0) {
-    resolverTab = <h2 className="tab" onClick={() => handleSwitchTab('resolverDetails')}>ResolverDetails</h2>
+const Tabs = ({ selectedNode, currentTab }) => {
+  let resolverTab,
+      hasResolver = parseInt(getNodeInfo(selectedNode, 'resolver'), 16) !== 0
+
+  function handleResolverTabSwitch(){
+    if(hasResolver){
+      handleSwitchTab('resolverDetails')
+    } else {
+      addNotification('Please add a resolver first')
+    }
   }
+
   return <div className="tabs">
-    <h2 className="tab" onClick={() => handleSwitchTab('nodeDetails')}>Node Details</h2>
-    {resolverTab}
+    <h2 className={classnames('tab', {current: currentTab === "nodeDetails"})} onClick={() => handleSwitchTab('nodeDetails')}>Node Details</h2>
+    <h2 className={classnames('tab', {current: currentTab === "resolverDetails", "has-resolver": hasResolver})} onClick={handleResolverTabSwitch}>Resolver Details</h2>
   </div>
 }
 
@@ -175,10 +183,11 @@ const NodeDetails = ({ selectedNode }) => <div>
 export default () => {
   const selectedNode = db.get('selectedNode')
   let content = <div>Select a node to continue</div>,
-      tabContent = null
+      tabContent = null,
+      currentTab = db.get('currentTab')
 
   if(selectedNode.length > 0){
-    switch(db.get('currentTab')) {
+    switch(currentTab) {
       case 'nodeDetails':
         tabContent = <NodeDetails selectedNode={selectedNode} />
         break
@@ -189,10 +198,12 @@ export default () => {
 
     content = (
       <div>
-        <Tabs selectedNode={selectedNode} />
-        <div className="current-node">Current Node: {getNodeInfo(selectedNode, 'name')}</div>
-        <div className="current-owner">Owner: {getNodeInfo(selectedNode, 'owner')}</div>
-        <div className="current-resolver">Resolver: {getNodeInfo(selectedNode, 'resolver')}</div>
+        <Tabs selectedNode={selectedNode} currentTab={currentTab} />
+        <div className="info-container">
+          <div className="current-node info">{getNodeInfo(selectedNode, 'name')}</div>
+          <div className="current-owner info">Owner: {getNodeInfo(selectedNode, 'owner')}</div>
+          <div className="current-resolver info">Resolver: {getNodeInfo(selectedNode, 'resolver')}</div>
+        </div>
         {tabContent}
       </div>
     )

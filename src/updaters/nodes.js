@@ -78,12 +78,6 @@ export function setNodeDetails(name, address) {
 
 }
 
-export function selectNode(data) {
-  update(
-    db.set('selectedNode', data)
-  )
-}
-
 export function appendSubDomain(subDomain, domain, owner){
   const domainArray = domain.split('.')
   let indexOfNode,

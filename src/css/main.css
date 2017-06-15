@@ -52,7 +52,7 @@ input:focus {
 }
 .header {
   zoom: 1;
-  background: #102026;
+  background: linear-gradient(to right, #2b306d 1%, #4a66ba 100%);
   padding: 10px 20px;
 }
 .header:after,
@@ -64,10 +64,10 @@ input:focus {
   clear: both;
 }
 h1 {
-  margin-top: 0;
+  margin-top: 5px;
   margin-bottom: 0;
   float: left;
-  color: #c3ccdb;
+  color: #fff;
   font-weight: 300;
 }
 @media (max-width: 728px) {
@@ -134,13 +134,78 @@ h1 {
 .search-name button:hover {
   background: #363ca1;
 }
-.current-owner {
-  margin-bottom: 10px;
-}
 .node-info {
   padding: 20px;
   background: #ccc;
   width: 60%;
+}
+.tabs {
+  display: flex;
+}
+.tab {
+  color: #fff;
+  font-weight: 300;
+  font-size: 20px;
+  width: 50%;
+  background: #262b78;
+  opacity: 0.7;
+  padding: 10px 0;
+  text-align: center;
+  margin: 0;
+  transition: 0.2s;
+}
+.tab:first-child {
+  border-radius: 5px 0 0 0;
+}
+.tab:last-child {
+  border-radius: 0 5px 0 0;
+}
+.tab.current {
+  background: #262b78;
+  opacity: 1;
+}
+.tab:hover {
+  cursor: pointer;
+  opacity: 1;
+}
+.info-container {
+  zoom: 1;
+  margin-bottom: 10px;
+}
+.info-container:after,
+.info-container:before {
+  content: "";
+  display: table;
+}
+.info-container:after {
+  clear: both;
+}
+.info {
+  background: transparent;
+  padding: 14px 15px 5px;
+  height: 50px;
+  white-space: nowrap;
+  background: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 70%;
+}
+.current-node {
+  float: left;
+  width: 30%;
+  border-right: solid 1px #262b78;
+  border-left: solid 1px #262b78;
+}
+.current-owner {
+  float: left;
+  overflow: hidden;
+  border-right: solid 1px #262b78;
+}
+.current-resolver {
+  float: left;
+  width: 100%;
+  border: solid 1px #262b78;
+  border-radius: 0 0 5px 5px;
 }
 .nodes-root {
   color: #2267b1;
