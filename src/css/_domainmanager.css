@@ -110,3 +110,6 @@
 .selected > .node-details {
   border: 2px solid $medBlue;
 }
+.node-details:hover {
+  cursor: pointer;
+}

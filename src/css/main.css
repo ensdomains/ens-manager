@@ -233,3 +233,6 @@ h1 {
 .selected > .node-details {
   border: 2px solid #262b78;
 }
+.node-details:hover {
+  cursor: pointer;
+}
