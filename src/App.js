@@ -23,7 +23,8 @@ let initialData = {
     subDomain: '',
     newAddr: '',
     newContent: ''
-  }
+  },
+  currentTab: 'nodeDetails'
 }
 
 //var syncedData = syncData(syncProp)(initialData)

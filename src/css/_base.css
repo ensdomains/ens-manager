@@ -26,6 +26,10 @@ button:hover {
 button:focus {
   outline: 0;
 }
+button.right {
+  background: #f00;
+  float: right;
+}
 input {
   font-size: 14px;
   padding: 12px 15px;

@@ -28,12 +28,6 @@ export function updateAddress(value) {
   )
 }
 
-export function updateForm(formName, data) {
-  update(
-    db.setIn(['updateForm', formName], data)
-  )
-}
-
 export function updateNode(name, prop, data) {
   const domainArray = name.split('.')
   let indexOfNode,

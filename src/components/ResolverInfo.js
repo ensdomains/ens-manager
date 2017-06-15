@@ -38,3 +38,5 @@ const ResolverDetails = ({ selectedNode, handleOnChange }) => {
     </div>
   </div>
 }
+
+export default ResolverDetails
