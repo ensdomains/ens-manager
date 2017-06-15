@@ -16,9 +16,7 @@ export const updateReadOnlyReducer = (db, value) =>
   db.set('readOnly', value)
 
 export function updateReadOnly(value){
-  update(
-    db.set('readOnly', value)
-  )
+  update(updateReadOnlyReducer(db, value))
 }
 
 export function updateAddress(value) {
@@ -176,4 +174,18 @@ export function resolveUpdatePath(domainArray, path, db) {
   }
 
   return resolveUpdatePath(domainArrayPopped, updatedPath, db)
+}
+
+export function getNodeInfoSelector(name, prop) {
+  const domainArray = name.split('.')
+  let indexOfNode,
+      updatePath = ['nodes', 0]
+
+  if(domainArray.length > 2) {
+    let domainArraySliced = domainArray.slice(0, domainArray.length - 2)
+    updatePath = resolveUpdatePath(domainArraySliced, updatePath, db)
+  }
+
+  updatePath = [...updatePath, prop]
+  return db.getIn(updatePath)
 }

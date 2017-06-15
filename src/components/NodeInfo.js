@@ -6,15 +6,22 @@ import {
   checkSubDomain,
   setResolver,
   createSubDomain,
-  deleteSubDomain,
-  setAddr,
-  setContent
+  deleteSubDomain
 } from '../api/registry'
-import { updateForm, appendSubDomain, updateNode, resolveUpdatePath, removeSubDomain } from '../updaters/nodes'
+import {
+  updateForm,
+  appendSubDomain,
+  updateNode,
+  resolveUpdatePath,
+  removeSubDomain,
+  getNodeInfoSelector as getNodeInfo
+} from '../updaters/nodes'
 import { watchEvent, stopWatching } from '../api/watchers'
 import { getNamehash } from '../api/ens'
 import { addNotification } from '../updaters/notifications'
 import getWeb3 from '../api/web3'
+
+import ResolverInfo from './ResolverInfo'
 
 function handleUpdateOwner(name, newOwner){
   updateForm('newOwner', '')
@@ -43,7 +50,7 @@ function handleUpdateOwner(name, newOwner){
   }
 }
 
-function setDefaultResolver(){
+function handleSetDefaultResolver(){
   updateForm('newResolver', db.get('publicResolver'))
 }
 
@@ -118,58 +125,13 @@ function handleOnChange(formName, newOwner){
   updateForm(formName, newOwner)
 }
 
-function getNodeInfo(name, prop) {
-  const domainArray = name.split('.')
-  let indexOfNode,
-      updatePath = ['nodes', 0]
-
-  if(domainArray.length > 2) {
-    let domainArraySliced = domainArray.slice(0, domainArray.length - 2)
-    updatePath = resolveUpdatePath(domainArraySliced, updatePath, db)
-  }
-
-  updatePath = [...updatePath, prop]
-  return db.getIn(updatePath)
-}
-
-function handleSetAddr(name, addr){
-  console.log(name, addr)
-  setAddr(name, addr).then(txId => console.log(txId))
-}
-
-function handleSetContent(name, content){
-  console.log(name, content)
-  setContent(name, content).then(txId => console.log(txId))
-}
-
 export default () => {
   const selectedNode = db.get('selectedNode')
   let content = <div>Select a node to continue</div>,
       resolver = null
 
   if(parseInt(getNodeInfo(selectedNode, 'resolver'), 16) !== 0) {
-    resolver = <div className="resolver-details">
-      <div className="addr">{getNodeInfo(selectedNode, 'addr')}</div>
-      <div className="input-group">
-        <input
-          type="text"
-          name="resolver"
-          value={db.getIn(['updateForm', 'newAddr'])}
-          onChange={(e)=> handleOnChange('newAddr', e.target.value)}
-        />
-        <button placeholder="0x..." onClick={() => handleSetAddr(getNodeInfo(selectedNode, 'name'), db.getIn(['updateForm', 'newAddr']))}>Set Addr</button>
-      </div>
-      <div className="content">{getNodeInfo(selectedNode, 'content')}</div>
-      <div className="input-group">
-        <input
-          type="text"
-          name="resolver"
-          value={db.getIn(['updateForm', 'newContent'])}
-          onChange={(e)=> handleOnChange('newContent', e.target.value)}
-        />
-        <button placeholder="0x..." onClick={() => handleSetContent(getNodeInfo(selectedNode, 'name'), db.getIn(['updateForm', 'newContent']))}>Set Content</button>
-      </div>
-    </div>
+    resolver = <ResolverInfo selectedNode={selectedNode} handleOnChange={handleOnChange} />
   }
 
   if(selectedNode.length > 0){
@@ -194,7 +156,7 @@ export default () => {
           />
           <button placeholder="0x..." onClick={() => handleSetResolver(getNodeInfo(selectedNode, 'name'), db.getIn(['updateForm', 'newResolver']))}>Set Resolver</button>
         </div>
-        <button onClick={() => setDefaultResolver()}>Use default resolver</button>
+        <button onClick={() => handleSetDefaultResolver()}>Use default resolver</button>
         <div className="input-group">
           <input type="text" name="subDomain" value={db.getIn(['updateForm', 'subDomain'])} onChange={(e)=> handleOnChange('subDomain', e.target.value)} />
           <button onClick={() => handleCheckSubDomain(db.getIn(['updateForm', 'subDomain']), getNodeInfo(selectedNode, 'name'))}>Check for subdomain</button>

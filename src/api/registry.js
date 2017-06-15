@@ -40,7 +40,6 @@ export async function setContent(name, content){
 }
 
 export async function setResolver(name, resolver) {
-  console.log('setting resolver to ', resolver)
   let { ENS, web3 } = await getENS()
   return ENS.setResolver(name, resolver, {from: web3.eth.accounts[0]})
 }

@@ -111,7 +111,7 @@ h1 {
 .search-name {
   padding: 20px;
   background: #eee;
-  width: 50%;
+  width: 40%;
 }
 .search-name .instructions {
   margin-bottom: 10px;
@@ -136,7 +136,7 @@ h1 {
 .node-info {
   padding: 20px;
   background: #ccc;
-  width: 50%;
+  width: 60%;
 }
 .nodes-root {
   color: #2267b1;
