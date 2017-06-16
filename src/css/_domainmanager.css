@@ -1,23 +1,27 @@
-.domain-manager-header {
+.domain-manager {
   display: flex;
+  margin-top: 80px;
 }
 .search-name {
-  padding: 20px;
-  background: #eee;
-  width: 40%;
-}
-.search-name .instructions {
-  margin-bottom: 10px;
+  width: auto;
+  margin-top: 10px;
 }
 .search-name .owner {
-  margin-bottom: 20px;
+  float: left;
 }
 .search-name input {
-  width: 100%;
+  margin: 0;
+  margin-left: 20px;
+  float: left;
+  width: auto;
+}
+.search-name input.has-owner {
+  border-radius: 5px 0 0 5px;
 }
 .search-name button {
+  float: left;
   background: $medBlue;
-  width: 100%;
+  width: auto;
   transition: 0.2s;
 }
 .search-name button:hover {
@@ -25,9 +29,12 @@
 }
 /* Node info */
 .node-info {
+  height: 100%;
   padding: 20px;
   background: #ccc;
-  width: 60%;
+  width: 40%;
+  position: fixed;
+  z-index: 100;
 }
 .tabs {
   display: flex;
@@ -90,18 +97,21 @@
 }
 /* Nodes */
 .nodes-root {
+  margin-left: 40%;
+  width: 60%;
   color: $lightBlue;
   background: $darkBlue;
 }
 .child-nodes {
-  display: flex;
+  left: 100%;
+  bottom: 100%;
+  position: relative;
   justify-content: center;
 }
 .node {
+  position: relative;
   color: #fff;
-  flex: 1;
-  justify-content: center;
-  align-items: center;
+  display: flex;
 }
 .node-details {
   padding: 20px;

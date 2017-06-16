@@ -53,7 +53,13 @@ input:focus {
 .header {
   zoom: 1;
   background: linear-gradient(to right, #2b306d 1%, #4a66ba 100%);
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 80px;
+  width: 100%;
   padding: 10px 20px;
+  z-index: 100;
 }
 .header:after,
 .header:before {
@@ -109,35 +115,42 @@ h1 {
   border-bottom: 2px solid #fff;
   color: #fff;
 }
-.domain-manager-header {
+.domain-manager {
   display: flex;
+  margin-top: 80px;
 }
 .search-name {
-  padding: 20px;
-  background: #eee;
-  width: 40%;
-}
-.search-name .instructions {
-  margin-bottom: 10px;
+  width: auto;
+  margin-top: 10px;
 }
 .search-name .owner {
-  margin-bottom: 20px;
+  float: left;
 }
 .search-name input {
-  width: 100%;
+  margin: 0;
+  margin-left: 20px;
+  float: left;
+  width: auto;
+}
+.search-name input.has-owner {
+  border-radius: 5px 0 0 5px;
 }
 .search-name button {
+  float: left;
   background: #262b78;
-  width: 100%;
+  width: auto;
   transition: 0.2s;
 }
 .search-name button:hover {
   background: #363ca1;
 }
 .node-info {
+  height: 100%;
   padding: 20px;
   background: #ccc;
-  width: 60%;
+  width: 40%;
+  position: fixed;
+  z-index: 100;
 }
 .tabs {
   display: flex;
@@ -208,23 +221,21 @@ h1 {
   border-radius: 0 0 5px 5px;
 }
 .nodes-root {
+  margin-left: 40%;
+  width: 60%;
   color: #2267b1;
   background: #102026;
 }
-.nodes-inner {
-  max-width: 1200px;
-  padding: 0 20px 0;
-  margin: 0 auto 0;
-}
 .child-nodes {
-  display: flex;
+  left: 100%;
+  bottom: 100%;
+  position: relative;
   justify-content: center;
 }
 .node {
+  position: relative;
   color: #fff;
-  flex: 1;
-  justify-content: center;
-  align-items: center;
+  display: flex;
 }
 .node-details {
   padding: 20px;

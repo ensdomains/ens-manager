@@ -203,7 +203,7 @@ const NodeDetails = ({ selectedNode }) => <div>
 
 export default () => {
   const selectedNode = db.get('selectedNode')
-  let content = <div>Select a node to continue</div>,
+  let content = <div>Search and select a domain to start managing your domains!</div>,
       tabContent = null,
       currentTab = db.get('currentTab')
 
