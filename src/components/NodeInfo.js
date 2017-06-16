@@ -21,8 +21,9 @@ import {
 } from '../updaters/nodeDetails'
 import { watchEvent, stopWatching } from '../api/watchers'
 import { getNamehash } from '../api/ens'
-import { addNotification } from '../updaters/notifications'
+import { addNotification, addActionNotification } from '../updaters/notifications'
 import getWeb3 from '../api/web3'
+import { getEtherScanAddr } from '../lib/utils'
 import classnames from 'classnames'
 
 import ResolverInfo from './ResolverInfo'
@@ -61,10 +62,30 @@ function handleSetDefaultResolver(){
 function handleSetResolver(name, newResolver) {
   updateForm('newResolver', '')
   setResolver(name, newResolver).then(txId => {
+    addActionNotification({
+      message: `New Resolver tx sent for ${name}`,
+      action: 'View Tx',
+      onClick: async () => {
+        let etherscanAddr = await getEtherScanAddr()
+        let txLink = `${etherscanAddr}/tx/${txId}`
+        console.log(txLink)
+        window.open(`${etherscanAddr}/tx/${txId}`, "_blank");
+      },
+      dismissAfter: false
+    })
     watchEvent('NewResolver', name, (error, log, event) => {
-
       updateNode(name, 'resolver', log.args.resolver)
-      addNotification(`New resolver found for ${name}`)
+      addActionNotification({
+        message: `New Resolver for ${name} confirmed!`,
+        action: 'View Tx',
+        onClick: async () => {
+          let etherscanAddr = await getEtherScanAddr()
+          let txLink = `${etherscanAddr}/tx/${txId}`
+          console.log(txLink)
+          window.open(`${etherscanAddr}/tx/${txId}`,"_blank");
+        },
+        dismissAfter: false
+      })
       event.stopWatching()
     })
   })
