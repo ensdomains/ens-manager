@@ -100,14 +100,16 @@
   margin-left: 40%;
   width: 60%;
   color: $lightBlue;
-  background: $darkBlue;
 }
 .node {
   position: relative;
   color: #fff;
+  display: flex;
+  height: 50px;
 }
 .node-details {
-  padding: 20px;
+  padding: 10px;
+  width: 200px;
   border: 2px solid $lightBlue;
 }
 .selected > .node-details {
@@ -117,8 +119,5 @@
   cursor: pointer;
 }
 .child-nodes {
-  left: 100%;
-  bottom: 100%;
   position: relative;
-  justify-content: center;
 }
