@@ -31,10 +31,10 @@
 .node-info {
   height: 100%;
   padding: 20px;
-  background: #ccc;
+  background: #f1f1f1;
   width: 40%;
   position: fixed;
-  z-index: 100;
+  z-index: 1;
 }
 .tabs {
   display: flex;
@@ -102,16 +102,9 @@
   color: $lightBlue;
   background: $darkBlue;
 }
-.child-nodes {
-  left: 100%;
-  bottom: 100%;
-  position: relative;
-  justify-content: center;
-}
 .node {
   position: relative;
   color: #fff;
-  display: flex;
 }
 .node-details {
   padding: 20px;
@@ -122,4 +115,10 @@
 }
 .node-details:hover {
   cursor: pointer;
+}
+.child-nodes {
+  left: 100%;
+  bottom: 100%;
+  position: relative;
+  justify-content: center;
 }

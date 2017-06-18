@@ -91,6 +91,7 @@ h1 {
   }
 }
 .nav ul {
+  margin-top: 10px;
   padding: 0;
 }
 @media (max-width: 728px) {
@@ -104,7 +105,7 @@ h1 {
   border-bottom: 2px solid transparent;
 }
 .nav a {
-  color: #c3ccdb;
+  color: #ededed;
   margin: 0 20px;
   padding-bottom: 10px;
   text-decoration: none;
@@ -147,10 +148,10 @@ h1 {
 .node-info {
   height: 100%;
   padding: 20px;
-  background: #ccc;
+  background: #f1f1f1;
   width: 40%;
   position: fixed;
-  z-index: 100;
+  z-index: 1;
 }
 .tabs {
   display: flex;
@@ -226,16 +227,9 @@ h1 {
   color: #2267b1;
   background: #102026;
 }
-.child-nodes {
-  left: 100%;
-  bottom: 100%;
-  position: relative;
-  justify-content: center;
-}
 .node {
   position: relative;
   color: #fff;
-  display: flex;
 }
 .node-details {
   padding: 20px;
@@ -246,4 +240,10 @@ h1 {
 }
 .node-details:hover {
   cursor: pointer;
+}
+.child-nodes {
+  left: 100%;
+  bottom: 100%;
+  position: relative;
+  justify-content: center;
 }

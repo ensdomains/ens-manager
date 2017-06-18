@@ -21,6 +21,7 @@ bp($width-xs)
 bp($width-xs)
 }
 .nav ul {
+  margin-top: 10px;
   padding: 0;
 bp($width-xs)
 }
@@ -30,7 +31,7 @@ bp($width-xs)
   border-bottom: 2px solid transparent;
 }
 .nav a {
-  color: $lightestBlue;
+  color: #ededed;
   margin: 0 20px;
   padding-bottom: 10px;
   text-decoration: none;

@@ -9,19 +9,27 @@ const handleSelectNode = (event, data) => {
   event.stopPropagation()
 }
 
-const Node = ({ data }) => {
+const isSelected = (selected, name) => {
+  let query = new RegExp(name);
+  return selected.match(query) ? true : false
+}
 
+const Node = ({ data }) => {
+  let childNodes = null
+  let selected = isSelected(db.get('selectedNode'),data.get('name'))
   let classes = classNames({
     node: true,
-    selected: data.get('name') === db.get('selectedNode')
+    selected
   })
+  if(selected) {
+    childNodes = <div className="child-nodes">
+      {data.get('nodes').size > 0 ? data.get('nodes').map(node => <Node key={node.get('name')} data={node} />) : ''}
+    </div>
+  }
 
   return <div className={classes}>
     <div onClick={(e) => handleSelectNode(e, data.get('name'))} className="node-details">{data.get('name')}</div>
-
-    <div className="child-nodes">
-      {data.get('nodes').size > 0 ? data.get('nodes').map(node => <Node key={node.get('name')} data={node} />) : ''}
-    </div>
+    {childNodes}
   </div>
 }
 
