@@ -137,21 +137,6 @@ function handleCreateSubDomain(subDomain, domain){
   })
 }
 
-// setSubnodeOwner(domainArray[0], domainArray.slice(1).join('.'), newOwner)
-//   .then(txId => {
-//     updateForm('newOwner', '')
-//     let sentComponent = <span>New owner <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {name} sent!</span>
-//     addNotification(sentComponent, false)
-//     watchRegistryEvent('NewOwner', node, (error, log, event) => {
-//       console.log(log)
-//       console.log(event)
-//       updateNode(name, 'owner', log.args.owner)
-//       let confirmedComponent = <span>New owner <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {node} confirmed!</span>
-//       addNotification(confirmedComponent, false)
-//       event.stopWatching()
-//     })
-//   })
-
 function handleDeleteSubDomain(subDomain, domain){
   checkSubDomain(subDomain, domain).then(address => {
     console.log('here', subDomain, domain, address)
