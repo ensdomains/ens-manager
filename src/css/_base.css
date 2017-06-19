@@ -30,6 +30,14 @@ button.right {
   background: #f00;
   float: right;
 }
+button.danger {
+  border: 1px solid #f04848;
+  background: #f04848;
+}
+button.danger:hover {
+  background: #eb2929;
+  border: 1px solid #eb2929;
+}
 input {
   font-size: 14px;
   padding: 12px 15px;

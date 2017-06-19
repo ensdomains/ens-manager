@@ -31,6 +31,14 @@ button.right {
   background: #f00;
   float: right;
 }
+button.danger {
+  border: 1px solid #f04848;
+  background: #f04848;
+}
+button.danger:hover {
+  background: #eb2929;
+  border: 1px solid #eb2929;
+}
 input {
   font-size: 14px;
   padding: 12px 15px;
@@ -202,23 +210,15 @@ h1 {
   background: #fff;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 70%;
-}
-.current-node {
-  float: left;
-  width: 30%;
+  border-bottom: solid 1px #262b78;
   border-right: solid 1px #262b78;
   border-left: solid 1px #262b78;
-}
-.current-owner {
-  float: left;
-  overflow: hidden;
-  border-right: solid 1px #262b78;
-}
-.current-resolver {
-  float: left;
   width: 100%;
-  border: solid 1px #262b78;
+}
+.info strong {
+  font-weight: 300;
+}
+.info:last-child {
   border-radius: 0 0 5px 5px;
 }
 .nodes-root {

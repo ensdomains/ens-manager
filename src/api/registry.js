@@ -146,6 +146,4 @@ export const getSubdomains = async name => {
     })
     return Promise.all(nodePromises)
   })
-
-
 }

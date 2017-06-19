@@ -198,13 +198,15 @@ const NodeDetails = ({ selectedNode }) => <div>
     <input type="text" name="subDomain" value={db.getIn(['updateForm', 'newSubDomain'])} onChange={(e)=> handleOnChange('newSubDomain', e.target.value)} />
     <button onClick={() => handleCreateSubDomain(db.getIn(['updateForm', 'newSubDomain']), getNodeInfo(selectedNode, 'name'))}>Create new subdomain</button>
   </div>
-  <button onClick={() => handleDeleteSubDomain(getNodeInfo(selectedNode, 'label'), getNodeInfo(selectedNode, 'node'))}>Delete Node</button>
+  <button className="danger" onClick={() => handleDeleteSubDomain(getNodeInfo(selectedNode, 'label'), getNodeInfo(selectedNode, 'node'))}>Delete Node</button>
 </div>
 
 export default () => {
   const selectedNode = db.get('selectedNode')
-  let content = <div>Search and select a domain to start managing your domains!</div>,
-      tabContent = null,
+  let renderedContent = <div>Search and select a domain to start managing your domains!</div>,
+      tabContent,
+      addr,
+      content,
       currentTab = db.get('currentTab')
 
   if(selectedNode.length > 0){
@@ -214,16 +216,20 @@ export default () => {
         break
       case 'resolverDetails':
         tabContent = <ResolverDetails selectedNode={selectedNode} handleOnChange={handleOnChange} />
+        addr = <div className="current-addr info"><strong>Addr:</strong> {getNodeInfo(selectedNode, 'addr')}</div>
+        content = <div className="current-content info"><strong>Content:</strong> {getNodeInfo(selectedNode, 'content')}</div>
         break
     }
 
-    content = (
+    renderedContent = (
       <div>
         <Tabs selectedNode={selectedNode} currentTab={currentTab} />
         <div className="info-container">
-          <div className="current-node info">{getNodeInfo(selectedNode, 'name')}</div>
-          <div className="current-owner info">Owner: {getNodeInfo(selectedNode, 'owner')}</div>
-          <div className="current-resolver info">Resolver: {getNodeInfo(selectedNode, 'resolver')}</div>
+          <div className="current-node info"><strong>Name:</strong> {getNodeInfo(selectedNode, 'name')}</div>
+          <div className="current-owner info"><strong>Owner:</strong> {getNodeInfo(selectedNode, 'owner')}</div>
+          <div className="current-resolver info"><strong>Resolver:</strong> {getNodeInfo(selectedNode, 'resolver')}</div>
+          {addr}
+          {content}
         </div>
         {tabContent}
       </div>
@@ -232,7 +238,7 @@ export default () => {
 
   return (
     <div className="node-info">
-      {content}
+      {renderedContent}
     </div>
   )
 }

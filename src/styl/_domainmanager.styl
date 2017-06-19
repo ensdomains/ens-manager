@@ -70,22 +70,13 @@
   background white
   overflow hidden
   text-overflow ellipsis
-  width 70%
-
-.current-node
-  float left
-  width 30%
+  border-bottom solid 1px $medBlue
   border-right solid 1px $medBlue
   border-left solid 1px $medBlue
-
-.current-owner
-  float left
-  overflow hidden
-  border-right solid 1px $medBlue
-
-
-.current-resolver
-  float left
   width 100%
-  border solid 1px $medBlue
-  border-radius 0 0 5px 5px
+
+  strong
+    font-weight 300
+
+  &:last-child
+    border-radius 0 0 5px 5px

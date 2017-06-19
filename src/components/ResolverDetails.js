@@ -16,7 +16,6 @@ function handleSetContent(name, content){
 
 const ResolverDetails = ({ selectedNode, handleOnChange }) => {
   return <div className="resolver-details">
-    <div className="addr">{getNodeInfo(selectedNode, 'addr')}</div>
     <div className="input-group">
       <input
         type="text"
@@ -26,7 +25,6 @@ const ResolverDetails = ({ selectedNode, handleOnChange }) => {
       />
       <button placeholder="0x..." onClick={() => handleSetAddr(getNodeInfo(selectedNode, 'name'), db.getIn(['updateForm', 'newAddr']))}>Set Addr</button>
     </div>
-    <div className="content">{getNodeInfo(selectedNode, 'content')}</div>
     <div className="input-group">
       <input
         type="text"
