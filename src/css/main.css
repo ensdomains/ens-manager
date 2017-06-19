@@ -230,7 +230,7 @@ h1 {
 .nodes-root {
   margin-left: 40%;
   width: 60%;
-  color: #2267b1;
+  color: #2c7dd3;
 }
 .node {
   position: relative;
@@ -256,4 +256,13 @@ h1 {
 .child-nodes {
   position: relative;
   z-index: 100;
+}
+.tx-link {
+  color: #2c7dd3;
+  text-decoration: none;
+  font-style: italic;
+}
+.tx-link:hover {
+  color: #419bfc;
+  text-decoration: underline;
 }

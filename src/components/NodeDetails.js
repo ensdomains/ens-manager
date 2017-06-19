@@ -23,7 +23,7 @@ import { watchRegistryEvent, watchResolverEvent, stopWatching } from '../api/wat
 import { getNamehash } from '../api/ens'
 import { addNotification, addActionNotification } from '../updaters/notifications'
 import getWeb3 from '../api/web3'
-import { getEtherScanAddr } from '../lib/utils'
+import { openEtherScanPage } from '../lib/utils'
 import classnames from 'classnames'
 
 import ResolverDetails from './ResolverDetails'
@@ -66,10 +66,7 @@ function handleSetResolver(name, newResolver) {
       message: `New Resolver tx sent for ${name}`,
       action: 'View Tx',
       onClick: async () => {
-        let etherscanAddr = await getEtherScanAddr()
-        let txLink = `${etherscanAddr}/tx/${txId}`
-        console.log(txLink)
-        window.open(`${etherscanAddr}/tx/${txId}`, "_blank");
+        openEtherScanPage(txId)
       },
       dismissAfter: false
     })
@@ -79,10 +76,7 @@ function handleSetResolver(name, newResolver) {
         message: `New Resolver for ${name} confirmed!`,
         action: 'View Tx',
         onClick: async () => {
-          let etherscanAddr = await getEtherScanAddr()
-          let txLink = `${etherscanAddr}/tx/${txId}`
-          console.log(txLink)
-          window.open(`${etherscanAddr}/tx/${txId}`,"_blank");
+          openEtherScanPage(txId)
         },
         dismissAfter: false
       })
@@ -216,7 +210,7 @@ export default () => {
         break
       case 'resolverDetails':
         tabContent = <ResolverDetails selectedNode={selectedNode} handleOnChange={handleOnChange} />
-        addr = <div className="current-addr info"><strong>Addr:</strong> {getNodeInfo(selectedNode, 'addr')}</div>
+        addr = <div className="current-addr info"><strong>Address:</strong> {getNodeInfo(selectedNode, 'addr')}</div>
         content = <div className="current-content info"><strong>Content:</strong> {getNodeInfo(selectedNode, 'content')}</div>
         break
     }

@@ -4,14 +4,40 @@ import {
   setAddr,
   setContent
 } from '../api/registry'
-import { resolveUpdatePath, getNodeInfoSelector as getNodeInfo } from '../updaters/nodes'
+import { resolveUpdatePath, getNodeInfoSelector as getNodeInfo, updateNode } from '../updaters/nodes'
+import { updateForm} from '../updaters/nodeDetails'
+import { watchResolverEvent } from '../api/watchers'
+import { addActionNotification, addNotification } from '../updaters/notifications'
+import { getEtherScanAddr } from '../lib/utils'
 
-function handleSetAddr(name, addr){
-  setAddr(name, addr).then(txId => console.log(txId))
+function handleSetAddr(name, resolverAddr, addr){
+  setAddr(name, addr).then(async txId => {
+    updateForm('newAddr', '')
+    let etherscanAddr = await getEtherScanAddr()
+    let sentComponent = <span>New address <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {name} sent!</span>
+    addNotification(sentComponent, false)
+    watchResolverEvent('AddrChanged', resolverAddr, name, async (error, log, event) => {
+      updateNode(name, 'addr', log.args.a)
+      let confirmedComponent = <span>New address <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {name} confirmed!</span>
+      addNotification(confirmedComponent, false)
+      event.stopWatching()
+    })
+  })
 }
 
-function handleSetContent(name, content){
-  setContent(name, content).then(txId => console.log(txId))
+function handleSetContent(name, resolverAddr, content){
+  setContent(name, content).then(async txId => {
+    updateForm('newContent', '')
+    let etherscanAddr = await getEtherScanAddr()
+    let sentComponent = <span>New Content <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {name} sent!</span>
+    addNotification(sentComponent, false)
+    watchResolverEvent('ContentChanged', resolverAddr, name, async (error, log, event) => {
+      updateNode(name, 'content', log.args.hash)
+      let confirmedComponent = <span>New content <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {name} confirmed!</span>
+      addNotification(confirmedComponent, false)
+      event.stopWatching()
+    })
+  })
 }
 
 const ResolverDetails = ({ selectedNode, handleOnChange }) => {
@@ -23,7 +49,12 @@ const ResolverDetails = ({ selectedNode, handleOnChange }) => {
         value={db.getIn(['updateForm', 'newAddr'])}
         onChange={(e)=> handleOnChange('newAddr', e.target.value)}
       />
-      <button placeholder="0x..." onClick={() => handleSetAddr(getNodeInfo(selectedNode, 'name'), db.getIn(['updateForm', 'newAddr']))}>Set Addr</button>
+      <button placeholder="0x..." onClick={() =>
+        handleSetAddr(
+          getNodeInfo(selectedNode, 'name'),
+          getNodeInfo(selectedNode, 'resolver'),
+          db.getIn(['updateForm', 'newAddr'])
+        )}>Set Addr</button>
     </div>
     <div className="input-group">
       <input
@@ -32,7 +63,12 @@ const ResolverDetails = ({ selectedNode, handleOnChange }) => {
         value={db.getIn(['updateForm', 'newContent'])}
         onChange={(e)=> handleOnChange('newContent', e.target.value)}
       />
-      <button placeholder="0x..." onClick={() => handleSetContent(getNodeInfo(selectedNode, 'name'), db.getIn(['updateForm', 'newContent']))}>Set Content</button>
+      <button placeholder="0x..." onClick={() =>
+        handleSetContent(
+          getNodeInfo(selectedNode, 'name'),
+          getNodeInfo(selectedNode, 'resolver'),
+          db.getIn(['updateForm', 'newContent'])
+        )}>Set Content</button>
     </div>
   </div>
 }

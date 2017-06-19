@@ -546,14 +546,14 @@ var resolverContract = [
 const getResolverContract = addr => {
   return getWeb3().then(({ web3, networkId }) => {
     return {
-      resolverContract: web3.eth.contract(resolverContract).at(addr),
+      resolver: web3.eth.contract(resolverContract).at(addr),
       web3
     }
   })
 }
 
 
-const getEns = () => {
+const getENSContract = () => {
   return getWeb3().then(({ web3, networkId }) => {
     return {
       ens: web3.eth.contract(ensContract).at(contracts[networkId].registry),
@@ -573,7 +573,7 @@ const getENS = async () => {
 }
 
 const getENSEvent = (event, filter, params) =>
-  getEns().then(({ens}) => {
+  getENSContract().then(({ens}) => {
     const myEvent = ens[event](filter,params)
 
     return new Promise(function(resolve,reject){
@@ -589,10 +589,11 @@ const getENSEvent = (event, filter, params) =>
   })
 
 
-const watchEvent = (contract, event, filter, params, callback) => {
-
-  function eventFactory(contract, event, filter, params, callback) {
-    const myEvent = contract[event](filter,params)
+const watchEvent = ({ contract, addr, eventName}, filter, params, callback) => {
+  console.log('WATCH EVENT', contract, addr, eventName )
+  function eventFactory(contract, eventName, filter, params, callback) {
+    const myEvent = contract[eventName](filter,params)
+      console.log(myEvent)
       myEvent.watch(function(error, log){
         console.log(event, `here in the ${contract} Event`, log)
         if(error) {
@@ -606,24 +607,22 @@ const watchEvent = (contract, event, filter, params, callback) => {
 
   switch(contract){
     case 'ENS':
-      return getEns().then(({ens}) => {
-        eventFactory(ens, event, filter, params, callback)
+      return getENSContract().then(({ens}) => {
+        eventFactory(ens, eventName, filter, params, callback)
       })
     case 'Resolver':
-      return getResolverContract().then(({resolver}) => {
-        eventFactory(resolver, event, filter, params, callback)
+      console.log('Resolver ENS WATCH')
+      return getResolverContract(addr).then(({resolver}) => {
+        eventFactory(resolver, eventName, filter, params, callback)
       })
   }
 }
 
-
-
 export default getENS
 export {
-   getEns,
+   getENSContract,
    getENSEvent,
    getNamehash,
-   watchEvent,
-   resolverContract,
    getResolverContract,
+   watchEvent
 }

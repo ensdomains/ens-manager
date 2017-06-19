@@ -7,7 +7,6 @@ export const uniq = (a, param) =>
 
 export function getEtherScanAddr(){
   return getWeb3().then(({ networkId}) => {
-    console.log(networkId)
     switch(networkId) {
       case 1:
         return "https://etherscan.io/"
@@ -19,4 +18,10 @@ export function getEtherScanAddr(){
         return "https://ropsten.etherscan.io/"
     }
   })
+}
+
+export async function openEtherScanPage(txId){
+  let etherscanAddr = await getEtherScanAddr()
+  let txLink = `${etherscanAddr}/tx/${txId}`
+  window.open(`${etherscanAddr}/tx/${txId}`, "_blank");
 }

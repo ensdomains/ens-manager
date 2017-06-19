@@ -1,4 +1,4 @@
-import getENS, { getNamehash, getENSEvent, getEns } from './ens'
+import getENS, { getNamehash, getENSEvent } from './ens'
 import { fromJS } from 'immutable'
 import { decryptHashes } from './preimage'
 import { uniq } from '../lib/utils'

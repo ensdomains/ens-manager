@@ -22,18 +22,21 @@ export function addNotification(message, time = 3000){
   }))
 }
 
-export function addActionNotification(params){
-  let id = uuid()
-  let callback = params.onClick
-  update(addNotificationReducer(db, {...params,
-    onClick: (notification, deactivate) => {
-      callback()
-      deactivate();
-      removeNotification(id);
-    },
-    id
-  }))
-}
+// export function addActionNotification(params){
+//   let id = uuid()
+//
+//   update(addNotificationReducer(db, {
+//     ...params,
+//     onClick: (notification, deactivate) => {
+//       if(typeof params.onClick === 'Function') {
+//         params.onClick()
+//       }
+//       deactivate();
+//       removeNotification(id);
+//     },
+//     key: id
+//   }))
+// }
 
 export const removeNotificationReducer = (db, id) => {
   const index = db.get('notifications').findIndex(notif => notif.get('key') === id)
