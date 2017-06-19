@@ -21,37 +21,60 @@ import {
 } from '../updaters/nodeDetails'
 import { watchRegistryEvent, watchResolverEvent, stopWatching } from '../api/watchers'
 import { getNamehash } from '../api/ens'
-import { addNotification, addActionNotification } from '../updaters/notifications'
+import { addNotification } from '../updaters/notifications'
 import getWeb3 from '../api/web3'
-import { openEtherScanPage } from '../lib/utils'
+import { getEtherScanAddr } from '../lib/utils'
 import classnames from 'classnames'
 
 import ResolverDetails from './ResolverDetails'
 
-function handleUpdateOwner(name, newOwner){
-  updateForm('newOwner', '')
+// setContent(name, content).then(async txId => {
+//   updateForm('newContent', '')
+//  let etherscanAddr = await getEtherScanAddr()
+//
+//   watchResolverEvent('ContentChanged', resolverAddr, name, async (error, log, event) => {
+//     updateNode(name, 'content', log.args.hash)
+//     let confirmedComponent = <span>New content <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {name} confirmed!</span>
+//     addNotification(confirmedComponent, false)
+//     event.stopWatching()
+//   })
+// })
+async function handleUpdateOwner(name, newOwner){
+  let etherscanAddr = await getEtherScanAddr()
   let domainArray = name.split('.')
   if(domainArray.length > 2) {
+    let node = domainArray.slice(1).join('.')
     setSubnodeOwner(domainArray[0], domainArray.slice(1).join('.'), newOwner)
       .then(txId => {
-        console.log(txId)
-        watch(name)
+        updateForm('newOwner', '')
+        let sentComponent = <span>New owner <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {name} sent!</span>
+        addNotification(sentComponent, false)
+        watchRegistryEvent('NewOwner', node, (error, log, event) => {
+          console.log(log)
+          console.log(event)
+          updateNode(name, 'owner', log.args.owner)
+          let confirmedComponent = <span>New owner <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {node} confirmed!</span>
+          addNotification(confirmedComponent, false)
+          event.stopWatching()
+        })
       })
   } else {
     setNewOwner(name, newOwner).then(txId => {
-      console.log(txId)
-      watch(name)
+      let sentComponent = <span>New owner <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {name} sent!</span>
+      addNotification(sentComponent, false)
+      watchRegistryEvent('Transfer', name, (error, log, event) => {
+        console.log(log)
+        console.log(event)
+        updateNode(name, 'owner', log.args.owner)
+        let confirmedComponent = <span>New owner <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {name} confirmed!</span>
+        addNotification(confirmedComponent, false)
+        event.stopWatching()
+      })
     })
   }
 
-  function watch(){
-    watchRegistryEvent('Transfer', name, (error, log, event) => {
-      console.log(log)
-      console.log(event)
-      updateNode(name, 'owner', log.args.owner)
-      addNotification(`New owner found for ${name}`)
-      stopWatching(event, db.getIn(['watchers', event.event]) === 0)
-    })
+  function watch(name, txId){
+
   }
 }
 
@@ -60,26 +83,15 @@ function handleSetDefaultResolver(){
 }
 
 function handleSetResolver(name, newResolver) {
-  updateForm('newResolver', '')
-  setResolver(name, newResolver).then(txId => {
-    addActionNotification({
-      message: `New Resolver tx sent for ${name}`,
-      action: 'View Tx',
-      onClick: async () => {
-        openEtherScanPage(txId)
-      },
-      dismissAfter: false
-    })
+  setResolver(name, newResolver).then(async txId => {
+    updateForm('newResolver', '')
+    let etherscanAddr = await getEtherScanAddr()
+    let sentComponent = <span>New Resolver <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {name} sent!</span>
+    addNotification(sentComponent, false)
     watchRegistryEvent('NewResolver', name, (error, log, event) => {
       updateNode(name, 'resolver', log.args.resolver)
-      addActionNotification({
-        message: `New Resolver for ${name} confirmed!`,
-        action: 'View Tx',
-        onClick: async () => {
-          openEtherScanPage(txId)
-        },
-        dismissAfter: false
-      })
+      let confirmedComponent = <span>New Resolver <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {name} confirmed!</span>
+      addNotification(confirmedComponent, false)
       event.stopWatching()
     })
   })
@@ -97,19 +109,25 @@ function handleCheckSubDomain(subDomain, domain){
 }
 
 function handleCreateSubDomain(subDomain, domain){
+  let name = subDomain + '.'+ domain
   updateForm('newSubDomain', '')
   checkSubDomain(subDomain, domain).then(address => {
     console.log('here', subDomain, domain, address)
     if(address !== "0x0000000000000000000000000000000000000000"){
       console.log('subdomain already exists!')
     } else {
-      createSubDomain(subDomain, domain).then(({ owner, txId }) => {
+      createSubDomain(subDomain, domain).then(async ({ owner, txId }) => {
+        let etherscanAddr = await getEtherScanAddr()
+        let sentComponent = <span>New Subdomain <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {domain} sent!</span>
+        addNotification(sentComponent, false)
         watchRegistryEvent('NewOwner', domain,  async (error, log, event) => {
           //TODO check if this subdomain really is the same one submitted
           // if it is cancel event
           let { web3 } = await getWeb3()
           let labelHash = web3.sha3(subDomain)
           if(log.args.owner === owner && labelHash === log.args.label) {
+            let confirmedComponent = <span>New Subdomain <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {domain} confirmed!</span>
+            addNotification(confirmedComponent, false)
             appendSubDomain(subDomain, domain, log.args.owner)
             event.stopWatching()
           }
@@ -118,6 +136,21 @@ function handleCreateSubDomain(subDomain, domain){
     }
   })
 }
+
+// setSubnodeOwner(domainArray[0], domainArray.slice(1).join('.'), newOwner)
+//   .then(txId => {
+//     updateForm('newOwner', '')
+//     let sentComponent = <span>New owner <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {name} sent!</span>
+//     addNotification(sentComponent, false)
+//     watchRegistryEvent('NewOwner', node, (error, log, event) => {
+//       console.log(log)
+//       console.log(event)
+//       updateNode(name, 'owner', log.args.owner)
+//       let confirmedComponent = <span>New owner <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {node} confirmed!</span>
+//       addNotification(confirmedComponent, false)
+//       event.stopWatching()
+//     })
+//   })
 
 function handleDeleteSubDomain(subDomain, domain){
   checkSubDomain(subDomain, domain).then(address => {
@@ -131,7 +164,9 @@ function handleDeleteSubDomain(subDomain, domain){
           let labelHash = web3.sha3(subDomain)
           if(parseInt(log.args.owner, 16) === 0 && log.args.label === labelHash){
             removeSubDomain(subDomain, domain)
-            addNotification('subdomain ' + subDomain + '.' + domain + ' deleted')
+            let etherscanAddr = await getEtherScanAddr()
+            let confirmedComponent = <span>Delete domain <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {subDomain + '.' + domain} confirmed!</span>
+            addNotification(confirmedComponent, false)
             event.stopWatching()
           }
         })
