@@ -26,7 +26,7 @@ import getWeb3 from '../api/web3'
 import { getEtherScanAddr } from '../lib/utils'
 import classnames from 'classnames'
 
-import ResolverInfo from './ResolverInfo'
+import ResolverDetails from './ResolverDetails'
 
 function handleUpdateOwner(name, newOwner){
   updateForm('newOwner', '')
@@ -213,7 +213,7 @@ export default () => {
         tabContent = <NodeDetails selectedNode={selectedNode} />
         break
       case 'resolverDetails':
-        tabContent = <ResolverInfo selectedNode={selectedNode} handleOnChange={handleOnChange} />
+        tabContent = <ResolverDetails selectedNode={selectedNode} handleOnChange={handleOnChange} />
         break
     }
 

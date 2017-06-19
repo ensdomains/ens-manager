@@ -1,0 +1,29 @@
+/* Nodes */
+
+.nodes-root
+  margin-left 40%
+  width 60%
+  color $lightBlue
+
+.node
+  position relative
+  color white
+  display flex
+  height 45px
+
+
+.node-details
+  padding 10px
+  width 250px
+  display flex
+  align-content center
+  .ethereum-address-icon
+    margin-right 10px
+  .selected > &
+    background $medBlue
+  &:hover
+    cursor pointer
+
+.child-nodes
+  position relative
+  z-index 100

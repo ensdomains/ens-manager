@@ -1,6 +1,7 @@
 import React from 'react'
 import { db } from 'redaxe'
 import { selectNode, switchTab } from '../updaters/nodeDetails'
+import Blockies from './Blockies'
 import classNames from 'classnames'
 
 const handleSelectNode = (event, data) => {
@@ -28,7 +29,7 @@ const Node = ({ data }) => {
   }
 
   return <div className={classes}>
-    <div onClick={(e) => handleSelectNode(e, data.get('name'))} className="node-details">{data.get('name')}</div>
+    <div onClick={(e) => handleSelectNode(e, data.get('name'))} className="node-details"><Blockies imageSize={25} address={data.get('owner')} /> {data.get('name')}</div>
     {childNodes}
   </div>
 }

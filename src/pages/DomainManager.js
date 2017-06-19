@@ -1,9 +1,9 @@
 import React from 'react'
 import Nodes from '../components/Nodes'
-import NodeInfo from '../components/NodeInfo'
+import NodeDetails from '../components/NodeDetails'
 
 export default () =>
   <div className="domain-manager">
-    <NodeInfo />
+    <NodeDetails />
     <Nodes />
   </div>

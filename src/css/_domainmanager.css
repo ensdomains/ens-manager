@@ -95,29 +95,3 @@
   border: solid 1px $medBlue;
   border-radius: 0 0 5px 5px;
 }
-/* Nodes */
-.nodes-root {
-  margin-left: 40%;
-  width: 60%;
-  color: $lightBlue;
-}
-.node {
-  position: relative;
-  color: #fff;
-  display: flex;
-  height: 50px;
-}
-.node-details {
-  padding: 10px;
-  width: 200px;
-  border: 2px solid $lightBlue;
-}
-.selected > .node-details {
-  border: 2px solid $medBlue;
-}
-.node-details:hover {
-  cursor: pointer;
-}
-.child-nodes {
-  position: relative;
-}
