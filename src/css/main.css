@@ -58,6 +58,9 @@ input:focus {
   border-radius: 0 3px 3px 0;
   width: 200px;
 }
+.notification-bar {
+  z-index: 100;
+}
 .header {
   zoom: 1;
   background: linear-gradient(to right, #2b306d 1%, #4a66ba 100%);
@@ -146,12 +149,15 @@ h1 {
 }
 .search-name button {
   float: left;
-  background: #262b78;
+  background: #73c462;
+  border-radius: 0 5px 5px 0;
+  border: #73c462;
   width: auto;
   transition: 0.2s;
 }
 .search-name button:hover {
-  background: #363ca1;
+  background: #73c462;
+  border: #73c462;
 }
 .node-info {
   height: 100%;

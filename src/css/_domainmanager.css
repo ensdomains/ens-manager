@@ -20,12 +20,15 @@
 }
 .search-name button {
   float: left;
-  background: $medBlue;
+  background: #73c462;
+  border-radius: 0 5px 5px 0;
+  border: #73c462;
   width: auto;
   transition: 0.2s;
 }
 .search-name button:hover {
-  background: $medBlueHigh;
+  background: #73c462;
+  border: #73c462;
 }
 /* Node info */
 .node-info {
