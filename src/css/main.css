@@ -248,9 +248,10 @@ h1 {
   margin-right: 10px;
 }
 .selected > .node-details {
-  background: #262b78;
+  background: #2c7dd3;
 }
 .node-details:hover {
+  background: #419bfc;
   cursor: pointer;
 }
 .child-nodes {
