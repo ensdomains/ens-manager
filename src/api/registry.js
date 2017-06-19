@@ -82,15 +82,31 @@ export async function setSubnodeOwner(label, node, newOwner) {
   return ENS.setSubnodeOwner(label + '.' + node, newOwner, {from: web3.eth.accounts[0]})
 }
 
+function getResolverDetails(node){
+  let addr = getAddr(node.name)
+  let content = getContent(node.name)
+  return Promise.all([addr, content]).then(([addr, content]) => ({
+    ...node,
+    addr,
+    content
+  }))
+}
+
 export function getRootDomain(name){
   return Promise.all([getOwner(name), getResolver(name)])
-    .then(([owner, resolver]) => fromJS([{
+    .then(([owner, resolver]) => ({
         name,
         owner,
         resolver,
         nodes: []
-      }])
-    )
+      })
+    ).then(node => {
+      let hasResolver = parseInt(node.resolver, 16) !== 0
+      if(hasResolver) {
+        return getResolverDetails(node)
+      }
+      return Promise.resolve(node)
+    })
 }
 
 export const getSubdomains = async name => {
@@ -124,13 +140,7 @@ export const getSubdomains = async name => {
     let nodePromises = nodes.map(node => {
       let hasResolver = parseInt(node.resolver, 16) !== 0
       if(hasResolver) {
-        let addr = getAddr(node.name)
-        let content = getContent(node.name)
-        return Promise.all([addr, content]).then(([addr, content]) => ({
-          ...node,
-          addr,
-          content
-        }))
+        return getResolverDetails(node)
       }
       return Promise.resolve(node)
     })

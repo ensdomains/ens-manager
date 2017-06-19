@@ -1,6 +1,7 @@
 import { db, update} from 'redaxe'
 import { fromJS } from 'immutable'
 import { getSubdomains, getRootDomain, getOwner, getResolver, getAddr } from '../api/registry'
+import { selectNode } from './nodeDetails'
 import { addNotification } from './notifications'
 
 //web3
@@ -58,23 +59,11 @@ export function setNodeDetails(name, address) {
 
   getRootDomain(name).then(rootDomain => {
     update(
-      db.set('nodes', rootDomain)
+      db.set('nodes', db.get('nodes').push(fromJS(rootDomain)))
     )
+    selectNode(name)
     return name
   }).then(fetchSubdomains)
-
-  getResolver(name).then(data =>
-    update(
-      db.set('resolver', data)
-    )
-  )
-
-  getAddr(name).then(data =>{
-    console.log(name, data)
-    update(
-      db.set('addr', data)
-    )
-  })
 
 }
 

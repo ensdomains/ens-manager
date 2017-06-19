@@ -14,9 +14,9 @@ export function updateForm(formName, data) {
   update(updateFormReducer(formName, data))
 }
 
-export const selectNodeReducer = data =>
-  db.set('selectedNode', data)
+export const selectNodeReducer = name =>
+  db.set('selectedNode', name)
 
-export function selectNode(data) {
-  update(selectNodeReducer(data))
+export function selectNode(name) {
+  update(selectNodeReducer(name))
 }
