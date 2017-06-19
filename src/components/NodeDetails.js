@@ -19,7 +19,7 @@ import {
   updateForm,
   switchTab
 } from '../updaters/nodeDetails'
-import { watchEvent, stopWatching } from '../api/watchers'
+import { watchRegistryEvent, watchResolverEvent, stopWatching } from '../api/watchers'
 import { getNamehash } from '../api/ens'
 import { addNotification, addActionNotification } from '../updaters/notifications'
 import getWeb3 from '../api/web3'
@@ -45,7 +45,7 @@ function handleUpdateOwner(name, newOwner){
   }
 
   function watch(){
-    watchEvent('Transfer', name, (error, log, event) => {
+    watchRegistryEvent('Transfer', name, (error, log, event) => {
       console.log(log)
       console.log(event)
       updateNode(name, 'owner', log.args.owner)
@@ -73,7 +73,7 @@ function handleSetResolver(name, newResolver) {
       },
       dismissAfter: false
     })
-    watchEvent('NewResolver', name, (error, log, event) => {
+    watchRegistryEvent('NewResolver', name, (error, log, event) => {
       updateNode(name, 'resolver', log.args.resolver)
       addActionNotification({
         message: `New Resolver for ${name} confirmed!`,
@@ -110,7 +110,7 @@ function handleCreateSubDomain(subDomain, domain){
       console.log('subdomain already exists!')
     } else {
       createSubDomain(subDomain, domain).then(({ owner, txId }) => {
-        watchEvent('NewOwner', domain,  async (error, log, event) => {
+        watchRegistryEvent('NewOwner', domain,  async (error, log, event) => {
           //TODO check if this subdomain really is the same one submitted
           // if it is cancel event
           let { web3 } = await getWeb3()
@@ -132,7 +132,7 @@ function handleDeleteSubDomain(subDomain, domain){
       addNotification('subdomain already deleted!')
     } else {
       deleteSubDomain(subDomain, domain).then(txId => {
-        watchEvent('NewOwner', domain, async (error, log, event) => {
+        watchRegistryEvent('NewOwner', domain, async (error, log, event) => {
           let { web3 } = await getWeb3()
           let labelHash = web3.sha3(subDomain)
           if(parseInt(log.args.owner, 16) === 0 && log.args.label === labelHash){
