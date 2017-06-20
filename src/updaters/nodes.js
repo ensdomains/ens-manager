@@ -70,12 +70,10 @@ export function setNodeDetails(name, address) {
 export function appendSubDomain(subDomain, domain, owner){
   const domainArray = domain.split('.')
   let indexOfNode,
-      updatePath = ['nodes', 0, 'nodes']
+      updatePath = ['nodes']
 
-  if(domainArray.length > 2) {
-    let domainArraySliced = domainArray.slice(0, domainArray.length - 2)
-    updatePath = resolveUpdatePath(domainArraySliced, updatePath, db)
-  }
+  let domainArraySliced = domainArray.slice(0, domainArray.length - 1)
+  updatePath = resolveUpdatePath(domainArraySliced, updatePath, db)
 
   update(
     db.updateIn(updatePath, nodes => nodes.push(fromJS({
@@ -92,12 +90,10 @@ export function appendSubDomain(subDomain, domain, owner){
 
 export function appendSubDomains(subDomains, rootDomain) {
   const domainArray = rootDomain.split('.')
-  let updatePath = ['nodes', 0, 'nodes']
+  let updatePath = ['nodes']
 
-  if(domainArray.length > 2) {
-    let domainArraySliced = domainArray.slice(0, domainArray.length - 2)
-    updatePath = resolveUpdatePath(domainArraySliced, updatePath, db)
-  }
+  let domainArraySliced = domainArray.slice(0, domainArray.length - 1)
+  updatePath = resolveUpdatePath(domainArraySliced, updatePath, db)
 
   subDomains.forEach(domain => {
     update(
@@ -113,12 +109,10 @@ export function appendSubDomains(subDomains, rootDomain) {
 export function removeSubDomain(subDomain, rootDomain) {
   const domainArray = rootDomain.split('.')
   let indexOfNode,
-      updatePath = ['nodes', 0, 'nodes']
+      updatePath = ['nodes']
 
-  if(domainArray.length > 2) {
-    let domainArraySliced = domainArray.slice(0, domainArray.length - 2)
-    updatePath = resolveUpdatePath(domainArraySliced, updatePath, db)
-  }
+  let domainArraySliced = domainArray.slice(0, domainArray.length - 2)
+  updatePath = resolveUpdatePath(domainArraySliced, updatePath, db)
 
   indexOfNode = db.getIn(updatePath).findIndex(node => node.get('name') === subDomain + '.' + rootDomain)
   update(
@@ -156,12 +150,10 @@ export function resolveUpdatePath(domainArray, path, db) {
 export function getNodeInfoSelector(name, prop) {
   const domainArray = name.split('.')
   let indexOfNode,
-      updatePath = ['nodes', 0]
+      updatePath = []
 
-  if(domainArray.length > 2) {
-    let domainArraySliced = domainArray.slice(0, domainArray.length - 2)
-    updatePath = resolveUpdatePath(domainArraySliced, updatePath, db)
-  }
+  let domainArraySliced = domainArray.slice(0, domainArray.length - 1)
+  updatePath = resolveUpdatePath(domainArraySliced, updatePath, db)
 
   updatePath = [...updatePath, prop]
   return db.getIn(updatePath)
