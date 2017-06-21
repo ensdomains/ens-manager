@@ -227,7 +227,7 @@ let ensContract = [
   }
 ];
 
-var resolverContract = [
+let resolverContract = [
   {
     "constant": true,
     "inputs": [
@@ -542,6 +542,96 @@ var resolverContract = [
     "type": "event"
   }
 ];
+
+let reverseRegistrarContract = [
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "owner",
+        "type": "address"
+      }
+    ],
+    "name": "claim",
+    "outputs": [
+      {
+        "name": "node",
+        "type": "bytes32"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "ens",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "addr",
+        "type": "address"
+      }
+    ],
+    "name": "node",
+    "outputs": [
+      {
+        "name": "ret",
+        "type": "bytes32"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "rootNode",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "name": "ensAddr",
+        "type": "address"
+      },
+      {
+        "name": "node",
+        "type": "bytes32"
+      }
+    ],
+    "payable": false,
+    "type": "constructor"
+  }
+]
+
+const getReverseRegistrarContract = () => {
+  return getENS().then(async ({ ENS, web3 }) => {
+    let namehash = await getNamehash('addr.reverse')
+    let reverseRegistrarAddr = await ENS.owner(namehash)
+    return {
+      reverseRegistrar: web3.eth.contract(reverseRegistrarContract).at(reverseRegistrarAddr),
+      web3
+    }
+  })
+}
 
 const getResolverContract = addr => {
   return getWeb3().then(({ web3, networkId }) => {

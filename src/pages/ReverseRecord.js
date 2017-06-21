@@ -1,5 +1,12 @@
 import React from 'react'
+import SearchReverseName from '../components/SearchReverseName'
+import ReverseNodeDetails from '../components/ReverseNodeDetails'
+import Header from '../components/Header'
+
 export default () =>
   <div className="reverse-record">
-    Reverse Record
+    <Header>
+      <SearchReverseName />
+    </Header>
+    <ReverseNodeDetails />
   </div>

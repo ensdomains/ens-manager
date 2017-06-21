@@ -1,16 +1,12 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
 import { fromJS } from 'immutable'
-import Main from './Main'
 import './index.css'
-import redaxeInit from 'redaxe'
+import createStore from 'redaxe'
 import ImmutableLogger from './lib/ImmutableLogger'
 import { syncData, localStorageMiddlewareImmutable } from './lib/LocalStorage'
 
 let syncProp = ['nodeCache', 'rootName', 'rootAddress']
 let initialData = {
-  rootName: '',
-  rootAddress: '0x0000000000000000000000000000000000000000',
+  nameSearch: '',
   nodes: [],
   nodeCache: [],
   notifications: [],
@@ -24,6 +20,11 @@ let initialData = {
     newAddr: '',
     newContent: ''
   },
+  reverseRecordSearch: '',
+  reverseRecordForm: {
+    name: '',
+    resolverAddr: ''
+  },
   currentTab: 'nodeDetails'
 }
 
@@ -34,8 +35,7 @@ let middleware = [
   //localStorageMiddlewareImmutable(syncProp, Immutable)
 ]
 
-redaxeInit(
+createStore(
   fromJS(initialData),//fromJS(syncedData),
-  () => ReactDOM.render(<Main />, document.getElementById('root')),
   middleware
 )

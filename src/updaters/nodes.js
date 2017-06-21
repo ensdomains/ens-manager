@@ -20,9 +20,15 @@ export function updateReadOnly(value){
   update(updateReadOnlyReducer(db, value))
 }
 
-export function updateAddress(name) {
+export function updateSearchName(name) {
   update(
-    db.set('rootName', name)
+    db.set('nameSearch', name)
+  )
+}
+
+export function updateReverseAddress(address){
+  update(
+    db.set('reverseRecordSearch', address)
   )
 }
 

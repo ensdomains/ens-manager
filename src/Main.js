@@ -1,7 +1,6 @@
 import React from 'react'
 import DomainManager from './pages/DomainManager'
 import ReverseRecord from './pages/ReverseRecord'
-import Header from './components/Header'
 import Notifications from './components/Notifications'
 
 import { db } from 'redaxe'
@@ -15,7 +14,6 @@ const Main = () => {
   return <div className="App">
     <Router>
       <div>
-        <Header />
         <Route exact path="/" component={DomainManager}/>
         <Route path="/reverse-record" component={ReverseRecord}/>
       </div>

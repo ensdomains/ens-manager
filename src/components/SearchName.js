@@ -1,14 +1,14 @@
 import React from 'react'
-import { db } from 'redaxe'
 import { connect } from 'react-redaxe'
+import { db } from 'redaxe'
 import classnames from 'classnames'
 
-import { updateAddress, setNodeDetails } from '../updaters/nodes'
+import { updateSearchName, setNodeDetails } from '../updaters/nodes'
 import { addNotification } from '../updaters/notifications'
 import { getOwner } from '../api/registry'
 import Blockies from './Blockies'
 
-function handleSetNodeDetails(name){
+function handleGetNodeDetails(name){
   getOwner(name).then(owner => {
     if(parseInt(owner, 16) === 0) {
       addNotification(`${name} does not have an owner!`)
@@ -18,18 +18,13 @@ function handleSetNodeDetails(name){
   })
 }
 
-export const SearchName = ({ handleSetNodeDetails }) => {
-  let owner,
-      getDetails,
-      address = db.get('rootAddress'),
-      addressExists = address !== '0x0000000000000000000000000000000000000000'
-
+export const SearchName = ({ handleGetNodeDetails, nameSearch }) => {
   return <div className="search-name">
     <div className="search-box">
-      <input className={classnames({'has-owner': addressExists})} type="text" id="address" placeholder="vitalik.eth" onChange={(e) => updateAddress(e.target.value)} />
+      <input type="text" id="address" placeholder="vitalik.eth" onChange={(e) => updateSearchName(e.target.value)} />
     </div>
-    <button className="get-details" onClick={() => handleSetNodeDetails(db.get('rootName'))}>Get Details</button>
+    <button className="get-details" onClick={() => handleGetNodeDetails(nameSearch)}>Get Details</button>
   </div>
 }
 
-export default connect({ handleSetNodeDetails: handleSetNodeDetails })(SearchName)
+export default connect(db => ({ rootName: db.get('nameSearch'), handleGetNodeDetails }))(SearchName)
