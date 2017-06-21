@@ -127,10 +127,6 @@ h1 {
   border-bottom: 2px solid #fff;
   color: #fff;
 }
-.domain-manager {
-  display: flex;
-  margin-top: 80px;
-}
 .search-name {
   width: auto;
   margin-top: 10px;
@@ -143,21 +139,25 @@ h1 {
   margin-left: 20px;
   float: left;
   width: auto;
-}
-.search-name input.has-owner {
   border-radius: 5px 0 0 5px;
+  height: 43px;
 }
 .search-name button {
   float: left;
   background: #73c462;
   border-radius: 0 5px 5px 0;
   border: #73c462;
+  height: 43px;
   width: auto;
   transition: 0.2s;
 }
 .search-name button:hover {
   background: #73c462;
   border: #73c462;
+}
+.domain-manager {
+  display: flex;
+  margin-top: 80px;
 }
 .node-info {
   height: 100%;

@@ -20,12 +20,9 @@ export function updateReadOnly(value){
   update(updateReadOnlyReducer(db, value))
 }
 
-export function updateAddress(value) {
+export function updateAddress(name) {
   update(
-    db.set('rootName', value)
-  )
-  getOwner(value).then(owner =>
-    update(db.set('rootAddress', owner))
+    db.set('rootName', name)
   )
 }
 
@@ -46,7 +43,7 @@ export function updateNode(name, prop, data) {
   )
 }
 
-export function setNodeDetails(name, address) {
+export function setNodeDetails(name) {
   const fetchSubdomains = name =>
     getSubdomains(name).then(subdomains => {
       appendSubDomains(subdomains, name)
