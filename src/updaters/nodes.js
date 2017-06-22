@@ -70,6 +70,10 @@ export function setNodeDetails(name) {
 
 }
 
+export function setReverseRecordDetails(address, name) {
+  console.log(address, name)
+}
+
 export function appendSubDomain(subDomain, domain, owner){
   const domainArray = domain.split('.')
   let indexOfNode,

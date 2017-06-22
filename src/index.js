@@ -1,11 +1,10 @@
 import ReactDOM from 'react-dom'
 import React from 'react'
-import './App'
+import render from './App'
 import './css/main.css'
 import { setupWeb3 } from './api/web3'
 import { getAddr, getContent } from './api/registry'
 import { updatePublicResolver } from './updaters/nodes'
-import { render } from 'redaxe'
 import Main from './Main'
 
 

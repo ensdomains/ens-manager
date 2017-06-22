@@ -27,4 +27,4 @@ export const SearchName = ({ handleGetNodeDetails, nameSearch }) => {
   </div>
 }
 
-export default connect(db => ({ rootName: db.get('nameSearch'), handleGetNodeDetails }))(SearchName)
+export default connect(db => ({ nameSearch: db.get('nameSearch'), handleGetNodeDetails }))(SearchName)
