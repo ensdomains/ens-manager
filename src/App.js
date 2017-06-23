@@ -23,9 +23,9 @@ let initialData = new new Record({
   }),
   selectedReverseNode: '',
   reverseRecordSearch: '',
-  reverseRecordForm: new new Record({
-    name: '',
-    resolverAddr: ''
+  reverseUpdateForm: new new Record({
+    newName: '',
+    newResolverAddr: ''
   }),
   currentTab: 'nodeDetails'
 })

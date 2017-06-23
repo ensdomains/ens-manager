@@ -7,11 +7,18 @@ export function switchTab(tab){
   update(switchTabReducer(tab))
 }
 
-export const updateFormReducer = (formName, data) =>
-  db.setIn(['updateForm', formName], data)
+export const updateFormReducer = (formName, value) =>
+  db.setIn(['updateForm', formName], value)
 
-export function updateForm(formName, data) {
-  update(updateFormReducer(formName, data))
+export function updateForm(formName, value) {
+  update(updateFormReducer(formName, value))
+}
+
+export const updateReverseFormReducer = (formName, value) =>
+  db.setIn(['updateReverse', formName], value)
+
+export function updateReverseForm(formName, value) {
+  update(updateReverseFormReducer(formName, value))
 }
 
 export const selectNodeReducer = name =>

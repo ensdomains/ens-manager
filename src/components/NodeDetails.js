@@ -148,8 +148,8 @@ function handleDeleteSubDomain(subDomain, domain){
   })
 }
 
-function handleOnChange(formName, newOwner){
-  updateForm(formName, newOwner)
+function handleOnChange(formField, value){
+  updateForm(formField, value)
 }
 
 function handleSwitchTab(tab){
