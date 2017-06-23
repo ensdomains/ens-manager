@@ -7,6 +7,9 @@ import {
 import {
   updateReverseForm
 } from '../updaters/nodeDetails'
+import { addNotification } from '../updaters/notifications'
+import { claimReverseRecord } from '../api/registry'
+import { getWeb3 } from '../api/web3'
 
 function handleOnChange(formName, newOwner){
   updateReverseForm(formName, newOwner)
@@ -16,12 +19,17 @@ function handleSetName(address, newName){
 
 }
 
-function handleSetReverseResolver(address, newResolver){
-
+async function handleSetReverseResolver(address, newResolver){
+  let { web3 } = await getWeb3()
+  if(address === web3.eth.accounts[0]) {
+    claimReverseRecord()
+  } else {
+    addNotification(`You are not currently logged in as ${address} and aren't authorised to update this record`)
+  }
 }
 
 function handleSetDefaultReverseResolver(){
-
+  updateReverseForm('newResolverAddr', db.get('publicResolver'))
 }
 
 const ReverseNodeDetails = () => {

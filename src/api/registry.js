@@ -129,6 +129,7 @@ export function getRootDomain(name){
   return Promise.all([getOwner(name), getResolver(name)])
     .then(([owner, resolver]) => ({
         name,
+        label: name.split('.')[0],
         owner,
         resolver,
         nodes: []

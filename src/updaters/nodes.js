@@ -165,7 +165,6 @@ export function getNodeInfoSelector(name, prop) {
 
   let domainArraySliced = domainArray.slice(0, domainArray.length - 1)
   updatePath = resolveUpdatePath(domainArraySliced, updatePath, db)
-
   updatePath = [...updatePath, prop]
   return db.getIn(updatePath)
 }
