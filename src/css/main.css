@@ -254,6 +254,9 @@ h1 {
   background: #419bfc;
   cursor: pointer;
 }
+.reverse-nodes-root .node-details.node-details {
+  width: 100%;
+}
 .child-nodes {
   position: relative;
   z-index: 100;
