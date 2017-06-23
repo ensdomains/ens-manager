@@ -28,17 +28,6 @@ import classnames from 'classnames'
 
 import ResolverDetails from './ResolverDetails'
 
-// setContent(name, content).then(async txId => {
-//   updateForm('newContent', '')
-//  let etherscanAddr = await getEtherScanAddr()
-//
-//   watchResolverEvent('ContentChanged', resolverAddr, name, async (error, log, event) => {
-//     updateNode(name, 'content', log.args.hash)
-//     let confirmedComponent = <span>New content <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {name} confirmed!</span>
-//     addNotification(confirmedComponent, false)
-//     event.stopWatching()
-//   })
-// })
 async function handleUpdateOwner(name, newOwner){
   let etherscanAddr = await getEtherScanAddr()
   let domainArray = name.split('.')
@@ -112,9 +101,8 @@ function handleCreateSubDomain(subDomain, domain){
   let name = subDomain + '.'+ domain
   updateForm('newSubDomain', '')
   checkSubDomain(subDomain, domain).then(address => {
-    console.log('here', subDomain, domain, address)
     if(address !== "0x0000000000000000000000000000000000000000"){
-      console.log('subdomain already exists!')
+      addNotification('subdomain already exists!')
     } else {
       createSubDomain(subDomain, domain).then(async ({ owner, txId }) => {
         let etherscanAddr = await getEtherScanAddr()

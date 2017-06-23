@@ -1,5 +1,5 @@
 import { db, update} from 'redaxe'
-import { fromJS } from 'immutable'
+import { fromJS, Record } from 'immutable'
 import { getSubdomains, getRootDomain, getOwner, getResolver, getAddr } from '../api/registry'
 import { selectNode } from './nodeDetails'
 import { addNotification } from './notifications'
@@ -70,8 +70,12 @@ export function setNodeDetails(name) {
 
 }
 
-export function setReverseRecordDetails(address, name) {
-  console.log(address, name)
+export function setReverseNodeReducer(db, reverseNode){
+  return db.update('reverseNodes', nodes => nodes.push(new new Record(reverseNode)))
+}
+
+export function setReverseRecordDetails(reverseNode) {
+  update(setReverseNodeReducer(db, reverseNode))
 }
 
 export function appendSubDomain(subDomain, domain, owner){
@@ -164,4 +168,9 @@ export function getNodeInfoSelector(name, prop) {
 
   updatePath = [...updatePath, prop]
   return db.getIn(updatePath)
+}
+
+export function getReverseNodeInfoSelector(address, prop) {
+  let indexOfNode = db.reverseNodes.findIndex(node => node.address === address)
+  return db.getIn(['reverseNodes', indexOfNode, prop])
 }

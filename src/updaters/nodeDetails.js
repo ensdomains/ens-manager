@@ -20,3 +20,10 @@ export const selectNodeReducer = name =>
 export function selectNode(name) {
   update(selectNodeReducer(name))
 }
+
+export const selectReverseNodeReducer = address =>
+  db.set('selectedReverseNode', address)
+
+export function selectReverseNode(address) {
+  update(selectReverseNodeReducer(address))
+}

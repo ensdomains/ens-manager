@@ -69,6 +69,11 @@ function getWeb3(){
   }
 }
 
+export async function checkAddress(hash){
+  let { web3 } = await getWeb3()
+  return web3.isAddress(hash)
+}
+
 export default getWeb3
 
 export { setupWeb3 }

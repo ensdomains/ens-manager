@@ -5,7 +5,7 @@ import ImmutableLogger from './lib/ImmutableLogger'
 import { syncData, localStorageMiddlewareImmutable } from './lib/LocalStorage'
 
 let syncProp = ['nodeCache', 'rootName', 'rootAddress']
-let initialData = new Record({
+let initialData = new new Record({
   nameSearch: '',
   nodes: new List(),
   reverseNodes: new List(),
@@ -13,7 +13,7 @@ let initialData = new Record({
   notifications: new List(),
   publicResolver: '',
   selectedNode: '',
-  updateForm: ({
+  updateForm: new new Record({
     newOwner: '',
     newResolver: '',
     newSubDomain: '',
@@ -30,7 +30,6 @@ let initialData = new Record({
   currentTab: 'nodeDetails'
 })
 
-console.log(new initialData)
 //var syncedData = syncData(syncProp)(initialData)
 
 let middleware = [
@@ -39,6 +38,6 @@ let middleware = [
 ]
 
 export default createStore(
-  fromJS(new initialData),//fromJS(syncedData),
+  fromJS(initialData),//fromJS(syncedData),
   middleware
 )
