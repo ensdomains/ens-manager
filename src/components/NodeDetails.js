@@ -27,6 +27,7 @@ import { getEtherScanAddr } from '../lib/utils'
 import classnames from 'classnames'
 
 import ResolverDetails from './ResolverDetails'
+import TxLink from './TxLink'
 
 async function handleUpdateOwner(name, newOwner){
   let etherscanAddr = await getEtherScanAddr()
@@ -36,26 +37,26 @@ async function handleUpdateOwner(name, newOwner){
     setSubnodeOwner(domainArray[0], domainArray.slice(1).join('.'), newOwner)
       .then(txId => {
         updateForm('newOwner', '')
-        let sentComponent = <span>New owner <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {name} sent!</span>
+        let sentComponent = <span>New owner <TxLink addr={etherscanAddr} txId={txId}/> for {name} sent!</span>
         addNotification(sentComponent, false)
         watchRegistryEvent('NewOwner', node, (error, log, event) => {
           console.log(log)
           console.log(event)
           updateNode(name, 'owner', log.args.owner)
-          let confirmedComponent = <span>New owner <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {node} confirmed!</span>
+          let confirmedComponent = <span>New owner <TxLink addr={etherscanAddr} txId={txId}/> for {node} confirmed!</span>
           addNotification(confirmedComponent, false)
           event.stopWatching()
         })
       })
   } else {
     setNewOwner(name, newOwner).then(txId => {
-      let sentComponent = <span>New owner <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {name} sent!</span>
+      let sentComponent = <span>New owner <TxLink addr={etherscanAddr} txId={txId}/> for {name} sent!</span>
       addNotification(sentComponent, false)
       watchRegistryEvent('Transfer', name, (error, log, event) => {
         console.log(log)
         console.log(event)
         updateNode(name, 'owner', log.args.owner)
-        let confirmedComponent = <span>New owner <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {name} confirmed!</span>
+        let confirmedComponent = <span>New owner <TxLink txId={txId}/> for {name} confirmed!</span>
         addNotification(confirmedComponent, false)
         event.stopWatching()
       })
@@ -75,11 +76,11 @@ function handleSetResolver(name, newResolver) {
   setResolver(name, newResolver).then(async txId => {
     updateForm('newResolver', '')
     let etherscanAddr = await getEtherScanAddr()
-    let sentComponent = <span>New Resolver <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {name} sent!</span>
+    let sentComponent = <span>New Resolver <TxLink addr={etherscanAddr} txId={txId}/> for {name} sent!</span>
     addNotification(sentComponent, false)
     watchRegistryEvent('NewResolver', name, (error, log, event) => {
       updateNode(name, 'resolver', log.args.resolver)
-      let confirmedComponent = <span>New Resolver <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {name} confirmed!</span>
+      let confirmedComponent = <span>New Resolver <TxLink addr={etherscanAddr} txId={txId}/> for {name} confirmed!</span>
       addNotification(confirmedComponent, false)
       event.stopWatching()
     })
@@ -97,6 +98,8 @@ function handleCheckSubDomain(subDomain, domain){
   })
 }
 
+
+
 function handleCreateSubDomain(subDomain, domain){
   let name = subDomain + '.'+ domain
   updateForm('newSubDomain', '')
@@ -106,7 +109,7 @@ function handleCreateSubDomain(subDomain, domain){
     } else {
       createSubDomain(subDomain, domain).then(async ({ owner, txId }) => {
         let etherscanAddr = await getEtherScanAddr()
-        let sentComponent = <span>New Subdomain <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {domain} sent!</span>
+        let sentComponent = <span>New Subdomain <TxLink addr={etherscanAddr} txId={txId}/> for {domain} sent!</span>
         addNotification(sentComponent, false)
         watchRegistryEvent('NewOwner', domain,  async (error, log, event) => {
           //TODO check if this subdomain really is the same one submitted
@@ -114,7 +117,7 @@ function handleCreateSubDomain(subDomain, domain){
           let { web3 } = await getWeb3()
           let labelHash = web3.sha3(subDomain)
           if(log.args.owner === owner && labelHash === log.args.label) {
-            let confirmedComponent = <span>New Subdomain <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {domain} confirmed!</span>
+            let confirmedComponent = <span>New Subdomain <TxLink addr={etherscanAddr} txId={txId}/> for {domain} confirmed!</span>
             addNotification(confirmedComponent, false)
             appendSubDomain(subDomain, domain, log.args.owner)
             event.stopWatching()
@@ -138,7 +141,7 @@ function handleDeleteSubDomain(subDomain, domain){
           if(parseInt(log.args.owner, 16) === 0 && log.args.label === labelHash){
             removeSubDomain(subDomain, domain)
             let etherscanAddr = await getEtherScanAddr()
-            let confirmedComponent = <span>Delete domain <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {subDomain + '.' + domain} confirmed!</span>
+            let confirmedComponent = <span>Delete domain <TxLink addr={etherscanAddr} txId={txId}/> for {subDomain + '.' + domain} confirmed!</span>
             addNotification(confirmedComponent, false)
             event.stopWatching()
           }
