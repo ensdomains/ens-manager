@@ -1,11 +1,10 @@
 import getENS, { getNamehash, getENSEvent, getReverseRegistrarContract } from './ens'
 import { fromJS } from 'immutable'
 import { decryptHashes } from './preimage'
-import { uniq } from '../lib/utils'
+import { uniq, ensStartBlock } from '../lib/utils'
 
 export async function claimReverseRecord(resolver){
   let { reverseRegistrar, web3 } = await getReverseRegistrarContract()
-  console.log(resolver)
   return new Promise((resolve, reject) => {
     reverseRegistrar.claimWithResolver(web3.eth.accounts[0], resolver, { from: web3.eth.accounts[0] }, function(err, txId){
       if(err)
@@ -145,8 +144,10 @@ export function getRootDomain(name){
 }
 
 export const getSubdomains = async name => {
+  let startBlock = await ensStartBlock()
+  console.log(startBlock)
   let namehash = await getNamehash(name)
-  let rawLogs = await getENSEvent('NewOwner', {node: namehash}, {fromBlock: 900000, toBlock: 'latest'})
+  let rawLogs = await getENSEvent('NewOwner', {node: namehash}, {fromBlock: startBlock, toBlock: 'latest'})
   let flattenedLogs = rawLogs.map(log => log.args)
   let logs = uniq(flattenedLogs, 'label')
   let labels = await decryptHashes(...logs.map(log => log.label))
