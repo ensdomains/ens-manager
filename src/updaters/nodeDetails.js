@@ -15,7 +15,7 @@ export function updateForm(formName, value) {
 }
 
 export const updateReverseFormReducer = (formName, value) =>
-  db.setIn(['updateReverse', formName], value)
+  db.setIn(['reverseUpdateForm', formName], value)
 
 export function updateReverseForm(formName, value) {
   update(updateReverseFormReducer(formName, value))

@@ -550,6 +550,28 @@ let reverseRegistrarContract = [
       {
         "name": "owner",
         "type": "address"
+      },
+      {
+        "name": "resolver",
+        "type": "address"
+      }
+    ],
+    "name": "claimWithResolver",
+    "outputs": [
+      {
+        "name": "node",
+        "type": "bytes32"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "owner",
+        "type": "address"
       }
     ],
     "name": "claim",
@@ -566,6 +588,19 @@ let reverseRegistrarContract = [
     "constant": true,
     "inputs": [],
     "name": "ens",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "defaultResolver",
     "outputs": [
       {
         "name": "",
@@ -594,12 +629,17 @@ let reverseRegistrarContract = [
     "type": "function"
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "rootNode",
+    "constant": false,
+    "inputs": [
+      {
+        "name": "name",
+        "type": "string"
+      }
+    ],
+    "name": "setName",
     "outputs": [
       {
-        "name": "",
+        "name": "node",
         "type": "bytes32"
       }
     ],
@@ -613,8 +653,8 @@ let reverseRegistrarContract = [
         "type": "address"
       },
       {
-        "name": "node",
-        "type": "bytes32"
+        "name": "resolverAddr",
+        "type": "address"
       }
     ],
     "payable": false,
@@ -624,8 +664,7 @@ let reverseRegistrarContract = [
 
 const getReverseRegistrarContract = () => {
   return getENS().then(async ({ ENS, web3 }) => {
-    let namehash = await getNamehash('addr.reverse')
-    let reverseRegistrarAddr = await ENS.owner(namehash)
+    let reverseRegistrarAddr = await ENS.owner('addr.reverse')
     return {
       reverseRegistrar: web3.eth.contract(reverseRegistrarContract).at(reverseRegistrarAddr),
       web3
@@ -709,9 +748,10 @@ const watchEvent = ({ contract, addr, eventName}, filter, params, callback) => {
 
 export default getENS
 export {
-   getENSContract,
-   getENSEvent,
-   getNamehash,
-   getResolverContract,
-   watchEvent
+  getReverseRegistrarContract,
+  getENSContract,
+  getENSEvent,
+  getNamehash,
+  getResolverContract,
+  watchEvent
 }

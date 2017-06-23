@@ -3,10 +3,11 @@ import { fromJS } from 'immutable'
 import { decryptHashes } from './preimage'
 import { uniq } from '../lib/utils'
 
-export async function claimReverseRecord(owner, resolver){
+export async function claimReverseRecord(resolver){
   let { reverseRegistrar, web3 } = await getReverseRegistrarContract()
+  console.log(resolver)
   return new Promise((resolve, reject) => {
-    reverseRegistrar.claimWithResolver(owner, resolver, { from: web3.eth.accounts[0]}, function(err, txId){
+    reverseRegistrar.claimWithResolver(web3.eth.accounts[0], resolver, { from: web3.eth.accounts[0] }, function(err, txId){
       if(err)
         reject(err)
       resolve(txId)

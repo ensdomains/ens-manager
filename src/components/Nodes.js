@@ -38,7 +38,7 @@ const Node = ({ data }) => {
 const Nodes = () => (
   <div className="nodes-root">
     <div className="nodes-inner">
-      {db.get('nodes').map(node => <Node key={node.get('owner')} data={node} />)}
+      {db.get('nodes').map(node => <Node key={node.get('name')} data={node} />)}
     </div>
   </div>
 )
