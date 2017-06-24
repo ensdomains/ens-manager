@@ -29,7 +29,7 @@ const Node = ({ data }) => {
   }
 
   return <div className={classes}>
-    <div onClick={(e) => handleSelectNode(e, data.get('name'))} className="node-details"><Blockies imageSize={25} address={data.get('owner')} /> {data.get('name')}</div>
+    <div onClick={(e) => handleSelectNode(e, data.get('name'))} className="node-details"><Blockies className="node-blockies" imageSize={25} address={data.get('owner')} /> {data.get('name')}</div>
     {childNodes}
   </div>
 }

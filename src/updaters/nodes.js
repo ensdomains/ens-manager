@@ -118,7 +118,7 @@ export function removeSubDomain(subDomain, rootDomain) {
   let indexOfNode,
       updatePath = ['nodes']
 
-  let domainArraySliced = domainArray.slice(0, domainArray.length - 2)
+  let domainArraySliced = domainArray.slice(0, domainArray.length - 1)
   updatePath = resolveUpdatePath(domainArraySliced, updatePath, db)
 
   indexOfNode = db.getIn(updatePath).findIndex(node => node.get('name') === subDomain + '.' + rootDomain)

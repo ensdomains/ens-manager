@@ -139,7 +139,9 @@ function handleDeleteSubDomain(subDomain, domain){
         watchRegistryEvent('NewOwner', domain, async (error, log, event) => {
           let { web3 } = await getWeb3()
           let labelHash = web3.sha3(subDomain)
+          console.log('watchRegistryEvent callback', log, event, labelHash)
           if(parseInt(log.args.owner, 16) === 0 && log.args.label === labelHash){
+            console.log('inside if')
             removeSubDomain(subDomain, domain)
             let etherscanAddr = await getEtherScanAddr()
             let confirmedComponent = <span>Delete domain <TxLink addr={etherscanAddr} txId={txId}/> for {subDomain + '.' + domain} confirmed!</span>
