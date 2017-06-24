@@ -1,6 +1,6 @@
 import 'whatwg-fetch'
 
-const rootUrl = 'http://preimagedb.appspot.com/keccak256/query'
+const rootUrl = 'https://preimagedb.appspot.com/keccak256/query'
 
 export function decryptHashes(...hashes) {
   let trimmedHashes = hashes.map(hash => hash.slice(2))
