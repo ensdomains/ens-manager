@@ -27,7 +27,8 @@ let initialData = new new Record({
     newName: '',
     newResolverAddr: ''
   }),
-  currentTab: 'nodeDetails'
+  currentTab: 'nodeDetails',
+  currentAccount: ''
 })
 
 //var syncedData = syncData(syncProp)(initialData)

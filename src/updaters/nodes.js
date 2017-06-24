@@ -6,11 +6,11 @@ import { addNotification } from './notifications'
 
 //web3
 
-export const updatePublicResolverReducer = (db, address) =>
+export const setPublicResolverReducer = (db, address) =>
   db.set('publicResolver', address)
 
-export function updatePublicResolver(address){
-  update(updatePublicResolverReducer(db, address))
+export function setPublicResolver(address){
+  update(setPublicResolverReducer(db, address))
 }
 
 export const updateReadOnlyReducer = (db, value) =>

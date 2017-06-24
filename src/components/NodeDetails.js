@@ -160,6 +160,10 @@ function handleSwitchTab(tab){
   switchTab(tab)
 }
 
+function isOwner(account){
+  return db.currentAccount === account
+}
+
 const Tabs = ({ selectedNode, currentTab }) => {
   let resolverTab,
       hasResolver = parseInt(getNodeInfo(selectedNode, 'resolver'), 16) !== 0
@@ -210,7 +214,7 @@ const NodeDetails = ({ selectedNode }) => <div>
 export default () => {
   const selectedNode = db.get('selectedNode')
   let renderedContent = <div>Search and select a domain to start managing your domains!</div>,
-      tabContent,
+      tabContent = null,
       addr,
       content,
       currentTab = db.get('currentTab')
@@ -218,10 +222,14 @@ export default () => {
   if(selectedNode.length > 0){
     switch(currentTab) {
       case 'nodeDetails':
-        tabContent = <NodeDetails selectedNode={selectedNode} />
+        if(isOwner(getNodeInfo(selectedNode, 'owner'))) {
+          tabContent = <NodeDetails selectedNode={selectedNode} />
+        }
         break
       case 'resolverDetails':
-        tabContent = <ResolverDetails selectedNode={selectedNode} handleOnChange={handleOnChange} />
+        if(isOwner(getNodeInfo(selectedNode, 'owner'))) {
+          tabContent = <ResolverDetails selectedNode={selectedNode} handleOnChange={handleOnChange} />
+        }
         addr = <div className="current-addr info"><strong>Address:</strong> {getNodeInfo(selectedNode, 'addr')}</div>
         content = <div className="current-content info"><strong>Content:</strong> {getNodeInfo(selectedNode, 'content')}</div>
         break

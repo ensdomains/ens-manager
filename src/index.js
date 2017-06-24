@@ -4,14 +4,20 @@ import render from './App'
 import './css/main.css'
 import { setupWeb3 } from './api/web3'
 import { getAddr, getContent } from './api/registry'
-import { updatePublicResolver } from './updaters/nodes'
+import { setPublicResolver } from './updaters/nodes'
+import { getCurrentAccount } from './api/web3'
+import { setCurrentAccount } from './updaters/config'
 import Main from './Main'
 
 
 async function setupDefaults() {
   const defaultResolver = "resolver.eth";
-  let resolverAddress = await getAddr(defaultResolver)
-  updatePublicResolver(resolverAddress)
+  let resolverAddressPromise = getAddr(defaultResolver)
+  let currentAccountPromise = getCurrentAccount()
+  Promise.all([resolverAddressPromise, currentAccountPromise]).then(([resolverAddress, currentAccount]) => {
+    setPublicResolver(resolverAddress)
+    setCurrentAccount(currentAccount)
+  })
 }
 
 render(() => ReactDOM.render(<Main />, document.getElementById('root')))

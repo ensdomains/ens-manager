@@ -74,6 +74,11 @@ export async function checkAddress(hash){
   return web3.isAddress(hash)
 }
 
+export async function getCurrentAccount() {
+  let { web3 } = await getWeb3()
+  return web3.eth.accounts[0]
+}
+
 export default getWeb3
 
 export { setupWeb3 }
