@@ -94,7 +94,7 @@ function handleCheckSubDomain(subDomain, domain){
       appendSubDomain(subDomain, domain, address)
       addNotification(subDomain + '.' + domain +  ' subdomain found')
     } else {
-      console.log('no subdomain with that name')
+      addNotification('no subdomain with that name')
     }
   })
 }
@@ -131,7 +131,6 @@ function handleCreateSubDomain(subDomain, domain){
 
 function handleDeleteSubDomain(subDomain, domain){
   checkSubDomain(subDomain, domain).then(address => {
-    console.log('here', subDomain, domain, address)
     if(address === "0x0000000000000000000000000000000000000000"){
       addNotification('subdomain already deleted!')
     } else {
@@ -139,7 +138,6 @@ function handleDeleteSubDomain(subDomain, domain){
         watchRegistryEvent('NewOwner', domain, async (error, log, event) => {
           let { web3 } = await getWeb3()
           let labelHash = web3.sha3(subDomain)
-          console.log('watchRegistryEvent callback', log, event, labelHash)
           if(parseInt(log.args.owner, 16) === 0 && log.args.label === labelHash){
             console.log('inside if')
             removeSubDomain(subDomain, domain)
