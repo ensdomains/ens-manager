@@ -14,17 +14,18 @@ function handleGetNodeDetails(name){
       addNotification(`${name} does not have an owner!`)
     } else {
       setNodeDetails(name)
+      addNotification(`Node details set for ${name}`)
     }
   })
 }
 
 export const SearchName = ({ handleGetNodeDetails, nameSearch }) => {
-  return <div className="search-name">
+  return <form className="search-name" onSubmit={(event) => { event.preventDefault(); handleGetNodeDetails(nameSearch) }}>
     <div className="search-box">
       <input type="text" id="address" placeholder="vitalik.eth" onChange={(e) => updateSearchName(e.target.value)} />
     </div>
-    <button className="get-details" onClick={() => handleGetNodeDetails(nameSearch)}>Get Details</button>
-  </div>
+    <button className="get-details">Get Details</button>
+  </form>
 }
 
 export default connect(db => ({ nameSearch: db.get('nameSearch'), handleGetNodeDetails }))(SearchName)

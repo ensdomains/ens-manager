@@ -92,6 +92,7 @@ function handleCheckSubDomain(subDomain, domain){
   checkSubDomain(subDomain, domain).then(address => {
     if(address !== "0x0000000000000000000000000000000000000000"){
       appendSubDomain(subDomain, domain, address)
+      addNotification(subDomain + '.' + domain +  ' subdomain found')
     } else {
       console.log('no subdomain with that name')
     }

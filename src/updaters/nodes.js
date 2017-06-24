@@ -58,8 +58,6 @@ export function setNodeDetails(name) {
       )
     })
 
-  addNotification('Node details set')
-
   getRootDomain(name).then(rootDomain => {
     update(
       db.set('nodes', db.get('nodes').push(fromJS(rootDomain)))
@@ -95,8 +93,6 @@ export function appendSubDomain(subDomain, domain, owner){
       nodes: []
     })))
   )
-
-  addNotification(subDomain + '.' + domain +  'subdomain found')
 }
 
 export function appendSubDomains(subDomains, rootDomain) {

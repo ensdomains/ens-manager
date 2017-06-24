@@ -145,7 +145,6 @@ export function getRootDomain(name){
 
 export const getSubdomains = async name => {
   let startBlock = await ensStartBlock()
-  console.log(startBlock)
   let namehash = await getNamehash(name)
   let rawLogs = await getENSEvent('NewOwner', {node: namehash}, {fromBlock: startBlock, toBlock: 'latest'})
   let flattenedLogs = rawLogs.map(log => log.args)
