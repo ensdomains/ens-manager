@@ -9,14 +9,22 @@ import { getOwner } from '../api/registry'
 import Blockies from './Blockies'
 
 function handleGetNodeDetails(name){
-  getOwner(name).then(owner => {
-    if(parseInt(owner, 16) === 0) {
-      addNotification(`${name} does not have an owner!`)
-    } else {
-      setNodeDetails(name)
-      addNotification(`Node details set for ${name}`)
-    }
-  })
+  if(name.split('.').length > 2) {
+    addNotification('ENS Manager currently only support searching top level domains')
+  } else if(name.split('.').length === 0) {
+    addNotification('Please enter a name first')
+  } else if(name.split('.').length === 1) {
+    addNotification('Please add a TLD such as .eth')
+  } else {
+    getOwner(name).then(owner => {
+      if(parseInt(owner, 16) === 0) {
+        addNotification(`${name} does not have an owner!`)
+      } else {
+        setNodeDetails(name)
+        addNotification(`Node details set for ${name}`)
+      }
+    })
+  }
 }
 
 export const SearchName = ({ handleGetNodeDetails, nameSearch }) => {
