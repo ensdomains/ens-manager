@@ -13,7 +13,8 @@ import {
   updateNode,
   resolveUpdatePath,
   removeSubDomain,
-  getNodeInfoSelector as getNodeInfo
+  getNodeInfo,
+  getParentNode
 } from '../updaters/nodes'
 import {
   updateForm,
@@ -160,6 +161,15 @@ function handleSwitchTab(tab){
   switchTab(tab)
 }
 
+function isOwnerOrParentIsOwner(account, name){
+  let parent = getParentNode(name)
+  if(parent) {
+    return db.currentAccount === getParentNode(name).get('owner') || db.currentAccount === account
+  }
+
+  return db.currentAccount === account
+}
+
 function isOwner(account){
   return db.currentAccount === account
 }
@@ -182,34 +192,50 @@ const Tabs = ({ selectedNode, currentTab }) => {
   </div>
 }
 
-const NodeDetails = ({ selectedNode }) => <div>
-  <div className="input-group">
-    <input placeholder="0x..." type="text" name="newOwner"
-      value={db.getIn(['updateForm', 'newOwner'])}
-      onChange={(e)=> handleOnChange('newOwner', e.target.value)}/>
-    <button
-      onClick={(e)=> handleUpdateOwner(getNodeInfo(selectedNode, 'name'), db.getIn(['updateForm', 'newOwner']))}>Update owner</button>
+const NodeDetails = ({ selectedNode }) => {
+  let newOwner = null,
+      otherFormFields = null,
+      nodeOwner = getNodeInfo(selectedNode, 'owner')
+
+  if(isOwnerOrParentIsOwner(nodeOwner, selectedNode)) {
+    newOwner = <div className="input-group">
+      <input placeholder="0x..." type="text" name="newOwner"
+        value={db.getIn(['updateForm', 'newOwner'])}
+        onChange={(e)=> handleOnChange('newOwner', e.target.value)}/>
+      <button
+        onClick={(e)=> handleUpdateOwner(getNodeInfo(selectedNode, 'name'), db.getIn(['updateForm', 'newOwner']))}>Update owner</button>
+    </div>
+  }
+
+  if(isOwner(nodeOwner)) {
+    otherFormFields = <div>
+      <div className="input-group">
+        <input
+          type="text"
+          name="resolver"
+          value={db.getIn(['updateForm', 'newResolver'])}
+          onChange={(e)=> handleOnChange('newResolver', e.target.value)}
+        />
+        <button placeholder="0x..." onClick={() => handleSetResolver(getNodeInfo(selectedNode, 'name'), db.getIn(['updateForm', 'newResolver']))}>Set Resolver</button>
+      </div>
+      <button onClick={() => handleSetDefaultResolver()}>Use default resolver</button>
+      <div className="input-group">
+        <input type="text" name="subDomain" value={db.getIn(['updateForm', 'subDomain'])} onChange={(e)=> handleOnChange('subDomain', e.target.value)} />
+        <button onClick={() => handleCheckSubDomain(db.getIn(['updateForm', 'subDomain']), getNodeInfo(selectedNode, 'name'))}>Check for subdomain</button>
+      </div>
+      <div className="input-group">
+        <input type="text" name="subDomain" value={db.getIn(['updateForm', 'newSubDomain'])} onChange={(e)=> handleOnChange('newSubDomain', e.target.value)} />
+        <button onClick={() => handleCreateSubDomain(db.getIn(['updateForm', 'newSubDomain']), getNodeInfo(selectedNode, 'name'))}>Create new subdomain</button>
+      </div>
+      <button className="danger" onClick={() => handleDeleteSubDomain(getNodeInfo(selectedNode, 'label'), getNodeInfo(selectedNode, 'node'))}>Delete Node</button>
+    </div>
+  }
+
+  return <div>
+    {newOwner}
+    {otherFormFields}
   </div>
-  <div className="input-group">
-    <input
-      type="text"
-      name="resolver"
-      value={db.getIn(['updateForm', 'newResolver'])}
-      onChange={(e)=> handleOnChange('newResolver', e.target.value)}
-    />
-    <button placeholder="0x..." onClick={() => handleSetResolver(getNodeInfo(selectedNode, 'name'), db.getIn(['updateForm', 'newResolver']))}>Set Resolver</button>
-  </div>
-  <button onClick={() => handleSetDefaultResolver()}>Use default resolver</button>
-  <div className="input-group">
-    <input type="text" name="subDomain" value={db.getIn(['updateForm', 'subDomain'])} onChange={(e)=> handleOnChange('subDomain', e.target.value)} />
-    <button onClick={() => handleCheckSubDomain(db.getIn(['updateForm', 'subDomain']), getNodeInfo(selectedNode, 'name'))}>Check for subdomain</button>
-  </div>
-  <div className="input-group">
-    <input type="text" name="subDomain" value={db.getIn(['updateForm', 'newSubDomain'])} onChange={(e)=> handleOnChange('newSubDomain', e.target.value)} />
-    <button onClick={() => handleCreateSubDomain(db.getIn(['updateForm', 'newSubDomain']), getNodeInfo(selectedNode, 'name'))}>Create new subdomain</button>
-  </div>
-  <button className="danger" onClick={() => handleDeleteSubDomain(getNodeInfo(selectedNode, 'label'), getNodeInfo(selectedNode, 'node'))}>Delete Node</button>
-</div>
+}
 
 export default () => {
   const selectedNode = db.get('selectedNode')
@@ -219,12 +245,12 @@ export default () => {
       content,
       currentTab = db.get('currentTab')
 
-  if(selectedNode.length > 0){
+  console.log('selectedNode', selectedNode)
+
+  if(selectedNode){
     switch(currentTab) {
       case 'nodeDetails':
-        if(isOwner(getNodeInfo(selectedNode, 'owner'))) {
-          tabContent = <NodeDetails selectedNode={selectedNode} />
-        }
+        tabContent = <NodeDetails selectedNode={selectedNode} />
         break
       case 'resolverDetails':
         if(isOwner(getNodeInfo(selectedNode, 'owner'))) {

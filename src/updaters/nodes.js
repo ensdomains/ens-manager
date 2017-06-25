@@ -154,7 +154,7 @@ export function resolveUpdatePath(domainArray, path, db) {
   return resolveUpdatePath(domainArrayPopped, updatedPath, db)
 }
 
-export function getNodeInfoSelector(name, prop) {
+export function getNodeInfoSelector(db, name, prop){
   const domainArray = name.split('.')
   let indexOfNode,
       updatePath = []
@@ -163,6 +163,30 @@ export function getNodeInfoSelector(name, prop) {
   updatePath = resolveUpdatePath(domainArraySliced, updatePath, db)
   updatePath = [...updatePath, prop]
   return db.getIn(updatePath)
+}
+
+export function getNodeInfo(name, prop) {
+  return getNodeInfoSelector(db, name, prop)
+}
+
+export function getParentNodeSelector(db, name) {
+  const domainArray = name.split('.')
+
+  if(domainArray.length === 2) { //if is just a root node
+    return false
+  }
+
+  let parentNodeArray = domainArray.slice(1),
+      parentNodeArraySliced = parentNodeArray.slice(0, parentNodeArray.length - 1),
+      updatePath = []
+
+  updatePath = resolveUpdatePath(parentNodeArraySliced, updatePath, db)
+
+  return db.getIn(updatePath)
+}
+
+export function getParentNode(name) {
+  return getParentNodeSelector(db, name)
 }
 
 export function getReverseNodeInfoSelector(address, prop) {
