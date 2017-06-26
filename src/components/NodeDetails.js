@@ -6,12 +6,14 @@ import {
   checkSubDomain,
   setResolver,
   createSubDomain,
-  deleteSubDomain
+  deleteSubDomain,
+  getResolver,
+  getResolverDetails
 } from '../api/registry'
 import {
   appendSubDomain,
   updateNode,
-  resolveUpdatePath,
+  resolveQueryPath,
   removeSubDomain,
   getNodeInfo,
   getParentNode
@@ -82,16 +84,37 @@ function handleSetResolver(name, newResolver) {
   })
 }
 
-function handleCheckSubDomain(subDomain, domain){
+function handleCheckSubDomain(label, node){
   updateForm('subDomain', '')
-  checkSubDomain(subDomain, domain).then(address => {
-    if(address !== "0x0000000000000000000000000000000000000000"){
-      appendSubDomain(subDomain, domain, address)
-      addNotification(subDomain + '.' + domain +  ' subdomain found')
+  checkSubDomain(label, node).then(async owner => {
+    console.log(owner)
+    if(owner !== "0x0000000000000000000000000000000000000000"){
+      let { web3 } = await getWeb3()
+      let labelHash = web3.sha3(label)
+      let resolver = await getResolver(label + '.' +  node)
+      let subDomain = {
+        resolver,
+        labelHash,
+        owner,
+        label,
+        node,
+        name: label + '.' + node
+      }
+      console.log(subDomain)
+      if(parseInt(resolver, 16) === 0) {
+        appendSubDomain(subDomain)
+      } else {
+        let resolverAndNode = await getResolverDetails(subDomain)
+        console.log(resolverAndNode)
+        appendSubDomain(resolverAndNode)
+      }
+      addNotification(label + '.' + node +  ' subdomain found')
     } else {
       addNotification('no subdomain with that name')
     }
-  })
+  }).catch(err =>
+    console.error('in catch', err)
+  )
 }
 
 function handleCreateSubDomain(subDomain, domain){

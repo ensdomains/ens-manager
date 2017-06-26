@@ -4,7 +4,7 @@ import {
   setAddr,
   setContent
 } from '../api/registry'
-import { resolveUpdatePath, getNodeInfoSelector as getNodeInfo, updateNode } from '../updaters/nodes'
+import { resolveQueryPath, getNodeInfo, updateNode } from '../updaters/nodes'
 import { updateForm} from '../updaters/nodeDetails'
 import { watchResolverEvent } from '../api/watchers'
 import { addActionNotification, addNotification } from '../updaters/notifications'

@@ -39,7 +39,7 @@ export function updateNode(name, prop, data) {
 
   if(domainArray.length > 2) {
     let domainArraySliced = domainArray.slice(0, domainArray.length - 2)
-    updatePath = resolveUpdatePath(domainArraySliced, updatePath, db)
+    updatePath = resolveQueryPath(domainArraySliced, updatePath, db)
   }
 
   updatePath = [...updatePath, prop]
@@ -78,22 +78,31 @@ export function setReverseRecordDetails(reverseNode) {
   update(setReverseNodeReducer(db, reverseNode))
 }
 
-export function appendSubDomain(subDomain, domain, owner){
-  const domainArray = domain.split('.')
-  let indexOfNode,
-      updatePath = ['nodes']
-
+export function appendSubDomain(subDomainProps){
+  const { label, node, labelHash } = subDomainProps
+  const domainArray = node.split('.')
+  let indexOfNode
+  let updatePath = ['nodes']
   let domainArraySliced = domainArray.slice(0, domainArray.length - 1)
-  updatePath = resolveUpdatePath(domainArraySliced, updatePath, db)
+
+  updatePath = resolveQueryPath(domainArraySliced, updatePath, db)
+
+  removeSubDomainWithHash(labelHash, node, updatePath) //remove duplicate
 
   update(
     db.updateIn(updatePath, nodes => nodes.push(fromJS({
-      owner,
-      label: subDomain,
-      node: domain,
-      name: subDomain + '.' + domain,
-      nodes: []
+      ...subDomainProps,
+      nodes: [],
+      decrypted: true
     })))
+  )
+}
+
+function removeSubDomainWithHash(labelHash, node, queryPath){
+  let indexOfNode = db.getIn(queryPath).findIndex(node => node.get('labelHash') === labelHash)
+
+  update(
+    db.updateIn(queryPath, nodes => nodes.delete(indexOfNode))
   )
 }
 
@@ -102,7 +111,7 @@ export function appendSubDomains(subDomains, rootDomain) {
   let updatePath = ['nodes']
 
   let domainArraySliced = domainArray.slice(0, domainArray.length - 1)
-  updatePath = resolveUpdatePath(domainArraySliced, updatePath, db)
+  updatePath = resolveQueryPath(domainArraySliced, updatePath, db)
 
   subDomains.forEach(domain => {
     update(
@@ -121,7 +130,7 @@ export function removeSubDomain(subDomain, rootDomain) {
       updatePath = ['nodes']
 
   let domainArraySliced = domainArray.slice(0, domainArray.length - 1)
-  updatePath = resolveUpdatePath(domainArraySliced, updatePath, db)
+  updatePath = resolveQueryPath(domainArraySliced, updatePath, db)
 
   indexOfNode = db.getIn(updatePath).findIndex(node => node.get('name') === subDomain + '.' + rootDomain)
   update(
@@ -129,7 +138,7 @@ export function removeSubDomain(subDomain, rootDomain) {
   )
 }
 
-export function resolveUpdatePath(domainArray, path, db) {
+export function resolveQueryPath(domainArray, path, db) {
   if(domainArray.length === 0 ){
     return path
   }
@@ -153,7 +162,7 @@ export function resolveUpdatePath(domainArray, path, db) {
     updatedPath = [...updatedPath, index]
   }
 
-  return resolveUpdatePath(domainArrayPopped, updatedPath, db)
+  return resolveQueryPath(domainArrayPopped, updatedPath, db)
 }
 
 export function getNodeInfoSelector(db, name, prop){
@@ -162,7 +171,7 @@ export function getNodeInfoSelector(db, name, prop){
       updatePath = []
 
   let domainArraySliced = domainArray.slice(0, domainArray.length - 1)
-  updatePath = resolveUpdatePath(domainArraySliced, updatePath, db)
+  updatePath = resolveQueryPath(domainArraySliced, updatePath, db)
   updatePath = [...updatePath, prop]
   return db.getIn(updatePath)
 }
@@ -182,7 +191,7 @@ export function getParentNodeSelector(db, name) {
       parentNodeArraySliced = parentNodeArray.slice(0, parentNodeArray.length - 1),
       updatePath = []
 
-  updatePath = resolveUpdatePath(parentNodeArraySliced, updatePath, db)
+  updatePath = resolveQueryPath(parentNodeArraySliced, updatePath, db)
 
   return db.getIn(updatePath)
 }

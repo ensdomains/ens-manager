@@ -115,7 +115,7 @@ export async function setSubnodeOwner(label, node, newOwner) {
   return ENS.setSubnodeOwner(label + '.' + node, newOwner, {from: web3.eth.accounts[0]})
 }
 
-function getResolverDetails(node){
+export function getResolverDetails(node){
   let addr = getAddr(node.name)
   let content = getContent(node.name)
   return Promise.all([addr, content]).then(([addr, content]) => ({
