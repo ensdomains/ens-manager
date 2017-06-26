@@ -185,9 +185,9 @@ const Tabs = ({ selectedNode, currentTab }) => {
 }
 
 const NodeDetails = ({ selectedNode }) => {
-  let newOwner = null,
-      otherFormFields = null,
-      nodeOwner = getNodeInfo(selectedNode, 'owner')
+  let newOwner = null
+  let otherFormFields = null
+  let nodeOwner = getNodeInfo(selectedNode, 'owner')
 
   if(isOwnerOrParentIsOwner(nodeOwner, selectedNode)) {
     newOwner = <div className="input-group">
@@ -231,13 +231,11 @@ const NodeDetails = ({ selectedNode }) => {
 
 export default () => {
   const selectedNode = db.get('selectedNode')
-  let renderedContent = <div>Search and select a domain to start managing your domains!</div>,
-      tabContent = null,
-      addr,
-      content,
-      currentTab = db.get('currentTab')
-
-  console.log('selectedNode', selectedNode)
+  let renderedContent = <div>Search and select a domain to start managing your domains!</div>
+  let tabContent
+  let addr
+  let content
+  let currentTab = db.get('currentTab')
 
   if(selectedNode){
     switch(currentTab) {

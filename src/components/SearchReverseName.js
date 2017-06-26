@@ -10,8 +10,8 @@ import { selectReverseNode } from '../updaters/nodeDetails'
 async function handleGetReverseRecord(rawAddress){
   let lowerCaseAddr = rawAddress.toLowerCase()
   let address = lowerCaseAddr.substring(0,2) === "0x" ? lowerCaseAddr : "0x" + lowerCaseAddr
-
   let isAddress = await checkAddress(address)
+  
   if(isAddress){
     getName(address)
       .then(({name, resolverAddr}) => {

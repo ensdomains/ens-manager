@@ -35,10 +35,10 @@ function handleSetDefaultReverseResolver(){
 }
 
 const ReverseNodeDetails = () => {
-  let selectedNode = db.selectedReverseNode,
-      content,
-      setNameForm
-  console.log('selectedNode', selectedNode)
+  let selectedNode = db.selectedReverseNode
+  let content
+  let setNameForm
+
   if(selectedNode){
     let hasResolver = parseInt(getNodeInfo(selectedNode, 'resolverAddr'), 16)
     if(hasResolver) {
