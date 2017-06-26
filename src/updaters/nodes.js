@@ -53,9 +53,11 @@ export function setNodeDetails(name) {
   const fetchSubdomains = name =>
     getSubdomains(name).then(subdomains => {
       appendSubDomains(subdomains, name)
-      subdomains.forEach(subdomain =>
-        fetchSubdomains(subdomain.name)
-      )
+      subdomains.forEach(subdomain => {
+        if(subdomain.decrypted) {
+          fetchSubdomains(subdomain.name)
+        }
+      })
     })
 
   getRootDomain(name).then(rootDomain => {

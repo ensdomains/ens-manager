@@ -24,7 +24,7 @@ const Node = ({ data }) => {
   })
   if(selected) {
     childNodes = <div className="child-nodes">
-      {data.get('nodes').size > 0 ? data.get('nodes').map(node => <Node key={node.get('name')} data={node} />) : ''}
+      {data.get('nodes').size > 0 ? data.get('nodes').map(node => <Node key={node.get('labelHash') + node} data={node} />) : ''}
     </div>
   }
 

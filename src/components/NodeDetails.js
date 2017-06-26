@@ -54,18 +54,12 @@ async function handleUpdateOwner(name, newOwner){
       let sentComponent = <span>New owner <TxLink addr={etherscanAddr} txId={txId}/> for {name} sent!</span>
       addNotification(sentComponent, false)
       watchRegistryEvent('Transfer', name, (error, log, event) => {
-        console.log(log)
-        console.log(event)
         updateNode(name, 'owner', log.args.owner)
         let confirmedComponent = <span>New owner <TxLink txId={txId}/> for {name} confirmed!</span>
         addNotification(confirmedComponent, false)
         event.stopWatching()
       })
     })
-  }
-
-  function watch(name, txId){
-
   }
 }
 
@@ -99,8 +93,6 @@ function handleCheckSubDomain(subDomain, domain){
     }
   })
 }
-
-
 
 function handleCreateSubDomain(subDomain, domain){
   let name = subDomain + '.'+ domain

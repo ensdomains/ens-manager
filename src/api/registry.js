@@ -148,8 +148,11 @@ export const getSubdomains = async name => {
   let namehash = await getNamehash(name)
   let rawLogs = await getENSEvent('NewOwner', {node: namehash}, {fromBlock: startBlock, toBlock: 'latest'})
   let flattenedLogs = rawLogs.map(log => log.args)
-  let logs = uniq(flattenedLogs, 'label')
+  flattenedLogs.reverse()
+  let logs = uniq(flattenedLogs, 'label').filter(node => parseInt(node.owner, 16) !== 0)
+  console.log(logs)
   let labels = await decryptHashes(...logs.map(log => log.label))
+  console.log(labels)
   let ownerPromises = labels.map(label => getOwner(`${label}.${name}`))
   let resolverPromises = labels.map(label => getResolver(`${label}.${name}`))
 
@@ -158,18 +161,32 @@ export const getSubdomains = async name => {
     Promise.all(resolverPromises)
   ]).then(([owners, resolvers, addr, content]) => {
     /* Maps owner and resolver onto nodes */
-    return labels.map((value, index) => {
-      //if(label === false)
-      // TODO add check for labels that haven't been found
+    return logs.map((log, index) => {
+      let label
+      let owner
+      let decrypted
+
+      if(labels[index] === null) {
+        label = 'unknown' + logs[index].label.slice(-6)
+        owner = log.owner
+        decrypted = false
+      } else {
+        label = labels[index]
+        owner = owners[index]
+        decrypted = true
+      }
+
       return {
-        label: value,
+        decrypted,
+        label,
+        owner,
+        labelHash: logs[index].label,
         node: name,
-        owner: owners[index],
-        name: value + '.' + name,
+        name: label + '.' + name,
         resolver: resolvers[index],
         nodes: []
       }
-    }).filter(node => parseInt(node.owner, 16) !== 0)
+    })
   }).then(nodes => {
     /* Gets Resolver information for node if they have a resolver */
     let nodePromises = nodes.map(node => {

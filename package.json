@@ -8,6 +8,7 @@
     "immutable": "^3.8.1",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
+    "react-ga": "^2.2.0",
     "react-notification": "^6.7.0",
     "react-redaxe": "0.0.10",
     "react-router-dom": "4.1.1",
