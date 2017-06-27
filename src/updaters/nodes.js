@@ -121,10 +121,10 @@ export function appendSubDomains(subDomains, rootDomain) {
       db.updateIn(updatePath, nodes => nodes.push(fromJS(domain)))
     )
   })
-
-  let plural = subDomains.length === 1 ? '' : 's'
-
-  addNotification(`${subDomains.length} subdomain${plural} found for ${rootDomain}`)
+  if(subDomains.length !== 0 ) {
+    let plural = subDomains.length === 1 ? '' : 's'
+    addNotification(`${subDomains.length} subdomain${plural} found for ${rootDomain}`)
+  }
 }
 
 export function removeSubDomain(subDomain, rootDomain) {

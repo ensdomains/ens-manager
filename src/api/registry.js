@@ -150,9 +150,7 @@ export const getSubdomains = async name => {
   let flattenedLogs = rawLogs.map(log => log.args)
   flattenedLogs.reverse()
   let logs = uniq(flattenedLogs, 'label').filter(node => parseInt(node.owner, 16) !== 0)
-  console.log(logs)
   let labels = await decryptHashes(...logs.map(log => log.label))
-  console.log(labels)
   let ownerPromises = labels.map(label => getOwner(`${label}.${name}`))
   let resolverPromises = labels.map(label => getResolver(`${label}.${name}`))
 
