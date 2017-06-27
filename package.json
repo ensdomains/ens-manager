@@ -10,7 +10,7 @@
     "react-dom": "^15.5.4",
     "react-ga": "^2.2.0",
     "react-notification": "^6.7.0",
-    "react-redaxe": "0.0.10",
+    "react-redaxe": "0.0.11",
     "react-router-dom": "4.1.1",
     "redaxe": "0.0.14",
     "uuid": "^3.0.1",
