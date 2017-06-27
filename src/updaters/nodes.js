@@ -49,16 +49,17 @@ export function updateNode(name, prop, data) {
   )
 }
 
-export function setNodeDetails(name) {
-  const fetchSubdomains = name =>
-    getSubdomains(name).then(subdomains => {
-      appendSubDomains(subdomains, name)
-      subdomains.forEach(subdomain => {
-        if(subdomain.decrypted) {
-          fetchSubdomains(subdomain.name)
-        }
-      })
+const fetchSubdomains = name =>
+  getSubdomains(name).then(subdomains => {
+    appendSubDomains(subdomains, name)
+    subdomains.forEach(subdomain => {
+      if(subdomain.decrypted) {
+        fetchSubdomains(subdomain.name)
+      }
     })
+  })
+
+export function setNodeDetails(name) {
 
   getRootDomain(name).then(rootDomain => {
     update(
@@ -96,6 +97,8 @@ export function appendSubDomain(subDomainProps){
       decrypted: true
     })))
   )
+
+  fetchSubdomains(name)
 }
 
 function removeSubDomainWithHash(labelHash, node, queryPath){
