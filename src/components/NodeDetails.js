@@ -8,7 +8,8 @@ import {
   createSubDomain,
   deleteSubDomain,
   getResolver,
-  getResolverDetails
+  getResolverDetails,
+  buildSubDomain
 } from '../api/registry'
 import {
   appendSubDomain,
@@ -87,27 +88,8 @@ function handleSetResolver(name, newResolver) {
 function handleCheckSubDomain(label, node){
   updateForm('subDomain', '')
   checkSubDomain(label, node).then(async owner => {
-    console.log(owner)
     if(owner !== "0x0000000000000000000000000000000000000000"){
-      let { web3 } = await getWeb3()
-      let labelHash = web3.sha3(label)
-      let resolver = await getResolver(label + '.' +  node)
-      let subDomain = {
-        resolver,
-        labelHash,
-        owner,
-        label,
-        node,
-        name: label + '.' + node
-      }
-      console.log(subDomain)
-      if(parseInt(resolver, 16) === 0) {
-        appendSubDomain(subDomain)
-      } else {
-        let resolverAndNode = await getResolverDetails(subDomain)
-        console.log(resolverAndNode)
-        appendSubDomain(resolverAndNode)
-      }
+      appendSubDomain(await buildSubDomain(label, node, owner))
       addNotification(label + '.' + node +  ' subdomain found')
     } else {
       addNotification('no subdomain with that name')
@@ -208,9 +190,18 @@ const Tabs = ({ selectedNode, currentTab }) => {
 }
 
 const NodeDetails = ({ selectedNode }) => {
-  let newOwner = null
-  let otherFormFields = null
+  let newOwner
+  let newResolver
+  let defaultResolver
+  let checkSubdomain
+  let createSubDomain
+  let deleteSubDomain
   let nodeOwner = getNodeInfo(selectedNode, 'owner')
+
+  createSubDomain = <div className="input-group">
+    <input type="text" name="subDomain" value={db.getIn(['updateForm', 'subDomain'])} onChange={(e)=> handleOnChange('subDomain', e.target.value)} />
+    <button onClick={() => handleCheckSubDomain(db.getIn(['updateForm', 'subDomain']), getNodeInfo(selectedNode, 'name'))}>Check for subdomain</button>
+  </div>
 
   if(isOwnerOrParentIsOwner(nodeOwner, selectedNode)) {
     newOwner = <div className="input-group">
@@ -223,8 +214,7 @@ const NodeDetails = ({ selectedNode }) => {
   }
 
   if(isOwner(nodeOwner)) {
-    otherFormFields = <div>
-      <div className="input-group">
+    newResolver = <div className="input-group">
         <input
           type="text"
           name="resolver"
@@ -233,22 +223,21 @@ const NodeDetails = ({ selectedNode }) => {
         />
         <button placeholder="0x..." onClick={() => handleSetResolver(getNodeInfo(selectedNode, 'name'), db.getIn(['updateForm', 'newResolver']))}>Set Resolver</button>
       </div>
-      <button onClick={() => handleSetDefaultResolver()}>Use default resolver</button>
-      <div className="input-group">
-        <input type="text" name="subDomain" value={db.getIn(['updateForm', 'subDomain'])} onChange={(e)=> handleOnChange('subDomain', e.target.value)} />
-        <button onClick={() => handleCheckSubDomain(db.getIn(['updateForm', 'subDomain']), getNodeInfo(selectedNode, 'name'))}>Check for subdomain</button>
-      </div>
-      <div className="input-group">
+    defaultResolver = <button onClick={() => handleSetDefaultResolver()}>Use default resolver</button>
+    createSubDomain = <div className="input-group">
         <input type="text" name="subDomain" value={db.getIn(['updateForm', 'newSubDomain'])} onChange={(e)=> handleOnChange('newSubDomain', e.target.value)} />
         <button onClick={() => handleCreateSubDomain(db.getIn(['updateForm', 'newSubDomain']), getNodeInfo(selectedNode, 'name'))}>Create new subdomain</button>
       </div>
-      <button className="danger" onClick={() => handleDeleteSubDomain(getNodeInfo(selectedNode, 'label'), getNodeInfo(selectedNode, 'node'))}>Delete Node</button>
-    </div>
+    deleteSubDomain = <button className="danger" onClick={() => handleDeleteSubDomain(getNodeInfo(selectedNode, 'label'), getNodeInfo(selectedNode, 'node'))}>Delete Node</button>
   }
 
   return <div>
     {newOwner}
-    {otherFormFields}
+    {newResolver}
+    {defaultResolver}
+    {checkSubdomain}
+    {createSubDomain}
+    {deleteSubDomain}
   </div>
 }
 

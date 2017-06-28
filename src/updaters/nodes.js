@@ -60,7 +60,6 @@ const fetchSubdomains = name =>
   })
 
 export function setNodeDetails(name) {
-
   getRootDomain(name).then(rootDomain => {
     update(
       db.set('nodes', db.get('nodes').push(fromJS(rootDomain)))
@@ -68,7 +67,18 @@ export function setNodeDetails(name) {
     selectNode(name)
     return name
   }).then(fetchSubdomains)
+}
 
+export function setNodeDetailsSubDomain(name) {
+  // let rootDomain = name.split('.').slice(-2).join('.')
+  //
+  // getRootDomain(rootDomain).then(rootDomainObj => {
+  //   update(
+  //     db.set('nodes', db.get('nodes').push(fromJS(rootDomainObj)))
+  //   )
+  //   selectNode(name)
+  //   return name
+  // }).then(fetchSubdomains)
 }
 
 export function setReverseNodeReducer(db, reverseNode){

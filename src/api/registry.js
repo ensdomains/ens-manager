@@ -2,6 +2,7 @@ import getENS, { getNamehash, getENSEvent, getReverseRegistrarContract } from '.
 import { fromJS } from 'immutable'
 import { decryptHashes } from './preimage'
 import { uniq, ensStartBlock } from '../lib/utils'
+import getWeb3 from '../api/web3'
 
 export async function claimReverseRecord(resolver){
   let { reverseRegistrar, web3 } = await getReverseRegistrarContract()
@@ -80,6 +81,27 @@ export async function setResolver(name, resolver) {
 export async function checkSubDomain(subDomain, domain) {
   let { ENS } = await getENS()
   return ENS.owner(subDomain + '.' + domain)
+}
+
+export async function buildSubDomain(label, node, owner) {
+  let { web3 } = await getWeb3()
+  let labelHash = web3.sha3(label)
+  let resolver = await getResolver(label + '.' +  node)
+  let subDomain = {
+    resolver,
+    labelHash,
+    owner,
+    label,
+    node,
+    name: label + '.' + node
+  }
+  console.log(subDomain)
+  if(parseInt(resolver, 16) === 0) {
+    return subDomain
+  } else {
+    let resolverAndNode = await getResolverDetails(subDomain)
+    return resolverAndNode
+  }
 }
 
 export async function createSubDomain(subDomain, domain) {

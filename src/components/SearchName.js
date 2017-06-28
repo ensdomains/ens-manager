@@ -3,7 +3,7 @@ import { connect } from 'react-redaxe'
 import { db } from 'redaxe'
 import classnames from 'classnames'
 
-import { updateSearchName, setNodeDetails } from '../updaters/nodes'
+import { updateSearchName, setNodeDetails, setNodeDetailsSubDomain } from '../updaters/nodes'
 import { addNotification } from '../updaters/notifications'
 import { getOwner } from '../api/registry'
 import Blockies from './Blockies'
@@ -11,6 +11,13 @@ import Blockies from './Blockies'
 function handleGetNodeDetails(name){
   if(name.split('.').length > 2) {
     addNotification('ENS Manager currently only support searching top level domains')
+    getOwner(name).then(owner => {
+      if(parseInt(owner, 16) === 0) {
+        addNotification(`${name} does not have an owner!`)
+      } else {
+        setNodeDetailsSubDomain(name)
+      }
+    })
   } else if(name.split('.').length === 0) {
     addNotification('Please enter a name first')
   } else if(name.split('.').length === 1) {
