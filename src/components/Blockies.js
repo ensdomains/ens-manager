@@ -4,7 +4,7 @@ import createIcon from '../lib/blockies'
 export default ({ address, imageSize = 42, className}) => {
   var imgURL = createIcon({
     seed: address,
-    size: 10,
+    size: 8,
     scale: 5,
   }).toDataURL();
   var style = {
