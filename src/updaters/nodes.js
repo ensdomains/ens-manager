@@ -1,6 +1,13 @@
 import { db, update} from 'redaxe'
 import { fromJS, Record } from 'immutable'
-import { getSubdomains, getRootDomain, getOwner, getResolver, getAddr } from '../api/registry'
+import {
+  getSubdomains,
+  getRootDomain,
+  getOwner,
+  getResolver,
+  getAddr,
+  buildSubDomain
+} from '../api/registry'
 import { selectNode } from './nodeDetails'
 import { addNotification } from './notifications'
 
@@ -59,6 +66,16 @@ const fetchSubdomains = name =>
     })
   })
 
+const fetchSubdomainsUntil = (name, tilName) =>
+  getSubdomains(name).then(subdomains => {
+    appendSubDomains(subdomains, name)
+    subdomains.forEach(subdomain => {
+      if(subdomain.decrypted && subdomain.name !== tilName) {
+        fetchSubdomains(subdomain.name)
+      }
+    })
+  })
+
 export function setNodeDetails(name) {
   getRootDomain(name).then(rootDomain => {
     update(
@@ -69,16 +86,23 @@ export function setNodeDetails(name) {
   }).then(fetchSubdomains)
 }
 
-export function setNodeDetailsSubDomain(name) {
-  // let rootDomain = name.split('.').slice(-2).join('.')
-  //
-  // getRootDomain(rootDomain).then(rootDomainObj => {
-  //   update(
-  //     db.set('nodes', db.get('nodes').push(fromJS(rootDomainObj)))
-  //   )
-  //   selectNode(name)
-  //   return name
-  // }).then(fetchSubdomains)
+export function setNodeDetailsSubDomain(name, owner) {
+  let domainArray = name.split('.')
+  let rootDomain = domainArray.slice(-2).join('.')
+  let currentDomainArray = rootDomain.split('.')
+  let frontDomains = domainArray.slice(0, domainArray.length - 2)
+
+  getRootDomain(rootDomain).then(rootDomainObj => {
+    update(
+      db.set('nodes', db.get('nodes').push(fromJS(rootDomainObj)))
+    )
+    frontDomains.forEach(async label => {
+      appendSubDomain(await buildSubDomain(label, currentDomainArray.join('.'), owner))
+      currentDomainArray.unshift(label)
+    })
+    selectNode(name)
+    return rootDomain
+  }).then((rootDomain)=> fetchSubdomainsUntil(rootDomain, name))
 }
 
 export function setReverseNodeReducer(db, reverseNode){
@@ -113,6 +137,10 @@ export function appendSubDomain(subDomainProps){
 
 function removeSubDomainWithHash(labelHash, node, queryPath){
   let indexOfNode = db.getIn(queryPath).findIndex(node => node.get('labelHash') === labelHash)
+
+  if(indexOfNode === -1){
+    return false
+  }
 
   update(
     db.updateIn(queryPath, nodes => nodes.delete(indexOfNode))

@@ -15,7 +15,7 @@ function handleGetNodeDetails(name){
       if(parseInt(owner, 16) === 0) {
         addNotification(`${name} does not have an owner!`)
       } else {
-        setNodeDetailsSubDomain(name)
+        setNodeDetailsSubDomain(name, owner)
       }
     })
   } else if(name.split('.').length === 0) {
