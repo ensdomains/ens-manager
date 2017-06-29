@@ -206,10 +206,10 @@ const NodeDetails = ({ selectedNode }) => {
   if(isOwnerOrParentIsOwner(nodeOwner, selectedNode)) {
     newOwner = <div className="input-group">
       <input placeholder="0x..." type="text" name="newOwner"
-        value={db.getIn(['updateForm', 'newOwner'])}
+        value={db.updateForm.newOwner}
         onChange={(e)=> handleOnChange('newOwner', e.target.value)}/>
       <button
-        onClick={(e)=> handleUpdateOwner(getNodeInfo(selectedNode, 'name'), db.getIn(['updateForm', 'newOwner']))}>Update owner</button>
+        onClick={(e)=> handleUpdateOwner(getNodeInfo(selectedNode, 'name'), db.updateForm.newOwner)}>Update owner</button>
     </div>
   }
 

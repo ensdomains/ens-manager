@@ -4,8 +4,16 @@ import createStore from 'redaxe'
 import ImmutableLogger from './lib/ImmutableLogger'
 import { syncDataImmutable, localStorageMiddlewareImmutable } from './lib/LocalStorage'
 
-let syncProp = ['nodes', 'selectedNode']
-let initialData = new new Record({
+let updateFormRecord = Record({
+  newOwner: '',
+  newResolver: '',
+  newSubDomain: '',
+  subDomain: '',
+  newAddr: '',
+  newContent: ''
+})
+
+let initialDataRecord = Record({
   nameSearch: '',
   nodes: List(),
   reverseNodes: List(),
@@ -13,14 +21,7 @@ let initialData = new new Record({
   notifications: List(),
   publicResolver: '',
   selectedNode: '',
-  updateForm: new new Record({
-    newOwner: '',
-    newResolver: '',
-    newSubDomain: '',
-    subDomain: '',
-    newAddr: '',
-    newContent: ''
-  }),
+  updateForm: updateFormRecord(),
   selectedReverseNode: '',
   reverseRecordSearch: '',
   reverseUpdateForm: new new Record({
@@ -30,6 +31,10 @@ let initialData = new new Record({
   currentTab: 'nodeDetails',
   currentAccount: ''
 })
+
+let syncProp = ['updateForm']
+
+let initialData = initialDataRecord()
 
 var syncedData = syncDataImmutable(syncProp, initialData, Immutable)
 let middleware = [
