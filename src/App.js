@@ -1,16 +1,16 @@
-import { fromJS, Record, List } from 'immutable'
+import Immutable, { fromJS, Record, List } from 'immutable'
 import './index.css'
 import createStore from 'redaxe'
 import ImmutableLogger from './lib/ImmutableLogger'
-import { syncData, localStorageMiddlewareImmutable } from './lib/LocalStorage'
+import { syncDataImmutable, localStorageMiddlewareImmutable } from './lib/LocalStorage'
 
-let syncProp = ['nodeCache', 'rootName', 'rootAddress']
+let syncProp = ['nodes', 'selectedNode']
 let initialData = new new Record({
   nameSearch: '',
-  nodes: new List(),
-  reverseNodes: new List(),
-  nodeCache: new List(),
-  notifications: new List(),
+  nodes: List(),
+  reverseNodes: List(),
+  nodeCache: List(),
+  notifications: List(),
   publicResolver: '',
   selectedNode: '',
   updateForm: new new Record({
@@ -31,14 +31,13 @@ let initialData = new new Record({
   currentAccount: ''
 })
 
-//var syncedData = syncData(syncProp)(initialData)
-
+var syncedData = syncDataImmutable(syncProp, initialData, Immutable)
 let middleware = [
   ImmutableLogger,
-  //localStorageMiddlewareImmutable(syncProp, Immutable)
+  localStorageMiddlewareImmutable(syncProp, Immutable)
 ]
 
 export default createStore(
-  fromJS(initialData),//fromJS(syncedData),
+  fromJS(syncedData),
   middleware
 )
