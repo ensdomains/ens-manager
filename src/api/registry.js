@@ -15,7 +15,7 @@ export async function claimReverseRecord(resolver){
   })
 }
 
-export async function setReverseRecordName(name){
+export async function setReverseRecordName(account, name){
   let { reverseRegistrar, web3 } = await getReverseRegistrarContract()
   return new Promise((resolve, reject) => {
     reverseRegistrar.setName(name, { from: web3.eth.accounts[0]}, function(err, txId){

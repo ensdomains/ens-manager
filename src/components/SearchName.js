@@ -10,7 +10,6 @@ import Blockies from './Blockies'
 
 function handleGetNodeDetails(name){
   if(name.split('.').length > 2) {
-    addNotification('ENS Manager currently only support searching top level domains')
     getOwner(name).then(owner => {
       if(parseInt(owner, 16) === 0) {
         addNotification(`${name} does not have an owner!`)

@@ -8,7 +8,7 @@ import {
   updateReverseForm
 } from '../updaters/nodeDetails'
 import { addNotification } from '../updaters/notifications'
-import { claimReverseRecord } from '../api/registry'
+import { claimReverseRecord, setReverseRecordName } from '../api/registry'
 import getWeb3 from '../api/web3'
 
 function handleOnChange(formName, newOwner){
@@ -16,7 +16,7 @@ function handleOnChange(formName, newOwner){
 }
 
 function handleSetName(address, newName){
-
+  setReverseRecordName(address, newName)
 }
 
 async function handleSetReverseResolver(address, newResolver){
