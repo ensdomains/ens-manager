@@ -33,10 +33,21 @@ import classnames from 'classnames'
 import ResolverDetails from './ResolverDetails'
 import TxLink from './TxLink'
 
-async function handleUpdateOwner(name, newOwner){
+async function handleUpdateOwner(name, currentOwner, newOwner){
   let etherscanAddr = await getEtherScanAddr()
   let domainArray = name.split('.')
-  if(domainArray.length > 2) {
+  if(currentOwner === db.currentAccount) {
+    setNewOwner(name, newOwner).then(txId => {
+      let sentComponent = <span>New owner <TxLink addr={etherscanAddr} txId={txId}/> for {name} sent!</span>
+      addNotification(sentComponent, false)
+      watchRegistryEvent('Transfer', name, (error, log, event) => {
+        updateNode(name, 'owner', log.args.owner)
+        let confirmedComponent = <span>New owner <TxLink txId={txId}/> for {name} confirmed!</span>
+        addNotification(confirmedComponent, false)
+        event.stopWatching()
+      })
+    })
+  } else if(domainArray.length > 2) {
     let node = domainArray.slice(1).join('.')
     setSubnodeOwner(domainArray[0], domainArray.slice(1).join('.'), newOwner)
       .then(txId => {
@@ -52,17 +63,6 @@ async function handleUpdateOwner(name, newOwner){
           event.stopWatching()
         })
       })
-  } else {
-    setNewOwner(name, newOwner).then(txId => {
-      let sentComponent = <span>New owner <TxLink addr={etherscanAddr} txId={txId}/> for {name} sent!</span>
-      addNotification(sentComponent, false)
-      watchRegistryEvent('Transfer', name, (error, log, event) => {
-        updateNode(name, 'owner', log.args.owner)
-        let confirmedComponent = <span>New owner <TxLink txId={txId}/> for {name} confirmed!</span>
-        addNotification(confirmedComponent, false)
-        event.stopWatching()
-      })
-    })
   }
 }
 
@@ -206,10 +206,10 @@ const NodeDetails = ({ selectedNode }) => {
   if(isOwnerOrParentIsOwner(nodeOwner, selectedNode)) {
     newOwner = <div className="input-group">
       <input placeholder="0x..." type="text" name="newOwner"
-        value={db.updateForm.newOwner}
+        value={db.getIn(['updateForm', 'newOwner'])}
         onChange={(e)=> handleOnChange('newOwner', e.target.value)}/>
       <button
-        onClick={(e)=> handleUpdateOwner(getNodeInfo(selectedNode, 'name'), db.updateForm.newOwner)}>Update owner</button>
+        onClick={(e)=> handleUpdateOwner(getNodeInfo(selectedNode, 'name'), getNodeInfo(selectedNode, 'owner'), db.getIn(['updateForm', 'newOwner']))}>Update owner</button>
     </div>
   }
 

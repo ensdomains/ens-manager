@@ -11,7 +11,7 @@ let updateFormRecord = Record({
   subDomain: '',
   newAddr: '',
   newContent: ''
-})
+}, 'updateFormRecord')
 
 let initialDataRecord = Record({
   nameSearch: '',
@@ -30,11 +30,11 @@ let initialDataRecord = Record({
   }),
   currentTab: 'nodeDetails',
   currentAccount: ''
-})
+}, 'initialDataRecord')
 
-let syncProp = ['updateForm']
+let syncProp = []
 
-let initialData = initialDataRecord()
+let initialData = new initialDataRecord()
 
 var syncedData = syncDataImmutable(syncProp, initialData, Immutable)
 let middleware = [
