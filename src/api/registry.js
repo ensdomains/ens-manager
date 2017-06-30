@@ -171,7 +171,7 @@ export const getSubdomains = async name => {
   let rawLogs = await getENSEvent('NewOwner', {node: namehash}, {fromBlock: startBlock, toBlock: 'latest'})
   let flattenedLogs = rawLogs.map(log => log.args)
   flattenedLogs.reverse()
-  let logs = uniq(flattenedLogs, 'label').filter(node => parseInt(node.owner, 16) !== 0)
+  let logs = uniq(flattenedLogs, 'label')
   let labels = await decryptHashes(...logs.map(log => log.label))
   let ownerPromises = labels.map(label => getOwner(`${label}.${name}`))
   let resolverPromises = labels.map(label => getResolver(`${label}.${name}`))
@@ -206,7 +206,7 @@ export const getSubdomains = async name => {
         resolver: resolvers[index],
         nodes: []
       }
-    })
+    }).filter(node => parseInt(node.owner, 16) !== 0)
   }).then(nodes => {
     /* Gets Resolver information for node if they have a resolver */
     let nodePromises = nodes.map(node => {
