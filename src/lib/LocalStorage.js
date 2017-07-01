@@ -29,8 +29,6 @@ const syncDataImmutable = (props, data, { fromJS }) => {
     }
   })
 
-  console.log("PROP DATA", propData)
-
   let newData = props.reduce((acc, prop, i) => {
       console.log(propData[i])
     if(propData[i] === null || propData[i] === 'null') {

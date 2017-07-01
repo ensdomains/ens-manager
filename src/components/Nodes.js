@@ -15,16 +15,18 @@ const isSelected = (selected, name) => {
   return selected.match(query) ? true : false
 }
 
+const alphabeticalSort = (a, b) => a.get('name').localeCompare(b.get('name'))
+
 const Node = ({ data }) => {
   let childNodes = null
-  let selected = isSelected(db.get('selectedNode'),data.get('name'))
+  let selected = isSelected(db.get('selectedNode'), data.get('name'))
   let classes = classNames({
     node: true,
     selected
   })
   if(selected) {
     childNodes = <div className="child-nodes">
-      {data.get('nodes').size > 0 ? data.get('nodes').map(node => <Node key={node.get('labelHash') + name} data={node} />) : ''}
+      {data.get('nodes').size > 0 ? data.get('nodes').sort(alphabeticalSort).map(node => <Node key={node.get('labelHash') + name} data={node} />) : ''}
     </div>
   }
 
@@ -38,7 +40,7 @@ const Node = ({ data }) => {
 const Nodes = () => (
   <div className="nodes-root">
     <div className="nodes-inner">
-      {db.get('nodes').map(node => <Node key={node.get('name')} data={node} />)}
+      {db.get('nodes').sort(alphabeticalSort).map(node => <Node key={node.get('name')} data={node} />)}
     </div>
   </div>
 )
