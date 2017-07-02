@@ -1,4 +1,4 @@
-import Immutable, { fromJS, Record, List } from 'immutable'
+import Immutable, { fromJS, Record, List, Map } from 'immutable'
 import './index.css'
 import createStore from 'redaxe'
 import ImmutableLogger from './lib/ImmutableLogger'
@@ -19,6 +19,7 @@ let initialDataRecord = Record({
   reverseNodes: List(),
   nodeCache: List(),
   notifications: List(),
+  preImageDB: {},
   publicResolver: '',
   selectedNode: '',
   updateForm: updateFormRecord(),

@@ -17,7 +17,8 @@ import {
   resolveQueryPath,
   removeSubDomain,
   getNodeInfo,
-  getParentNode
+  getParentNode,
+  addLabelToPreImage
 } from '../updaters/nodes'
 import {
   updateForm,
@@ -89,7 +90,9 @@ function handleCheckSubDomain(label, node){
   updateForm('subDomain', '')
   checkSubDomain(label, node).then(async owner => {
     if(owner !== "0x0000000000000000000000000000000000000000"){
-      appendSubDomain(await buildSubDomain(label, node, owner))
+      let subDomain = await buildSubDomain(label, node, owner)
+      //addLabelToPreImage(subDomain.labelHash, subDomain.label)
+      appendSubDomain(subDomain)
       addNotification(label + '.' + node +  ' subdomain found')
     } else {
       addNotification('no subdomain with that name')
@@ -198,7 +201,7 @@ const NodeDetails = ({ selectedNode }) => {
   let deleteSubDomain
   let nodeOwner = getNodeInfo(selectedNode, 'owner')
 
-  createSubDomain = <div className="input-group">
+  checkSubdomain = <div className="input-group">
     <input type="text" name="subDomain" value={db.getIn(['updateForm', 'subDomain'])} onChange={(e)=> handleOnChange('subDomain', e.target.value)} />
     <button onClick={() => handleCheckSubDomain(db.getIn(['updateForm', 'subDomain']), getNodeInfo(selectedNode, 'name'))}>Check for subdomain</button>
   </div>
