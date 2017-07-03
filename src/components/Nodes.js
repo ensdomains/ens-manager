@@ -11,8 +11,12 @@ const handleSelectNode = (event, data) => {
 }
 
 const isSelected = (selected, name) => {
-  let query = new RegExp(name);
-  return selected.match(query) ? true : false
+  if(selected.split('.').length === name.split('.').length) {
+    return selected === name
+  } else {
+    let query = new RegExp(name);
+    return selected.match(query) ? true : false
+  }
 }
 
 const alphabeticalSort = (a, b) => a.get('name').localeCompare(b.get('name'))
