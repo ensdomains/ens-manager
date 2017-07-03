@@ -192,8 +192,6 @@ export const getSubdomains = async name => {
       let owner
       let decrypted
 
-      console.log(resolvers)
-
       if(labels[index] === null) {
         label = 'unknown' + logs[index].label.slice(-6)
         owner = log.owner
