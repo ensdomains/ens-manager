@@ -18,8 +18,8 @@ import {
   removeSubDomain,
   getNodeInfo,
   getParentNode,
-  addLabelToPreImage
 } from '../updaters/nodes'
+import { addLabelToPreImageDB } from '../updaters/preImageDB'
 import {
   updateForm,
   switchTab
@@ -91,7 +91,7 @@ function handleCheckSubDomain(label, node){
   checkSubDomain(label, node).then(async owner => {
     if(owner !== "0x0000000000000000000000000000000000000000"){
       let subDomain = await buildSubDomain(label, node, owner)
-      //addLabelToPreImage(subDomain.labelHash, subDomain.label)
+      addLabelToPreImageDB(subDomain.labelHash, subDomain.label)
       appendSubDomain(subDomain)
       addNotification(label + '.' + node +  ' subdomain found')
     } else {

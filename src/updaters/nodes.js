@@ -245,10 +245,3 @@ export function getReverseNodeInfoSelector(address, prop) {
   let indexOfNode = db.reverseNodes.findIndex(node => node.address === address)
   return db.getIn(['reverseNodes', indexOfNode, prop])
 }
-
-export const addLabelToPreImageReducer = (labelHash, label) =>
-  db.setIn(['preImageDB', labelHash], label)
-
-export function addLabelToPreImage(labelHash, label) {
-  update(addLabelToPreImageReducer(labelHash, label))
-}

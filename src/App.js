@@ -19,7 +19,7 @@ let initialDataRecord = Record({
   reverseNodes: List(),
   nodeCache: List(),
   notifications: List(),
-  preImageDB: {},
+  preImageDB: Map(),
   publicResolver: '',
   selectedNode: '',
   updateForm: updateFormRecord(),
@@ -33,7 +33,7 @@ let initialDataRecord = Record({
   currentAccount: ''
 }, 'initialDataRecord')
 
-let syncProp = []
+let syncProp = ['preImageDB']
 
 let initialData = new initialDataRecord()
 

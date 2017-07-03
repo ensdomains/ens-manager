@@ -30,11 +30,12 @@ const syncDataImmutable = (props, data, { fromJS }) => {
   })
 
   let newData = props.reduce((acc, prop, i) => {
-      console.log(propData[i])
+    let key = Array.isArray(prop) ? prop[0] : prop
+    
     if(propData[i] === null || propData[i] === 'null') {
       return acc
     } else {
-      return acc.set(prop[0], propData[i])
+      return acc.set(key, propData[i])
     }
 
   }, data)
