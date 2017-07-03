@@ -25,6 +25,13 @@ function getNamehash(name) {
   })
 }
 
+function getNamehashWithLabelHash(labelHash, nodeHash) {
+  return getWeb3().then(({ web3 }) =>{
+    let node = web3.sha3(nodeHash + labelHash.slice(2), {encoding: 'hex'});
+    return node.toString();
+  })
+}
+
 let ensContract = [
   {
     "constant": true,
@@ -752,6 +759,7 @@ export {
   getENSContract,
   getENSEvent,
   getNamehash,
+  getNamehashWithLabelHash,
   getResolverContract,
   watchEvent
 }

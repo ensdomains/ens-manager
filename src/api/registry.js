@@ -1,4 +1,4 @@
-import getENS, { getNamehash, getENSEvent, getReverseRegistrarContract } from './ens'
+import getENS, { getNamehash, getNamehashWithLabelHash, getENSEvent, getReverseRegistrarContract } from './ens'
 import { fromJS } from 'immutable'
 import { decryptHashes } from './preimage'
 import { uniq, ensStartBlock } from '../lib/utils'
@@ -32,10 +32,17 @@ export async function getOwner(name) {
 }
 
 export async function getResolver(name){
-  let { ENS, web3 } = await getENS()
   let node = await getNamehash(name)
+  let { ENS } = await getENS()
   let registry = await ENS.registryPromise
   return registry.resolverAsync(node)
+}
+
+export async function getResolverWithNameHash(label, node, name){
+  let { ENS } = await getENS()
+  let nodeHash = await getNamehashWithLabelHash(label, node)
+  let registry = await ENS.registryPromise
+  return registry.resolverAsync(nodeHash)
 }
 
 export async function getAddr(name){
@@ -131,7 +138,6 @@ export async function setNewOwner(name, newOwner) {
 }
 
 export async function setSubnodeOwner(label, node, newOwner) {
-  console.log('setting subnode to ', newOwner)
   let { ENS, web3 } = await getENS()
   let owner = await ENS.owner(node)
   return ENS.setSubnodeOwner(label + '.' + node, newOwner, {from: web3.eth.accounts[0]})
@@ -174,7 +180,7 @@ export const getSubdomains = async name => {
   let logs = uniq(flattenedLogs, 'label')
   let labels = await decryptHashes(...logs.map(log => log.label))
   let ownerPromises = labels.map(label => getOwner(`${label}.${name}`))
-  let resolverPromises = labels.map(label => getResolver(`${label}.${name}`))
+  let resolverPromises = logs.map((log, i) => getResolverWithNameHash(log.label, log.node))
 
   return Promise.all([
     Promise.all(ownerPromises),
@@ -185,6 +191,8 @@ export const getSubdomains = async name => {
       let label
       let owner
       let decrypted
+
+      console.log(resolvers)
 
       if(labels[index] === null) {
         label = 'unknown' + logs[index].label.slice(-6)
@@ -211,7 +219,7 @@ export const getSubdomains = async name => {
     /* Gets Resolver information for node if they have a resolver */
     let nodePromises = nodes.map(node => {
       let hasResolver = parseInt(node.resolver, 16) !== 0
-      if(hasResolver) {
+      if(hasResolver && node.decrypted) {
         return getResolverDetails(node)
       }
       return Promise.resolve(node)
