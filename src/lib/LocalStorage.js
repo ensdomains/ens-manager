@@ -31,7 +31,7 @@ const syncDataImmutable = (props, data, { fromJS }) => {
 
   let newData = props.reduce((acc, prop, i) => {
     let key = Array.isArray(prop) ? prop[0] : prop
-    
+
     if(propData[i] === null || propData[i] === 'null') {
       return acc
     } else {
@@ -50,9 +50,13 @@ const localStorageMiddleware = props =>
   }
 
 const localStorageMiddlewareImmutable = (props, Immutable) =>
-  state => {
+  (prevState, state) => {
     const isImmutable = Immutable.Iterable.isIterable
     props.forEach(prop => {
+      if(prevState.prop === state.prop) {
+        return state
+      }
+
       let serialized
       let key
       if(Array.isArray(prop)) {

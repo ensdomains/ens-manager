@@ -1,6 +1,7 @@
-export default function RedaxImmutableLogger (state) {
+export default function RedaxImmutableLogger (prevState, nextState) {
+  console.log('previousState')
+  console.log(prevState.toJS())
   console.log('currentState')
-  console.log(state)
-  console.log(state.toJS())
-  return state
+  console.log(nextState.toJS())
+  return nextState
 }
