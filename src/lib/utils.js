@@ -1,4 +1,5 @@
 import getWeb3 from '../api/web3'
+import { checkLabelHash } from '../updaters/preImageDB'
 
 export const uniq = (a, param) =>
   a.filter((item, pos) =>
@@ -35,3 +36,9 @@ export async function openEtherScanPage(txId){
   let txLink = `${etherscanAddr}/tx/${txId}`
   window.open(`${etherscanAddr}/tx/${txId}`, "_blank");
 }
+
+export const checkLabels = (...labelHashes) =>
+  labelHashes.map(labelHash => checkLabelHash(labelHash) || null)
+
+export const mergeLabels = (labels1, labels2) =>
+  labels1.map((label, index) => label ? label : labels2[index])

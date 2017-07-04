@@ -1,7 +1,7 @@
 import getENS, { getNamehash, getNamehashWithLabelHash, getENSEvent, getReverseRegistrarContract } from './ens'
 import { fromJS } from 'immutable'
 import { decryptHashes } from './preimage'
-import { uniq, ensStartBlock } from '../lib/utils'
+import { uniq, ensStartBlock, checkLabels, mergeLabels } from '../lib/utils'
 import getWeb3 from '../api/web3'
 
 export async function claimReverseRecord(resolver){
@@ -178,7 +178,10 @@ export const getSubdomains = async name => {
   let flattenedLogs = rawLogs.map(log => log.args)
   flattenedLogs.reverse()
   let logs = uniq(flattenedLogs, 'label')
-  let labels = await decryptHashes(...logs.map(log => log.label))
+  let labelHashes = logs.map(log => log.label)
+  let remoteLabels = await decryptHashes(...labelHashes)
+  let localLabels = checkLabels(...labelHashes)
+  let labels = mergeLabels(localLabels, remoteLabels)
   let ownerPromises = labels.map(label => getOwner(`${label}.${name}`))
   let resolverPromises = logs.map((log, i) => getResolverWithNameHash(log.label, log.node))
 
