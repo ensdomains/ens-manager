@@ -24,8 +24,8 @@ async function handleGetReverseRecord(rawAddress){
         selectReverseNode(address)
       })
       .catch(err => {
-        console.log(err)
         setReverseRecordDetails({address, name: '0x', resolverAddr: '0x'})
+        selectReverseNode(address)
         addNotification('No reverse name record found at this address')
       })
   } else {
