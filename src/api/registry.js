@@ -102,7 +102,7 @@ export async function buildSubDomain(label, node, owner) {
     node,
     name: label + '.' + node
   }
-  console.log(subDomain)
+
   if(parseInt(resolver, 16) === 0) {
     return subDomain
   } else {

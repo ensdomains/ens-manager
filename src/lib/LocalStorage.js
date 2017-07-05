@@ -53,19 +53,17 @@ const localStorageMiddlewareImmutable = (props, Immutable) =>
   (prevState, state) => {
     const isImmutable = Immutable.Iterable.isIterable
     props.forEach(prop => {
-      if(prevState.prop === state.prop) {
+      if(prevState.get(prop) === state.get(prop)) {
         return state
       }
 
+      console.log(`syncing ${prop} to localstorage`)
+
       let serialized
       let key
-      if(Array.isArray(prop)) {
-        key = prop[0]
-        serialized = serialize(state.get(key))
-      } else {
-        key = prop
-        serialized = serialize(state.get(prop))
-      }
+
+      key = Array.isArray(prop) ? prop[0] : prop
+      serialized = serialize(state.get(key))
       LocalStorage.setItem(key, serialized)
     })
     return state
