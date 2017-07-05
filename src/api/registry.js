@@ -1,4 +1,4 @@
-import getENS, { getNamehash, getNamehashWithLabelHash, getENSEvent, getReverseRegistrarContract } from './ens'
+import getENS, { getNamehash, getNamehashWithLabelHash, getENSEvent, getReverseRegistrarContract, getResolverContract } from './ens'
 import { fromJS } from 'immutable'
 import { decryptHashes } from './preimage'
 import { uniq, ensStartBlock, checkLabels, mergeLabels } from '../lib/utils'
@@ -15,10 +15,12 @@ export async function claimReverseRecord(resolver){
   })
 }
 
-export async function setReverseRecordName(account, name){
-  let { reverseRegistrar, web3 } = await getReverseRegistrarContract()
+export async function setReverseRecordName(account, resolverAddr, name){
+  let { resolver, web3 } = await getResolverContract(resolverAddr)
+  let reverseAddress = `${account.slice(2)}.addr.reverse`
+  let node = await getNamehash(reverseAddress)
   return new Promise((resolve, reject) => {
-    reverseRegistrar.setName(name, { from: web3.eth.accounts[0]}, function(err, txId){
+    resolver.setName(node, name, { from: web3.eth.accounts[0]}, function(err, txId){
       if(err)
         reject(err)
       resolve(txId)

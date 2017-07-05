@@ -729,6 +729,7 @@ const watchEvent = ({ contract, addr, eventName}, filter, params, callback) => {
   console.log('WATCH EVENT', contract, addr, eventName )
   function eventFactory(contract, eventName, filter, params, callback) {
     const myEvent = contract[eventName](filter,params)
+    console.log(myEvent)
     myEvent.watch((error, log) => {
       console.log(event, `here in the ${contract} Event`, log)
       if(error) {

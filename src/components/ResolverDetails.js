@@ -10,15 +10,17 @@ import { watchResolverEvent } from '../api/watchers'
 import { addActionNotification, addNotification } from '../updaters/notifications'
 import { getEtherScanAddr } from '../lib/utils'
 
+import TxLink from './TxLink'
+
 function handleSetAddr(name, resolverAddr, addr){
   setAddr(name, addr).then(async txId => {
     updateForm('newAddr', '')
     let etherscanAddr = await getEtherScanAddr()
-    let sentComponent = <span>New address <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {name} sent!</span>
+    let sentComponent = <span>New address <TxLink addr={etherscanAddr} txId={txId}/> for {name} sent!</span>
     addNotification(sentComponent, false)
     watchResolverEvent('AddrChanged', resolverAddr, name, async (error, log, event) => {
       updateNode(name, 'addr', log.args.a)
-      let confirmedComponent = <span>New address <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {name} confirmed!</span>
+      let confirmedComponent = <span>New address <TxLink addr={etherscanAddr} txId={txId}/> for {name} confirmed!</span>
       addNotification(confirmedComponent, false)
       event.stopWatching()
     })
@@ -29,11 +31,11 @@ function handleSetContent(name, resolverAddr, content){
   setContent(name, content).then(async txId => {
     updateForm('newContent', '')
     let etherscanAddr = await getEtherScanAddr()
-    let sentComponent = <span>New Content <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {name} sent!</span>
+    let sentComponent = <span>New Content <TxLink addr={etherscanAddr} txId={txId}/> for {name} sent!</span>
     addNotification(sentComponent, false)
     watchResolverEvent('ContentChanged', resolverAddr, name, async (error, log, event) => {
       updateNode(name, 'content', log.args.hash)
-      let confirmedComponent = <span>New content <a className="tx-link" href={`${etherscanAddr}tx/${txId}`}>Transaction</a> for {name} confirmed!</span>
+      let confirmedComponent = <span>New content <TxLink addr={etherscanAddr} txId={txId}/> for {name} confirmed!</span>
       addNotification(confirmedComponent, false)
       event.stopWatching()
     })

@@ -245,3 +245,10 @@ export function getReverseNodeInfoSelector(address, prop) {
   let indexOfNode = db.reverseNodes.findIndex(node => node.address === address)
   return db.getIn(['reverseNodes', indexOfNode, prop])
 }
+
+export function updateReverseNode(address, prop, data) {
+  let indexOfNode = db.reverseNodes.findIndex(node => node.address === address)
+  update(
+    db.setIn(['reverseNodes', indexOfNode, prop], data)
+  )
+}
