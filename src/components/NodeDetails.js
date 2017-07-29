@@ -37,7 +37,7 @@ import TxLink from './TxLink'
 async function handleUpdateOwner(name, currentOwner, newOwner){
   let etherscanAddr = await getEtherScanAddr()
   let domainArray = name.split('.')
-  if(currentOwner === db.currentAccount) {
+  if(currentOwner === db.accounts[0]) {
     setNewOwner(name, newOwner).then(txId => {
       let sentComponent = <span>New owner <TxLink addr={etherscanAddr} txId={txId}/> for {name} sent!</span>
       addNotification(sentComponent, false)
@@ -164,14 +164,14 @@ function handleSwitchTab(tab){
 function isOwnerOrParentIsOwner(account, name){
   let parent = getParentNode(name)
   if(parent) {
-    return db.currentAccount === getParentNode(name).get('owner') || db.currentAccount === account
+    return db.accounts.get(0) === getParentNode(name).get('owner') || db.accounts.get(0) === account
   }
 
-  return db.currentAccount === account
+  return db.accounts.get(0) === account
 }
 
 function isOwner(account){
-  return db.currentAccount === account
+  return db.accounts.get(0) === account
 }
 
 const Tabs = ({ selectedNode, currentTab }) => {

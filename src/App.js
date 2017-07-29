@@ -14,6 +14,7 @@ let updateFormRecord = Record({
 }, 'updateFormRecord')
 
 let initialDataRecord = Record({
+  readOnly: false,
   nameSearch: '',
   nodes: List(),
   reverseNodes: List(),
@@ -30,7 +31,7 @@ let initialDataRecord = Record({
     newResolverAddr: ''
   }),
   currentTab: 'nodeDetails',
-  currentAccount: ''
+  accounts: List(),
 }, 'initialDataRecord')
 
 let initialData = new initialDataRecord()

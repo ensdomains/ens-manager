@@ -18,7 +18,7 @@ function setupWeb3(){
       web3.version.getNetwork(function(err, networkId){
         ready = true
         injected = true
-        console.log('Metamask active')
+        console.log('Mist or Metamask active')
         resolve({web3, provider, readOnly, networkId})
       })
     } else {
@@ -74,9 +74,14 @@ export async function checkAddress(hash){
   return web3.isAddress(hash)
 }
 
-export async function getCurrentAccount() {
+export async function getCurrentAccounts() {
   let { web3 } = await getWeb3()
-  return web3.eth.accounts[0]
+  return new Promise((resolve, reject) => {
+    web3.eth.getAccounts((err, accounts) => {
+      if(err) reject(err)
+      resolve(accounts)
+    })
+  })
 }
 
 export default getWeb3
