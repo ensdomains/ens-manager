@@ -5,7 +5,7 @@ import './css/main.css'
 import { setupWeb3 } from './api/web3'
 import { getAddr, getContent, getName } from './api/registry'
 import { setPublicResolver, setReverseRecordDetails } from './updaters/nodes'
-import { getCurrentAccounts } from './api/web3'
+import { getAccounts } from './api/web3'
 import { setCurrentAccounts } from './updaters/config'
 import { selectReverseNode } from './updaters/nodeDetails'
 import { addNotification } from './updaters/notifications'
@@ -15,32 +15,32 @@ import Main from './Main'
 async function setupDefaults() {
   const defaultResolver = "resolver.eth";
   let resolverAddressPromise = getAddr(defaultResolver)
-  let currentAccountsPromise = getCurrentAccounts()
+  let accountsPromise = getAccounts()
 
-  Promise.all([resolverAddressPromise, currentAccountsPromise]).then(([resolverAddress, currentAccounts]) => {
-    let hasAccounts = currentAccounts.length > 0
+  Promise.all([resolverAddressPromise, accountsPromise]).then(([resolverAddress, accounts]) => {
+    let hasAccounts = accounts.length > 0
     setPublicResolver(resolverAddress)
-    
+
     if(hasAccounts) {
-      setCurrentAccounts(currentAccounts)
-      getName(currentAccounts[0])
+      setCurrentAccounts(accounts)
+      getName(accounts[0])
         .then(({name, resolverAddr}) => {
           setReverseRecordDetails({
-            address: currentAccounts[0],
+            address: accounts[0],
             name,
             resolver: resolverAddr
           })
 
-          selectReverseNode(currentAccounts[0])
+          selectReverseNode(accounts[0])
         })
         .catch(err => {
           console.log(err)
           setReverseRecordDetails({
-            address: currentAccounts[0],
+            address: accounts[0],
             name: '0x',
             resolverAddr: '0x'
           })
-          selectReverseNode(currentAccounts[0])
+          selectReverseNode(accounts[0])
         })
     } else {
       addNotification('No account connected. Please connect account to make changes')

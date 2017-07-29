@@ -74,7 +74,7 @@ export async function checkAddress(hash){
   return web3.isAddress(hash)
 }
 
-export async function getCurrentAccounts() {
+export async function getAccounts() {
   let { web3 } = await getWeb3()
   return new Promise((resolve, reject) => {
     web3.eth.getAccounts((err, accounts) => {

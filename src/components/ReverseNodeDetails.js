@@ -38,7 +38,7 @@ function handleSetName(address, resolver, newName){
 
 async function handleSetReverseResolver(address, newResolver){
   let { web3 } = await getWeb3()
-  if(address === web3.eth.accounts[0]) {
+  if(address === db.accounts.get(0)) {
     claimReverseRecord(newResolver).then(async (txId) => {
       let etherscanAddr = await getEtherScanAddr()
       let sentComponent = <span>New Reverse Resolver <TxLink addr={etherscanAddr} txId={txId}/> for {`${address}.addr.reverse`} sent!</span>
