@@ -196,18 +196,18 @@ export const getSubdomains = async name => {
   let startBlock = await ensStartBlock()
   let namehash = await getNamehash(name)
   let currentBlock = await getCurrentBlock()
-  let blocks = 25000
+  let blocks = 50000
   let batches = Math.ceil((currentBlock - startBlock) / blocks)
   let subDomainPromises = []
 
   for(var i = 0; i < batches; i++) {
     let toBlock = currentBlock - (blocks * i)
     let fromBlock = currentBlock - (blocks * (i + 1))
-    console.log(toBlock, fromBlock)
+    //console.log(toBlock, fromBlock)
     subDomainPromises.push(getSubdomainBatch(namehash, fromBlock, toBlock))
   }
 
-  console.log('promises', subDomainPromises)
+  //console.log('promises', subDomainPromises)
 
   let rawLogs = await Promise.all(subDomainPromises.map(reflect)).then(results => {
     var subdomains = results.filter(x => x.status === "resolved").map(y => y.v);

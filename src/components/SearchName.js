@@ -9,6 +9,7 @@ import { getOwner } from '../api/registry'
 import Blockies from './Blockies'
 
 function handleGetNodeDetails(name){
+  console.log('here')
   if(name.split('.').length > 2) {
     getOwner(name).then(owner => {
       if(parseInt(owner, 16) === 0) {

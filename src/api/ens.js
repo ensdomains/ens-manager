@@ -714,7 +714,6 @@ const getENSEvent = (event, filter, params) =>
 
     return new Promise(function(resolve,reject){
       myEvent.get(function(error, logs){
-        console.log(logs)
         if(error) {
           reject(error)
         } else {
