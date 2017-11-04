@@ -2,7 +2,7 @@ import getENS, { getNamehash, getNamehashWithLabelHash, getENSEvent, getReverseR
 import { fromJS } from 'immutable'
 import { decryptHashes } from './preimage'
 import { uniq, ensStartBlock, checkLabels, mergeLabels } from '../lib/utils'
-import getWeb3, { getAccounts, getCurrentBlock } from '../api/web3'
+import getWeb3, { getAccounts } from '../api/web3'
 
 export async function claimReverseRecord(resolver){
   let { reverseRegistrar, web3 } = await getReverseRegistrarContract()
@@ -182,39 +182,10 @@ export function getRootDomain(name){
     })
 }
 
-async function getSubdomainBatch(namehash, fromBlock, toBlock) {
-  let rawLogs = await getENSEvent('NewOwner', {node: namehash}, {fromBlock: fromBlock, toBlock: toBlock})
-  return rawLogs
-}
-
-function reflect(promise){
-    return promise.then(function(v){ return {v:v, status: "resolved" }},
-                        function(e){ return {e:e, status: "rejected" }});
-}
-
 export const getSubdomains = async name => {
   let startBlock = await ensStartBlock()
   let namehash = await getNamehash(name)
-  let currentBlock = await getCurrentBlock()
-  let blocks = 25000
-  let batches = Math.ceil((currentBlock - startBlock) / blocks)
-  let subDomainPromises = []
-
-  for(var i = 0; i < batches; i++) {
-    let toBlock = currentBlock - (blocks * i)
-    let fromBlock = currentBlock - (blocks * (i + 1))
-    console.log(toBlock, fromBlock)
-    subDomainPromises.push(getSubdomainBatch(namehash, fromBlock, toBlock))
-  }
-
-  console.log('promises', subDomainPromises)
-
-  let rawLogs = await Promise.all(subDomainPromises.map(reflect)).then(results => {
-    var subdomains = results.filter(x => x.status === "resolved").map(y => y.v);
-    var flat = [].concat.apply([], subdomains)
-    return flat
-  })
-
+  let rawLogs = await getENSEvent('NewOwner', {node: namehash}, {fromBlock: startBlock, toBlock: 'latest'})
   let flattenedLogs = rawLogs.map(log => log.args)
   flattenedLogs.reverse()
   let logs = uniq(flattenedLogs, 'label')

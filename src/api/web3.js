@@ -84,18 +84,6 @@ export async function getAccounts() {
   })
 }
 
-export async function getCurrentBlock(){
-  let { web3 } = await getWeb3()
-
-  return new Promise((resolve, reject) => {
-    web3.eth.getBlockNumber(function(err, blockNumber){
-      if(err) reject(err)
-      resolve(blockNumber)
-    })
-  })
-
-}
-
 export default getWeb3
 
 export { setupWeb3 }
