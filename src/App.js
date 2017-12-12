@@ -32,6 +32,7 @@ let initialDataRecord = Record({
   }),
   currentTab: 'nodeDetails',
   accounts: List(),
+  currentAccount: '',
 }, 'initialDataRecord')
 
 let initialData = new initialDataRecord()

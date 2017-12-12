@@ -23,6 +23,7 @@ async function setupDefaults() {
 
     if(hasAccounts) {
       setCurrentAccounts(accounts)
+      setCurrentAccount(accounts[0])
       getName(accounts[0])
         .then(({name, resolverAddr}) => {
           setReverseRecordDetails({
