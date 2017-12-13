@@ -57,7 +57,14 @@ export function updateNode(name, prop, data) {
 }
 
 const fetchSubdomains = name =>
-  getSubdomains(name).then(subdomains => {
+  getSubdomains(name).then(subdomainsRaw => {
+    let subdomains = subdomainsRaw.map(subdomain => ({
+        ...subdomain,
+        fetchingSubdomains: subdomain.decrypted
+      })
+    )
+
+    updateNode(name, 'fetchingSubdomains', false)
     appendSubDomains(subdomains, name)
     subdomains.forEach(subdomain => {
       if(subdomain.decrypted) {
@@ -67,7 +74,13 @@ const fetchSubdomains = name =>
   })
 
 const fetchSubdomainsUntil = (name, tilName) =>
-  getSubdomains(name).then(subdomains => {
+  getSubdomains(name).then(subdomainsRaw => {
+    let subdomains = subdomainsRaw.map(subdomain => ({
+        ...subdomain,
+        fetchingSubdomains: true
+      })
+    )
+
     appendSubDomains(subdomains, name)
     subdomains.forEach(subdomain => {
       if(subdomain.decrypted && subdomain.name !== tilName) {
@@ -77,7 +90,11 @@ const fetchSubdomainsUntil = (name, tilName) =>
   })
 
 export function setNodeDetails(name) {
-  getRootDomain(name).then(rootDomain => {
+  getRootDomain(name).then(rootDomainRaw => {
+    let rootDomain = {
+      ...rootDomainRaw,
+      fetchingSubdomains: true
+    }
     update(
       db.set('nodes', db.get('nodes').push(fromJS(rootDomain)))
     )
