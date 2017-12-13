@@ -1,4 +1,10 @@
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,400i,600,700,900");
+.loader {
+  display: inline-block;
+  position: absolute;
+  right: 20px;
+  bottom: 24px;
+}
 * {
   box-sizing: border-box;
 }
@@ -244,6 +250,7 @@ h1 {
 .node-details {
   padding: 10px;
   width: 300px;
+  position: relative;
   display: flex;
   align-content: center;
 }

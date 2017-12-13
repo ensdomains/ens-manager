@@ -3,6 +3,7 @@ import { db } from 'redaxe'
 import { selectNode, switchTab } from '../updaters/nodeDetails'
 import Blockies from './Blockies'
 import classNames from 'classnames'
+import Loader from './Loader'
 
 const handleSelectNode = (event, data) => {
   switchTab('nodeDetails')
@@ -28,6 +29,7 @@ const Node = ({ data }) => {
     node: true,
     selected
   })
+  let loading = data.get('fetchingSubdomains') ? <Loader /> : null
   if(selected) {
     childNodes = <div className="child-nodes">
       {data.get('nodes').size > 0 ? data.get('nodes').sort(alphabeticalSort).map(node => <Node key={node.get('labelHash') + name} data={node} />) : ''}
@@ -35,7 +37,10 @@ const Node = ({ data }) => {
   }
 
   return <div className={classes}>
-    <div onClick={(e) => handleSelectNode(e, data.get('name'))} className="node-details"><Blockies className="node-blockies" imageSize={25} address={data.get('owner')} /> {data.get('name')}</div>
+    <div onClick={(e) => handleSelectNode(e, data.get('name'))} className="node-details"><Blockies className="node-blockies" imageSize={25} address={data.get('owner')} />
+      {data.get('name')}
+      {loading}
+    </div>
     {childNodes}
   </div>
 }
