@@ -77,7 +77,7 @@ const fetchSubdomainsUntil = (name, tilName) =>
   getSubdomains(name).then(subdomainsRaw => {
     let subdomains = subdomainsRaw.map(subdomain => ({
         ...subdomain,
-        fetchingSubdomains: true
+        fetchingSubdomains: subdomain.decrypted
       })
     )
 
