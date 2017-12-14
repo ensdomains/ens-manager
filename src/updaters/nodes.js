@@ -95,12 +95,12 @@ export function setNodeDetails(name) {
       ...rootDomainRaw,
       fetchingSubdomains: true
     }
-    
+
     const checkDomainExists = name =>
       db.get('nodes').filter(node => node.get('name') === name).size > 0
 
     if(checkDomainExists(name)){
-      addNotification(`${name} already added as a rootDomain`)
+      addNotification(`${name} already added as a root domain`)
       return false
     }
     update(
