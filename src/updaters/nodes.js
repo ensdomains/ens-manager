@@ -42,14 +42,13 @@ export function updateReverseAddress(address){
 export function updateNode(name, prop, data) {
   const domainArray = name.split('.')
   let indexOfNode,
-      updatePath = ['nodes', 0]
+      updatePath = []
+  let domainArraySliced = domainArray.slice(0, domainArray.length - 1)
 
-  if(domainArray.length > 2) {
-    let domainArraySliced = domainArray.slice(0, domainArray.length - 2)
-    updatePath = resolveQueryPath(domainArraySliced, updatePath, db)
-  }
-
+  updatePath = resolveQueryPath(domainArraySliced, updatePath, db)
   updatePath = [...updatePath, prop]
+
+  console.log(updatePath)
 
   update(
     db.setIn(updatePath, data)
