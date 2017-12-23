@@ -174,6 +174,10 @@ function isOwner(account){
   return db.accounts.get(0) === account
 }
 
+function isSubDomain(name){
+  return name.split('.').length > 2
+}
+
 const Tabs = ({ selectedNode, currentTab }) => {
   let resolverTab,
       hasResolver = parseInt(getNodeInfo(selectedNode, 'resolver'), 16) !== 0
@@ -231,6 +235,9 @@ const NodeDetails = ({ selectedNode }) => {
         <input type="text" name="subDomain" value={db.getIn(['updateForm', 'newSubDomain'])} onChange={(e)=> handleOnChange('newSubDomain', e.target.value)} />
         <button onClick={() => handleCreateSubDomain(db.getIn(['updateForm', 'newSubDomain']), getNodeInfo(selectedNode, 'name'))}>Create new subdomain</button>
       </div>
+  }
+
+  if(isOwner(nodeOwner) && isSubDomain(selectedNode)){
     deleteSubDomain = <button className="danger" onClick={() => handleDeleteSubDomain(getNodeInfo(selectedNode, 'label'), getNodeInfo(selectedNode, 'node'))}>Delete Node</button>
   }
 

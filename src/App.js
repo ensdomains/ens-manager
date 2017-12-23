@@ -35,7 +35,7 @@ let initialDataRecord = Record({
 }, 'initialDataRecord')
 
 let initialData = new initialDataRecord()
-let syncProp = ['preImageDB']
+let syncProp = ['preImageDB', 'nodes']
 let syncedData = syncDataImmutable(syncProp, initialData, Immutable)
 let middleware = [
   ImmutableLogger,
