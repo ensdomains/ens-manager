@@ -1,6 +1,7 @@
 import React from 'react'
 import { db } from 'redaxe'
 import { selectNode, switchTab } from '../updaters/nodeDetails'
+import { removeSubDomain } from '../updaters/nodes'
 import Blockies from './Blockies'
 import classNames from 'classnames'
 import Loader from './Loader'
@@ -9,6 +10,11 @@ const handleSelectNode = (event, data) => {
   switchTab('nodeDetails')
   selectNode(data)
   event.stopPropagation()
+}
+
+const handleRemoveNode = (data) => {
+  let split = data.get('name').split('.')
+  removeSubDomain(split[1], split[0])
 }
 
 const isSelected = (selected, name) => {
@@ -29,6 +35,7 @@ const Node = ({ data }) => {
     node: true,
     selected
   })
+  let removeNode = null
   let loading = data.get('fetchingSubdomains') ? <Loader /> : null
   if(selected) {
     childNodes = <div className="child-nodes">
@@ -36,10 +43,15 @@ const Node = ({ data }) => {
     </div>
   }
 
+  if(data.get('name').split('.').length == 2){
+    removeNode = <div onClick={() => handleRemoveNode(data)}>x</div>
+  }
+
   return <div className={classes}>
     <div onClick={(e) => handleSelectNode(e, data.get('name'))} className="node-details"><Blockies className="node-blockies" imageSize={25} address={data.get('owner')} />
       {data.get('name')}
       {loading}
+      {removeNode}
     </div>
     {childNodes}
   </div>
