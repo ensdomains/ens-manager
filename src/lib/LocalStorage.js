@@ -15,7 +15,7 @@ const syncData = (props, data) => {
   }
 }
 
-const syncDataImmutable = (props, data, { fromJS }) => {
+const syncDataImmutable = (props, data, transformers = [], { fromJS }) => {
   let propData = props.map(prop => {
 
     if(Array.isArray(prop)) {
@@ -40,7 +40,10 @@ const syncDataImmutable = (props, data, { fromJS }) => {
 
   }, data)
 
-  return data.merge(newData)
+  let mergedData = data.merge(newData)
+  let transformedData = transformers.reduce((data, transformer) => transformer(data), mergedData)
+
+  return transformedData
 }
 
 const localStorageMiddleware = props =>

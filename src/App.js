@@ -3,6 +3,7 @@ import './index.css'
 import createStore from 'redaxe'
 import ImmutableLogger from './lib/ImmutableLogger'
 import { syncDataImmutable, localStorageMiddlewareImmutable } from './lib/LocalStorage'
+import { nodeTransformer } from './localStorage';
 
 let updateFormRecord = Record({
   newOwner: '',
@@ -36,7 +37,8 @@ let initialDataRecord = Record({
 
 let initialData = new initialDataRecord()
 let syncProp = ['preImageDB', 'nodes']
-let syncedData = syncDataImmutable(syncProp, initialData, Immutable)
+let transformers = [nodeTransformer]
+let syncedData = syncDataImmutable(syncProp, initialData, transformers, Immutable)
 let middleware = [
   ImmutableLogger,
   localStorageMiddlewareImmutable(syncProp, Immutable)
