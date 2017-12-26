@@ -1,19 +1,24 @@
 import React from 'react'
 import { db } from 'redaxe'
 import { selectNode, switchTab } from '../updaters/nodeDetails'
-import { removeSubDomain } from '../updaters/nodes'
+import { removeSubDomain, setNodeDetails } from '../updaters/nodes'
 import Blockies from './Blockies'
 import classNames from 'classnames'
 import Loader from './Loader'
 
-const handleSelectNode = (event, data) => {
+const handleSelectNode = (event, node) => {
+  let name = node.get('name')
   switchTab('nodeDetails')
-  selectNode(data)
+  selectNode(name)
+  if(node.get('refreshed') === false) {
+    setNodeDetails(name)
+  }
   event.stopPropagation()
 }
 
 const handleRemoveNode = (data) => {
   let split = data.get('name').split('.')
+  selectNode(0)
   removeSubDomain(split[1], split[0])
 }
 
@@ -44,11 +49,11 @@ const Node = ({ data }) => {
   }
 
   if(data.get('name').split('.').length == 2){
-    removeNode = <div onClick={() => handleRemoveNode(data)}>x</div>
+    removeNode = <div title="Remove node from list" className="remove-node" onClick={() => handleRemoveNode(data)}>&#10006;</div>
   }
 
   return <div className={classes}>
-    <div onClick={(e) => handleSelectNode(e, data.get('name'))} className="node-details"><Blockies className="node-blockies" imageSize={25} address={data.get('owner')} />
+    <div onClick={(e) => handleSelectNode(e, data)} className="node-details"><Blockies className="node-blockies" imageSize={25} address={data.get('owner')} />
       {data.get('name')}
       {loading}
       {removeNode}

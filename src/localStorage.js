@@ -7,6 +7,7 @@ export function nodeTransformer(db) {
   function recursiveSet(nodes, updatePath){
     nodes.forEach((node, index) => {
       db = db.setIn([...updatePath, index, 'refreshed'], false)
+            // .setIn([...updatePath, index, 'fetchingSubdomains'], false)
       if(nodes.size > 0) {
         let nextUpdatePath = [...updatePath, index, 'nodes']
         let nextNodes = db.getIn(nextUpdatePath)

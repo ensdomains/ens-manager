@@ -247,6 +247,24 @@ h1 {
 .node-blockies {
   border-radius: 50%;
 }
+.remove-node {
+  position: absolute;
+  font-size: 16px;
+  color: #fff;
+  top: 0;
+  right: 0;
+  margin-top: -6px;
+  margin-right: -8px;
+  display: none;
+  z-index: 1000;
+  width: 20px;
+  height: 20px;
+  background: #000;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: solid 1px #000;
+}
 .node-details {
   padding: 10px;
   width: 300px;
@@ -263,6 +281,9 @@ h1 {
 .node-details:hover {
   background: #419bfc;
   cursor: pointer;
+}
+.node-details:hover .remove-node {
+  display: flex;
 }
 .reverse-nodes-root .node-details.node-details {
   width: 100%;

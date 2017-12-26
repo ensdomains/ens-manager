@@ -59,7 +59,8 @@ const fetchSubdomains = name =>
   getSubdomains(name).then(subdomainsRaw => {
     let subdomains = subdomainsRaw.map(subdomain => ({
         ...subdomain,
-        fetchingSubdomains: subdomain.decrypted
+        fetchingSubdomains: subdomain.decrypted,
+        refreshed: true
       })
     )
 
@@ -95,13 +96,18 @@ export function setNodeDetails(name) {
       fetchingSubdomains: true
     }
 
+    let domainArray = rootDomain.name.split('.')
+
     const checkDomainExists = name =>
       db.get('nodes').filter(node => node.get('name') === name).size > 0
 
-    if(checkDomainExists(name)){
+    if(checkDomainExists(name) && rootDomain.refreshed === false){
       addNotification(`${name} already added as a root domain`)
       return false
+    } else if(checkDomainExists(name)) {
+      removeSubDomain(domainArray[1], domainArray[0])
     }
+    
     update(
       db.set('nodes', db.get('nodes').push(fromJS(rootDomain)))
     )
