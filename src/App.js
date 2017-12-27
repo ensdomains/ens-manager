@@ -24,6 +24,7 @@ let initialDataRecord = Record({
   preImageDB: Map(),
   publicResolver: '',
   selectedNode: '',
+  isAboutModalActive: false,
   updateForm: updateFormRecord(),
   selectedReverseNode: '',
   reverseRecordSearch: '',

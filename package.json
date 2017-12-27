@@ -12,6 +12,7 @@
     "react-dom": "^15.5.4",
     "react-ga": "^2.2.0",
     "react-loader": "^2.4.2",
+    "react-modal": "^3.1.10",
     "react-notification": "^6.7.0",
     "react-redaxe": "0.0.11",
     "react-router-dom": "4.1.1",
