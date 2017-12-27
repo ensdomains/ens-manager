@@ -1,7 +1,7 @@
 import React from 'react'
 import { db } from 'redaxe'
 import { selectNode, switchTab } from '../updaters/nodeDetails'
-import { removeSubDomain, setNodeDetails } from '../updaters/nodes'
+import { removeRootDomain, setNodeDetails } from '../updaters/nodes'
 import Blockies from './Blockies'
 import classNames from 'classnames'
 import Loader from './Loader'
@@ -17,9 +17,9 @@ const handleSelectNode = (event, node) => {
 }
 
 const handleRemoveNode = (data) => {
-  let split = data.get('name').split('.')
+  let name = data.get('name')
   selectNode(0)
-  removeSubDomain(split[1], split[0])
+  removeRootDomain(name)
 }
 
 const isSelected = (selected, name) => {

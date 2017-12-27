@@ -93,19 +93,27 @@ export function setNodeDetails(name) {
   getRootDomain(name).then(rootDomainRaw => {
     let rootDomain = {
       ...rootDomainRaw,
-      fetchingSubdomains: true
+      fetchingSubdomains: true,
+      refreshed: true
     }
 
     let domainArray = rootDomain.name.split('.')
+    console.log(domainArray)
+
+    const getDomain = name =>
+      db.get('nodes').filter(node => node.get('name') === name).get(0)
 
     const checkDomainExists = name =>
       db.get('nodes').filter(node => node.get('name') === name).size > 0
 
-    if(checkDomainExists(name) && rootDomain.refreshed === false){
+    
+    if(checkDomainExists(name) && getDomain(name).get('refreshed') === true){
       addNotification(`${name} already added as a root domain`)
       return false
-    } else if(checkDomainExists(name)) {
-      removeSubDomain(domainArray[1], domainArray[0])
+    } else if(checkDomainExists(name) && getDomain(name).get('refreshed') === false) {
+      console.log('here2')
+      console.log(rootDomain, domainArray)
+      removeRootDomain(name)
     }
     
     update(
@@ -193,6 +201,17 @@ export function appendSubDomains(subDomains, rootDomain) {
     let plural = subDomains.length === 1 ? '' : 's'
     addNotification(`${subDomains.length} subdomain${plural} found for ${rootDomain}`)
   }
+}
+
+export function removeRootDomain(domain) {
+  const domainArray = domain.split('.')
+  let indexOfNode,
+      updatePath = ['nodes']
+
+  indexOfNode = db.getIn(updatePath).findIndex(node => node.get('name') === domainArray[0] + '.' + domainArray[1])
+  update(
+    db.updateIn(updatePath, nodes => nodes.delete(indexOfNode))
+  )
 }
 
 export function removeSubDomain(subDomain, rootDomain) {
