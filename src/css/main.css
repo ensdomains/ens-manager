@@ -317,3 +317,11 @@ h1 {
   transition: 0.2s;
   border-radius: 5px 5px 0 0;
 }
+.about-modal {
+  margin: 50px;
+  background: #000;
+  color: #fff;
+}
+.overlay {
+  z-index: 10000;
+}

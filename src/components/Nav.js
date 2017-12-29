@@ -10,9 +10,17 @@ export default () =>
     <ul>
       <li><NavLink to="/" activeClassName="current" exact>Domain Manager</NavLink></li>
       <li><NavLink to="/reverse-record" activeClassName="current">Reverse Record</NavLink></li>
-      <li><a href="#" onClick={toggleAbout}>About</a></li>
+
     </ul>
-    <ReactModal isOpen={db.get('isAboutModalActive')}>
+    <ReactModal 
+      className={{
+        base: 'about-modal'
+      }}
+      overlayClassName={{
+        base: 'about-overlay'
+      }}
+      isOpen={db.get('isAboutModalActive')
+    }>
       <About />
     </ReactModal>
   </nav>

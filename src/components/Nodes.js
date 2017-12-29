@@ -16,10 +16,11 @@ const handleSelectNode = (event, node) => {
   event.stopPropagation()
 }
 
-const handleRemoveNode = (data) => {
+const handleRemoveNode = (event, data) => {
   let name = data.get('name')
-  selectNode(0)
+  selectNode('')
   removeRootDomain(name)
+  event.stopPropagation()
 }
 
 const isSelected = (selected, name) => {
@@ -49,7 +50,7 @@ const Node = ({ data }) => {
   }
 
   if(data.get('name').split('.').length == 2){
-    removeNode = <div title="Remove node from list" className="remove-node" onClick={() => handleRemoveNode(data)}>&#10006;</div>
+    removeNode = <div title="Remove node from list" className="remove-node" onClick={(e) => handleRemoveNode(e, data)}>&#10006;</div>
   }
 
   return <div className={classes}>
