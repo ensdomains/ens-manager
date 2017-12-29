@@ -328,6 +328,7 @@ h1 {
   width: calc(100% - 50px);
   max-width: 600px;
   border-radius: 10px;
+  overflow-y: scroll;
 }
 .overlay {
   background: rgba(0,0,0,0.7);

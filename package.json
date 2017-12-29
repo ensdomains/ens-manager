@@ -70,7 +70,8 @@
     "test": "node scripts/test.js --env=jsdom",
     "styles:watch": "stylus -I ./node_modules -w ./src/styl/main.styl -o ./src/css/main.css",
     "styles": "stylus -I ./node_modules ./src/styl/main.styl -o ./src/css/main.css",
-    "deploy": "npm run styles && npm run build && cd build && mv index.html 200.html && surge . --domain manager.ens.domains"
+    "deploy": "npm run styles && npm run build && cd build && mv index.html 200.html && surge . --domain manager.ens.domains",
+    "deploy:dev": "npm run styles && npm run build && cd build && mv index.html 200.html && surge . --domain devensmanager.surge.sh"
   },
   "jest": {
     "collectCoverageFrom": [
