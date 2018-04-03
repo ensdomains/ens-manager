@@ -37,6 +37,7 @@ import TxLink from './TxLink'
 async function handleUpdateOwner(name, currentOwner, newOwner){
   let etherscanAddr = await getEtherScanAddr()
   let domainArray = name.split('.')
+  console.log(newOwner)
   if(currentOwner === db.accounts.get(0)) {
     setNewOwner(name, newOwner).then(txId => {
       let sentComponent = <span>New owner <TxLink addr={etherscanAddr} txId={txId}/> for {name} sent!</span>
