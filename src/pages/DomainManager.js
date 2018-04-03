@@ -1,10 +1,10 @@
-import React from 'react'
-import Nodes from '../components/Nodes'
-import NodeDetails from '../components/NodeDetails'
-import Header from '../components/Header'
-import SearchName from '../components/SearchName'
+import React from 'react';
+import Nodes from '../components/Nodes/NodesContainer';
+import NodeDetails from '../components/NodeDetails';
+import Header from '../components/Header';
+import SearchName from '../components/SearchName';
 
-export default () =>
+export default () => (
   <div className="domain-manager">
     <Header>
       <SearchName />
@@ -12,3 +12,4 @@ export default () =>
     <NodeDetails />
     <Nodes />
   </div>
+);
