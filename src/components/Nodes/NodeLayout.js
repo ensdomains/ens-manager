@@ -12,7 +12,7 @@ const NodeLayout = props => {
     alphabeticalSort,
     Blockies
   } = props
-  console.log(props)
+
   let childNodes = null
   let selected = isSelected(db.get('selectedNode'), data.get('name'))
   let classes = classNames({

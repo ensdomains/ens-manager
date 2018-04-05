@@ -62,25 +62,31 @@
     "webpack": "1.14.0",
     "webpack-dev-server": "1.16.2",
     "webpack-manifest-plugin": "1.1.0",
-    "whatwg-fetch": "2.0.2"
+    "whatwg-fetch": "2.0.2",
+    "@storybook/react": "^3.4.0",
+    "@storybook/addon-actions": "^3.4.0",
+    "@storybook/addon-links": "^3.4.0",
+    "@storybook/addons": "^3.4.0"
   },
   "scripts": {
     "start": "run-p dev styles:watch",
     "dev": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "styles:watch":
-      "stylus -I ./node_modules -w ./src/styl/main.styl -o ./src/css/main.css",
-    "styles":
-      "stylus -I ./node_modules ./src/styl/main.styl -o ./src/css/main.css",
-    "deploy":
-      "npm run styles && npm run build && cd build && mv index.html 200.html && surge . --domain manager.ens.domains",
-    "deploy:dev":
-      "npm run styles && npm run build && cd build && mv index.html 200.html && surge . --domain devensmanager.surge.sh"
+    "styles:watch": "stylus -I ./node_modules -w ./src/styl/main.styl -o ./src/css/main.css",
+    "styles": "stylus -I ./node_modules ./src/styl/main.styl -o ./src/css/main.css",
+    "deploy": "npm run styles && npm run build && cd build && mv index.html 200.html && surge . --domain manager.ens.domains",
+    "deploy:dev": "npm run styles && npm run build && cd build && mv index.html 200.html && surge . --domain devensmanager.surge.sh",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "jest": {
-    "collectCoverageFrom": ["src/**/*.{js,jsx}"],
-    "setupFiles": ["<rootDir>/config/polyfills.js"],
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}"
+    ],
+    "setupFiles": [
+      "<rootDir>/config/polyfills.js"
+    ],
     "testPathIgnorePatterns": [
       "<rootDir>[/\\\\](build|docs|node_modules|scripts)[/\\\\]"
     ],
@@ -91,13 +97,17 @@
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
       "^(?!.*\\.(js|jsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
-    "transformIgnorePatterns": ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"],
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
+    ],
     "moduleNameMapper": {
       "^react-native$": "react-native-web"
     }
   },
   "babel": {
-    "presets": ["react-app"]
+    "presets": [
+      "react-app"
+    ]
   },
   "eslintConfig": {
     "extends": "react-app"
