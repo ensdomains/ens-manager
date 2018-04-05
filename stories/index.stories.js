@@ -21,6 +21,12 @@ storiesOf('Button', module)
     <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>
   ))
 
+const BlackBackground = ({ children }) => (
+  <div style={{ background: 'black', height: '100%', width: '100%' }}>
+    {children}
+  </div>
+)
+
 const initialDataRecord = Record(
   {
     nodes: List(),
@@ -41,12 +47,14 @@ let mockData = fromJS({
 
 storiesOf('Node', module)
   .add('with text', () => (
-    <NodeLayout
-      db={mockStore}
-      data={mockData}
-      isSelected={() => false}
-      Blockies={Blockies}
-    />
+    <BlackBackground>
+      <NodeLayout
+        db={mockStore}
+        data={mockData}
+        isSelected={() => false}
+        Blockies={Blockies}
+      />
+    </BlackBackground>
   ))
   .add('with some emoji', () => (
     <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>

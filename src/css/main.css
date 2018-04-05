@@ -241,15 +241,6 @@ h1 {
   width: 60%;
   color: #2c7dd3;
 }
-.node {
-  position: relative;
-  color: #fff;
-  display: flex;
-  height: 45px;
-}
-.node-blockies {
-  border-radius: 50%;
-}
 .remove-node {
   position: absolute;
   font-size: 16px;
