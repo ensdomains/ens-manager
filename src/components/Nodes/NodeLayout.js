@@ -45,18 +45,18 @@ const NodeWrapper = styled.div`
       margin-right: 10px;
     }
 
-    .selected & {
+    .selected > & {
     }
   }
 
   &.selected {
-    .node-details {
+    > .node-details {
       background: ${props => props.theme.lightBlue};
     }
   }
 
   &:hover {
-    .node-details {
+    > .node-details {
       background: ${props => props.theme.lightBlueHigh};
       cursor: pointer;
     }
