@@ -8,6 +8,8 @@ import { Button, Welcome } from '@storybook/react/demo'
 import NodeLayout from '../src/components/Nodes/NodeLayout'
 import { Record, List, fromJS } from 'immutable'
 import Blockies from '../src/components/Blockies'
+import { ThemeProvider } from 'styled-components'
+import theme from '../src/theme'
 
 storiesOf('Welcome', module).add('to Storybook', () => (
   <Welcome showApp={linkTo('Button')} />
@@ -47,14 +49,16 @@ let mockData = fromJS({
 
 storiesOf('Node', module)
   .add('with text', () => (
-    <BlackBackground>
-      <NodeLayout
-        db={mockStore}
-        data={mockData}
-        isSelected={() => false}
-        Blockies={Blockies}
-      />
-    </BlackBackground>
+    <ThemeProvider theme={theme}>
+      <BlackBackground>
+        <NodeLayout
+          db={mockStore}
+          data={mockData}
+          isSelected={() => false}
+          Blockies={Blockies}
+        />
+      </BlackBackground>
+    </ThemeProvider>
   ))
   .add('with some emoji', () => (
     <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>

@@ -10,50 +10,60 @@ import { setCurrentAccounts } from './updaters/config'
 import { selectReverseNode } from './updaters/nodeDetails'
 import { addNotification } from './updaters/notifications'
 import Main from './Main'
-
+import { ThemeProvider } from 'styled-components'
+import theme from './theme'
 
 async function setupDefaults() {
-  const defaultResolver = "resolver.eth";
+  const defaultResolver = 'resolver.eth'
   let resolverAddressPromise = getAddr(defaultResolver)
   let accountsPromise = getAccounts()
 
-  Promise.all([resolverAddressPromise, accountsPromise]).then(([resolverAddress, accounts]) => {
-    let hasAccounts = accounts.length > 0
-    setPublicResolver(resolverAddress)
+  Promise.all([resolverAddressPromise, accountsPromise]).then(
+    ([resolverAddress, accounts]) => {
+      let hasAccounts = accounts.length > 0
+      setPublicResolver(resolverAddress)
 
-    if(hasAccounts) {
-      setCurrentAccounts(accounts)
-      getName(accounts[0])
-        .then(({name, resolverAddr}) => {
-          setReverseRecordDetails({
-            address: accounts[0],
-            name,
-            resolver: resolverAddr
-          })
+      if (hasAccounts) {
+        setCurrentAccounts(accounts)
+        getName(accounts[0])
+          .then(({ name, resolverAddr }) => {
+            setReverseRecordDetails({
+              address: accounts[0],
+              name,
+              resolver: resolverAddr
+            })
 
-          selectReverseNode(accounts[0])
-        })
-        .catch(err => {
-          console.log(err)
-          setReverseRecordDetails({
-            address: accounts[0],
-            name: '0x',
-            resolverAddr: '0x'
+            selectReverseNode(accounts[0])
           })
-          selectReverseNode(accounts[0])
-        })
-    } else {
-      addNotification('No account connected. Please connect account to make changes')
+          .catch(err => {
+            console.log(err)
+            setReverseRecordDetails({
+              address: accounts[0],
+              name: '0x',
+              resolverAddr: '0x'
+            })
+            selectReverseNode(accounts[0])
+          })
+      } else {
+        addNotification(
+          'No account connected. Please connect account to make changes'
+        )
+      }
     }
-
-  })
+  )
 }
 
-render(() => ReactDOM.render(<Main />, document.getElementById('root')))
-
+render(() =>
+  ReactDOM.render(
+    <ThemeProvider theme={theme}>
+      <Main />
+    </ThemeProvider>,
+    document.getElementById('root')
+  )
+)
 
 window.addEventListener('load', function() {
-  setupWeb3().then(()=>{
+  setupWeb3().then(() => {
     setupDefaults()
   })
 })

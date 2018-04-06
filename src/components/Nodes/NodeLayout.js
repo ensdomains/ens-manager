@@ -46,11 +46,11 @@ const NodeWrapper = styled.div`
     }
 
     .selected > .node-details {
-      background: ${lightBlue};
+      background: ${props => props.theme.lightBlue};
     }
 
     &:hover {
-      background: ${lightBlueHigh};
+      background: ${props => props.theme.lightBlueHigh};
       cursor: pointer;
       .remove-node {
         display: flex;
