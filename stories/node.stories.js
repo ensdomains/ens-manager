@@ -9,6 +9,7 @@ import { Record, List, fromJS } from 'immutable'
 import Blockies from '../src/components/Blockies'
 import { ThemeProvider } from 'styled-components'
 import theme from '../src/theme'
+import '../src/globalStyles'
 
 const BlackBackground = ({ children }) => (
   <div style={{ background: 'black', height: '100%', width: '100%' }}>
@@ -23,7 +24,7 @@ const NodeDefaults = ({ children }) => (
 )
 
 storiesOf('Node', module)
-  .add('with text', () => (
+  .add('Root node only', () => (
     <NodeDefaults>
       <NodeLayout
         db={new Record(
@@ -46,7 +47,7 @@ storiesOf('Node', module)
       />
     </NodeDefaults>
   ))
-  .add('with some emoji', () => (
+  .add('Root node selected', () => (
     <NodeDefaults>
       <NodeLayout
         db={new Record(
