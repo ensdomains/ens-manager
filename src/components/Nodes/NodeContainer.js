@@ -9,7 +9,7 @@ import { withHandlers, withProps, compose } from 'recompose'
 
 import NodeLayout from './NodeLayout'
 
-const handleSelectNode = (event, node) => {
+export const handleSelectNode = (event, node) => {
   let name = node.get('name')
   switchTab('nodeDetails')
   selectNode(name)
@@ -19,14 +19,15 @@ const handleSelectNode = (event, node) => {
   event.stopPropagation()
 }
 
-const handleRemoveNode = (event, data) => {
+export const handleRemoveNode = (event, data) => {
   let name = data.get('name')
   selectNode('')
   removeRootDomain(name)
   event.stopPropagation()
 }
 
-const isSelected = (selected, name) => {
+export const isSelected = (selected, name) => {
+  console.log('selected', selected, 'name', name)
   if (selected.split('.').length === name.split('.').length) {
     return selected === name
   } else {
@@ -35,15 +36,20 @@ const isSelected = (selected, name) => {
   }
 }
 
-const alphabeticalSort = (a, b) => a.get('name').localeCompare(b.get('name'))
+export const alphabeticalSort = (a, b) =>
+  a.get('name').localeCompare(b.get('name'))
 
 export default compose(
-  withProps({
-    db,
-    handleRemoveNode,
-    handleSelectNode,
-    isSelected,
-    alphabeticalSort,
-    Blockies
+  withProps(() => {
+    console.log('DB', db.toJS())
+    return {
+      db,
+      handleRemoveNode,
+      handleSelectNode,
+      isSelected,
+      selectedNode: db.selectedNode,
+      alphabeticalSort,
+      Blockies
+    }
   })
 )(NodeLayout)

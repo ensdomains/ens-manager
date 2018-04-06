@@ -45,16 +45,24 @@ const NodeWrapper = styled.div`
       margin-right: 10px;
     }
 
-    .selected > .node-details {
+    .selected & {
+    }
+  }
+
+  &.selected {
+    .node-details {
       background: ${props => props.theme.lightBlue};
     }
+  }
 
-    &:hover {
+  &:hover {
+    .node-details {
       background: ${props => props.theme.lightBlueHigh};
       cursor: pointer;
-      .remove-node {
-        display: flex;
-      }
+    }
+
+    .remove-node {
+      display: flex;
     }
   }
 
@@ -70,12 +78,12 @@ const NodeLayout = props => {
     handleRemoveNode,
     handleSelectNode,
     isSelected,
+    selectedNode,
     alphabeticalSort,
     Blockies
   } = props
-
   let childNodes = null
-  let selected = isSelected(db.get('selectedNode'), data.get('name'))
+  let selected = isSelected(selectedNode, data.get('name'))
   let classes = classNames({
     node: true,
     selected
@@ -90,7 +98,11 @@ const NodeLayout = props => {
               .get('nodes')
               .sort(alphabeticalSort)
               .map(node => (
-                <Node key={node.get('labelHash') + name} data={node} />
+                <NodeLayout
+                  {...props}
+                  key={node.get('labelHash') + name}
+                  data={node}
+                />
               ))
           : ''}
       </div>
