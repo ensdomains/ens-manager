@@ -107,6 +107,104 @@ exports[`Storyshots Node Root node selected 1`] = `
 </div>
 `;
 
+exports[`Storyshots NodesContainer Root node selected with multiple sub domains 1`] = `
+<div
+  style={
+    Object {
+      "background": "black",
+      "height": "100%",
+      "width": "100%",
+    }
+  }
+>
+  <div
+    className="nodes-root"
+  >
+    <div
+      className="nodes-inner"
+    >
+      <div
+        className="node selected sc-bdVaJa cbylkp"
+      >
+        <div
+          className="node-details"
+          onClick={[Function]}
+        >
+          <span
+            className="ethereum-address-icon node-blockies"
+            style={
+              Object {
+                "backgroundImage": "url()",
+                "backgroundSize": "cover",
+                "display": "inline-block",
+                "height": "25px",
+                "width": "25px",
+              }
+            }
+          />
+          jefflau.eth
+          <div
+            className="remove-node"
+            onClick={[Function]}
+            title="Remove node from list"
+          >
+            ✖
+          </div>
+        </div>
+        <div
+          className="child-nodes"
+        >
+          <div
+            className="node sc-bdVaJa cbylkp"
+          >
+            <div
+              className="node-details"
+              onClick={[Function]}
+            >
+              <span
+                className="ethereum-address-icon node-blockies"
+                style={
+                  Object {
+                    "backgroundImage": "url()",
+                    "backgroundSize": "cover",
+                    "display": "inline-block",
+                    "height": "25px",
+                    "width": "25px",
+                  }
+                }
+              />
+              4.jefflau.eth
+            </div>
+          </div>
+          <div
+            className="node sc-bdVaJa cbylkp"
+          >
+            <div
+              className="node-details"
+              onClick={[Function]}
+            >
+              <span
+                className="ethereum-address-icon node-blockies"
+                style={
+                  Object {
+                    "backgroundImage": "url()",
+                    "backgroundSize": "cover",
+                    "display": "inline-block",
+                    "height": "25px",
+                    "width": "25px",
+                  }
+                }
+              />
+              awesome.jefflau.eth
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`Storyshots Welcome to Storybook 1`] = `
 <article
   className="css-1fqbdip"

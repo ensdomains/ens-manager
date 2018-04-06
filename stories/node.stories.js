@@ -5,11 +5,14 @@ import { action } from '@storybook/addon-actions'
 import { linkTo } from '@storybook/addon-links'
 
 import NodeLayout from '../src/components/Nodes/NodeLayout'
+import { isSelected } from '../src/components/Nodes/NodeContainer'
+import NodesLayout from '../src/components/Nodes/NodesLayout'
 import { Record, List, fromJS } from 'immutable'
 import Blockies from '../src/components/Blockies'
 import { ThemeProvider } from 'styled-components'
 import theme from '../src/theme'
 import '../src/globalStyles'
+import { withProps } from 'recompose'
 
 const BlackBackground = ({ children }) => (
   <div style={{ background: 'black', height: '100%', width: '100%' }}>
@@ -70,3 +73,52 @@ storiesOf('Node', module)
       />
     </NodeDefaults>
   ))
+
+storiesOf('NodesContainer', module).add(
+  'Root node selected with multiple sub domains',
+  () => (
+    <NodeDefaults>
+      <NodesLayout
+        db={new Record(
+          {
+            nodes: fromJS([
+              {
+                name: 'jefflau.eth',
+                labelHash: 'sdfgdf',
+                owner: '0x123',
+                fetchingSubdomains: false,
+                nodes: [
+                  {
+                    name: 'awesome.jefflau.eth',
+                    labelHash: 'afdjwen',
+                    owner: '0x123',
+                    fetchingSubdomains: false,
+                    nodes: []
+                  },
+                  {
+                    name: '4.jefflau.eth',
+                    labelHash: 'eagewve',
+                    owner: '0x123',
+                    fetchingSubdomains: false,
+                    nodes: []
+                  }
+                ]
+              }
+            ]),
+            accounts: List()
+          },
+          'initialDataRecord'
+        )()}
+        NodeItem={withProps(props => ({
+          handleRemoveNode: function() {},
+          handleSelectNode: function() {},
+          isSelected,
+          selectedNode: 'jefflau.eth',
+          alphabeticalSort: (a, b) =>
+            a.get('name').localeCompare(b.get('name')),
+          Blockies
+        }))(NodeLayout)}
+      />
+    </NodeDefaults>
+  )
+)
