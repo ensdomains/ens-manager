@@ -24,8 +24,11 @@
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
-    "npm-run-all": "4.0.2",
-    "stylus": "0.54.5",
+    "@storybook/addon-actions": "^3.4.0",
+    "@storybook/addon-links": "^3.4.0",
+    "@storybook/addon-storyshots": "^3.4.0",
+    "@storybook/addons": "^3.4.0",
+    "@storybook/react": "^3.4.0",
     "autoprefixer": "6.7.2",
     "babel-core": "6.22.1",
     "babel-eslint": "7.1.1",
@@ -53,41 +56,41 @@
     "html-webpack-plugin": "2.24.0",
     "http-proxy-middleware": "0.17.3",
     "jest": "22.4.3",
+    "jest-canvas-mock": "^1.0.2",
     "json-loader": "0.5.4",
+    "npm-run-all": "4.0.2",
     "object-assign": "4.1.1",
     "postcss-loader": "1.2.2",
     "promise": "7.1.1",
     "react-dev-utils": "^0.5.2",
+    "react-test-renderer": "^16.3.1",
     "style-loader": "0.13.1",
+    "stylus": "0.54.5",
     "url-loader": "0.5.7",
     "webpack": "1.14.0",
     "webpack-dev-server": "1.16.2",
     "webpack-manifest-plugin": "1.1.0",
-    "whatwg-fetch": "2.0.2",
-    "@storybook/react": "^3.4.0",
-    "@storybook/addon-actions": "^3.4.0",
-    "@storybook/addon-links": "^3.4.0",
-    "@storybook/addons": "^3.4.0"
+    "whatwg-fetch": "2.0.2"
   },
   "scripts": {
     "start": "run-p dev styles:watch",
     "dev": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "styles:watch": "stylus -I ./node_modules -w ./src/styl/main.styl -o ./src/css/main.css",
-    "styles": "stylus -I ./node_modules ./src/styl/main.styl -o ./src/css/main.css",
-    "deploy": "npm run styles && npm run build && cd build && mv index.html 200.html && surge . --domain manager.ens.domains",
-    "deploy:dev": "npm run styles && npm run build && cd build && mv index.html 200.html && surge . --domain devensmanager.surge.sh",
+    "styles:watch":
+      "stylus -I ./node_modules -w ./src/styl/main.styl -o ./src/css/main.css",
+    "styles":
+      "stylus -I ./node_modules ./src/styl/main.styl -o ./src/css/main.css",
+    "deploy":
+      "npm run styles && npm run build && cd build && mv index.html 200.html && surge . --domain manager.ens.domains",
+    "deploy:dev":
+      "npm run styles && npm run build && cd build && mv index.html 200.html && surge . --domain devensmanager.surge.sh",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
   "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx}"
-    ],
-    "setupFiles": [
-      "<rootDir>/config/polyfills.js"
-    ],
+    "collectCoverageFrom": ["src/**/*.{js,jsx}"],
+    "setupFiles": ["<rootDir>/config/polyfills.js", "jest-canvas-mock"],
     "testPathIgnorePatterns": [
       "<rootDir>[/\\\\](build|docs|node_modules|scripts)[/\\\\]"
     ],
@@ -98,17 +101,13 @@
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
       "^(?!.*\\.(js|jsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
-    ],
+    "transformIgnorePatterns": ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"],
     "moduleNameMapper": {
       "^react-native$": "react-native-web"
     }
   },
   "babel": {
-    "presets": [
-      "react-app"
-    ]
+    "presets": ["react-app"]
   },
   "eslintConfig": {
     "extends": "react-app"
