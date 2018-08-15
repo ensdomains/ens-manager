@@ -42,7 +42,7 @@ function setupWeb3() {
             console.log(
               'The endpoint is not active. Falling back to Infura readOnly mode'
             )
-            url = 'https://ropsten.infura.io/BW6Y98TxAjFjImkmjVnG'
+            url = 'https://mainnet.infura.io/BW6Y98TxAjFjImkmjVnG'
             readOnly = true
             updateReadOnly(true)
           }
