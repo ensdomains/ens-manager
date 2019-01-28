@@ -2,7 +2,7 @@
 
 # Deprecated in 2019
 
-Deprecated in favour of the new ens-app repo: https://github.com/ensdomains/ens-app
+Deprecated in favour of the new ens-app repo: https://github.com/ensdomains/ens-app live at: https://manager.ens.domains/
 
 ## Development
 
