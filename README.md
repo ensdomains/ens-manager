@@ -1,5 +1,9 @@
 # ENS Manager
 
+# Deprecated in 2019
+
+Deprecated in favour of the new ens-app repo: https://github.com/ensdomains/ens-app
+
 ## Development
 
 In the project directory, you can run:
